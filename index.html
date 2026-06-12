@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>MTGRP</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Karla:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400&family=EB+Garamond:ital,wght@0,400;0,500;1,400;1,500&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+:root {
+  --white: #ffffff;
+  --black: #0a0a0a;
+  --blue:  #0033FF;
+  --grey:  #888;
+  --faint: #ccc;
+  --karla:    'Karla', sans-serif;
+  --garamond: 'EB Garamond', serif;
+}
+html, body {
+  height: 100%;
+}
+body {
+  background: var(--white);
+  color: var(--black);
+  font-family: var(--garamond);
+  -webkit-font-smoothing: antialiased;
+  display: flex;
+  flex-direction: column;
+}
+
+/* grid backdrop */
+body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  background-image:
+    linear-gradient(to right, rgba(0,0,0,0.045) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(0,0,0,0.045) 1px, transparent 1px);
+  background-size: 48px 48px;
+}
+
+/* ── LANDING MAIN ──────────────────────── */
+main {
+  position: relative;
+  z-index: 1;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  padding: 40px;
+  min-height: 0;
+}
+
+.land-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+}
+
+.land-brand {
+  font-family: var(--karla);
+  font-size: 13px;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  color: var(--black);
+}
+
+.land-year {
+  font-family: var(--garamond);
+  font-style: italic;
+  font-size: 13px;
+  color: var(--grey);
+}
+
+/* big clickable logo centre */
+.land-center {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  flex: 1;
+  justify-content: center;
+  padding: 32px 0;
+}
+
+a.land-logo {
+  font-family: var(--karla);
+  font-weight: 700;
+  font-size: clamp(88px, 16vw, 220px);
+  line-height: 0.88;
+  letter-spacing: -0.03em;
+  color: var(--black);
+  text-decoration: none;
+  display: block;
+  transition: color 0.15s;
+  cursor: pointer;
+}
+
+a.land-logo:hover { color: var(--blue); }
+
+.land-desc {
+  margin-top: 32px;
+  font-family: var(--garamond);
+  font-size: clamp(15px, 1.4vw, 18px);
+  line-height: 1.65;
+  color: var(--grey);
+  max-width: 520px;
+}
+
+/* ── FOOTER STRIP ──────────────────────── */
+footer {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 16px 40px;
+}
+
+.footer-cities {
+  font-family: var(--garamond);
+  font-style: italic;
+  font-size: 13px;
+  color: var(--faint);
+  letter-spacing: 0.04em;
+}
+
+/* mobile */
+@media (max-width: 600px) {
+  main { padding: 24px 20px; }
+  footer { padding: 14px 20px; }
+}
+</style>
+</head>
+<body>
+<main>
+  <div class="land-top">
+    <span class="land-brand">MTGRP</span>
+    <span class="land-year">Est. 2018</span>
+  </div>
+
+  <div class="land-center">
+    <a class="land-logo" href="work.html" aria-label="Enter site — go to Work">MTGRP</a>
+    <p class="land-desc">Architecture concerned with metabolism and circularity — a political approach to temperature, material expression, and collective use. We are interested in the spaces in between.</p>
+  </div>
+</main>
+
+<footer>
+  <span class="footer-cities">Beirut &nbsp;&mdash;&nbsp; Madrid &nbsp;&mdash;&nbsp; Milan</span>
+</footer>
+</body>
+</html>
