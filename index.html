@@ -43,6 +43,18 @@ body::before {
   background-size: 48px 48px;
 }
 
+/* ── PLAN IMAGE ── */
+.landing-plan {
+  position: fixed;
+  right: -40px;
+  bottom: 60px;
+  width: 55vw;
+  opacity: 1;
+  pointer-events: none;
+  mix-blend-mode: normal;
+  z-index: 0;
+}
+
 /* ── LANDING MAIN ──────────────────────── */
 main {
   position: relative;
@@ -136,6 +148,10 @@ footer {
 </style>
 </head>
 <body>
+
+<!-- Plan image sits behind everything, z-index: 0 -->
+<img src="photos/plan-01.png" class="landing-plan" alt="">
+
 <main>
   <div class="land-top">
     <span class="land-brand">MTGRP</span>
