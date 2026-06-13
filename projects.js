@@ -118,7 +118,7 @@ const PROJECTS = [
     size: "—",
     budget: "—",
     status: "—",
-    photos: 5,
+    photos: 7,
     team: ["Andrew Georges"],
     collaborators: [],
   },
