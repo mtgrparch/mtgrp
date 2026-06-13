@@ -83,6 +83,18 @@ const PROJECTS = [
     photos: 6,
   },
   {
+    id: "p07b",
+    title: "3 Brothers",
+    subtitle: "Pavilion",
+    desc: "Three pavilions for three brothers on the coast of Amchit.",
+    location: "Amchit, LB",
+    type: "Single Family Housing",
+    size: "—",
+    budget: "—",
+    status: "—",
+    photos: 5,
+  },
+  {
     id: "p07",
     title: "Casa de Aperos",
     subtitle: "Collective Housing",
