@@ -24,8 +24,8 @@ const PROJECTS = [
 
   {
     id: "p12",
-    title: "XXXXXXXXXXXX",
-    subtitle: "Coliving for Seniors",
+    title: "XXXXXXXXXXsXX",
+    subtitle: "sssssssssss",
     desc: "XXX",
     location: "XXXXXX, XX",
     type: "Coliving / Housing",
