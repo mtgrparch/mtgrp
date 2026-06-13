@@ -117,12 +117,8 @@
       const num = String(i).padStart(2, '0');
       wrap.innerHTML += `
         <div class="img-block">
-          <!--
-            TO ADD A REAL PHOTO — replace div.photo-ph with:
-            <img src="../photos/${project.id}-${num}.jpg"
+                      <img src="../photos/${project.id}-${num}.jpg"
                  style="width:100%;display:block;object-fit:cover;">
-          -->
-          <div class="photo-ph">Photo ${i}</div>
         </div>`;
     }
   }
