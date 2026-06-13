@@ -40,7 +40,6 @@ body::before {
 }
 nav, main, footer { position: relative; z-index: 1; }
 
-/* NAV */
 nav {
   position: sticky; top: 0;
   background: var(--white);
@@ -59,7 +58,6 @@ nav {
 }
 .nav-links a:hover, .nav-links a.active { color: var(--blue); }
 
-/* MAIN */
 main { flex: 1; padding-top: 48px; }
 
 .page-title {
@@ -68,7 +66,6 @@ main { flex: 1; padding-top: 48px; }
   color: var(--grey); padding: 0 40px 20px;
 }
 
-/* PROJECT ROWS — now <a> tags */
 .project-row {
   display: grid;
   grid-template-columns: 44px 1fr 180px 80px;
@@ -102,7 +99,6 @@ main { flex: 1; padding-top: 48px; }
   color: var(--faint); text-align: right; letter-spacing: 0.05em;
 }
 
-/* FOOTER */
 footer {
   display: flex; align-items: center; justify-content: center;
   padding: 20px 40px; margin-top: 40px;
@@ -135,85 +131,33 @@ a:focus-visible { outline: 2px solid var(--blue); outline-offset: 3px; }
 </nav>
 
 <main>
-<p class="page-title">Work — 12 projects</p>
-
-<a class="project-row" href="p01.html">
-  <span class="p-num">01</span>
-  <span class="p-name">xxxxxxxxx <em>— xxxxxxxxxxxx</em></span>
-  <span class="p-type">Coliving</span>
-  <span class="p-loc">xxxxx</span>
-</a>
-<a class="project-row" href="p02.html">
-  <span class="p-num">02</span>
-  <span class="p-name">Die Den Gletscher Bewohnen <em>— Europan, Winner</em></span>
-  <span class="p-type">Competition</span>
-  <span class="p-loc">—</span>
-</a>
-<a class="project-row" href="p03.html">
-  <span class="p-num">03</span>
-  <span class="p-name">Holcim Visitor Center <em>— Competition</em></span>
-  <span class="p-type">Cultural</span>
-  <span class="p-loc">—</span>
-</a>
-<a class="project-row" href="p04.html">
-  <span class="p-num">04</span>
-  <span class="p-name">Santa María de Valdeiglesias <em>— Adaptive Reuse, 2nd Prize</em></span>
-  <span class="p-type">Heritage</span>
-  <span class="p-loc">Pelayos de la Presa</span>
-</a>
-<a class="project-row" href="p05.html">
-  <span class="p-num">05</span>
-  <span class="p-name">Papushevo Park <em>— Urban Development</em></span>
-  <span class="p-type">Urban</span>
-  <span class="p-loc">Russia</span>
-</a>
-<a class="project-row" href="p06.html">
-  <span class="p-num">06</span>
-  <span class="p-name">Casa de Aperos <em>— Collective Housing</em></span>
-  <span class="p-type">Housing</span>
-  <span class="p-loc">Eivissa</span>
-</a>
-<a class="project-row" href="p07.html">
-  <span class="p-num">07</span>
-  <span class="p-name">Cárcel Abierta <em>— Adaptive Reuse</em></span>
-  <span class="p-type">Heritage</span>
-  <span class="p-loc">Chile</span>
-</a>
-<a class="project-row" href="p08.html">
-  <span class="p-num">08</span>
-  <span class="p-name">Amchit Fire Proving Grounds</span>
-  <span class="p-type">Public / Ephemeral</span>
-  <span class="p-loc">Amchit, LB</span>
-</a>
-<a class="project-row" href="p09.html">
-  <span class="p-num">09</span>
-  <span class="p-name">Dancing House <em>— Adaptive Reuse &amp; Coliving</em></span>
-  <span class="p-type">Residential</span>
-  <span class="p-loc">Beit Mery, LB</span>
-</a>
-<a class="project-row" href="p10.html">
-  <span class="p-num">10</span>
-  <span class="p-name">RAZ House <em>— Interior Design</em></span>
-  <span class="p-type">Interior</span>
-  <span class="p-loc">—</span>
-</a>
-<a class="project-row" href="p11.html">
-  <span class="p-num">11</span>
-  <span class="p-name">Baglietto Pavilion <em>— Competition, Hon. Mention</em></span>
-  <span class="p-type">Competition</span>
-  <span class="p-loc">—</span>
-</a>
-<a class="project-row" href="p12.html">
-  <span class="p-num">12</span>
-  <span class="p-name">KWL — Beirut River <em>— 1st Prize</em></span>
-  <span class="p-type">Infrastructure</span>
-  <span class="p-loc">Beirut, LB</span>
-</a>
-
+  <p class="page-title">Work</p>
+  <div id="project-list"></div>
 </main>
 
 <footer>
   <span class="footer-cities">Beirut &nbsp;&mdash;&nbsp; Madrid &nbsp;&mdash;&nbsp; Milan</span>
 </footer>
+
+<script src="projects.js"></script>
+<script>
+  const list = document.getElementById('project-list');
+
+  PROJECTS.forEach((p, i) => {
+    const a = document.createElement('a');
+    a.className = 'project-row';
+    a.href = `${p.id}.html`;
+    a.innerHTML = `
+      <span class="p-num">${String(i + 1).padStart(2, '0')}</span>
+      <span class="p-name">${p.title}${p.subtitle ? ` <em>— ${p.subtitle}</em>` : ''}</span>
+      <span class="p-type">${p.type}</span>
+      <span class="p-loc">${p.location}</span>
+    `;
+    list.appendChild(a);
+  });
+
+  document.querySelector('.page-title').textContent = `Work — ${PROJECTS.length} projects`;
+</script>
+
 </body>
 </html>
