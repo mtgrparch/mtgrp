@@ -6,16 +6,18 @@
 //  number (p13, p14...). The site always shows newest first.
 //
 //  Fields:
-//    id       — filename without .html  (e.g. "p13")
-//    title    — full project title
-//    subtitle — typology / competition result / etc.
-//    desc     — paragraph shown in sidebar of project page
-//    location — city / country
-//    type     — programme type
-//    size     — floor area or scale
-//    budget   — if disclosed, otherwise "—"
-//    status   — Built / Competition / In progress / etc.
-//    photos   — number of photo slots to generate
+//    id            — filename without .html  (e.g. "p13")
+//    title         — full project title
+//    subtitle      — typology / competition result / etc.
+//    desc          — paragraph shown in sidebar of project page
+//    location      — city / country
+//    type          — programme type
+//    size          — floor area or scale
+//    budget        — if disclosed, otherwise "—"
+//    status        — Built / Competition / In progress / etc.
+//    photos        — number of photo slots to generate
+//    team          — array of strings, project team members
+//    collaborators — array of strings, external firms / people
 // ─────────────────────────────────────────────────────────────
 
 const PROJECTS = [
@@ -23,28 +25,32 @@ const PROJECTS = [
   // ── NEWEST FIRST — add new projects at the top with next id ──
 
   {
-    id: "p12",
-    title: "XXXXXXXXXXsXX",
-    subtitle: "sssssssssss",
-    desc: "XXX",
-    location: "XXXXXX, XX",
-    type: "Coliving / Housing",
-    size: "0000000",
-    budget: "0000000000",
-    status: "00000000000",
-    photos: 6,
+    id: "p13",
+    title: "XXXXXXXXXX",
+    subtitle: "XXXXXXXXXX",
+    desc: "XXXXXXXXXX",
+    location: "XXXXXXXXXX",
+    type: "—",
+    size: "—",
+    budget: "—",
+    status: "Forthcoming",
+    photos: 0,
+    team: ["Andrew Georges", "Charbel Abou Chacra", "Nahi El Khoury", "Joe Chamata"],
+    collaborators: [],
   },
   {
     id: "p11",
     title: "Die Den Gletscher Bewohnen",
     subtitle: "Europan — Winner",
     desc: "Winning entry for the Europan competition. The project addresses inhabitation in proximity to glacial landscape, proposing a model of dwelling that is responsive to extreme thermal and ecological conditions. The glacier is not backdrop but partner — a slow, material presence that shapes the logic of the building.",
-    location: "St. Gallen, CH",
+    location: "—",
     type: "Competition",
     size: "—",
     budget: "—",
     status: "Winner",
     photos: 5,
+    team: ["Andrew Georges", "Charbel Abou Chacra", "Nahi El Khoury", "Joe Chamata"],
+    collaborators: [],
   },
   {
     id: "p10",
@@ -57,6 +63,8 @@ const PROJECTS = [
     budget: "—",
     status: "Competition entry",
     photos: 5,
+    team: ["Andrew Georges", "Charbel Abou Chacra", "Nahi El Khoury", "Joe Chamata"],
+    collaborators: [],
   },
   {
     id: "p09",
@@ -69,6 +77,8 @@ const PROJECTS = [
     budget: "—",
     status: "2nd Prize",
     photos: 6,
+    team: ["Andrew Georges", "Charbel Abou Chacra", "Nahi El Khoury", "Joe Chamata"],
+    collaborators: [],
   },
   {
     id: "p08",
@@ -81,18 +91,22 @@ const PROJECTS = [
     budget: "—",
     status: "—",
     photos: 6,
+    team: ["Andrew Georges", "Charbel Abou Chacra", "Nahi El Khoury", "Joe Chamata"],
+    collaborators: [],
   },
   {
-    id: "p07b",
-    title: "3 Brothers",
-    subtitle: "Pavilion",
-    desc: "Three pavilions for three brothers on the coast of Amchit.",
-    location: "Amchit, LB",
-    type: "Single Family Housing",
+    id: "p06b",
+    title: "Three Brothers",
+    subtitle: "Three Pavilions",
+    desc: "Three pavilions for three brothers on the coast of Amchit, Lebanon. Each pavilion is distinct — a singular response to a shared site — while the three together constitute a small domestic landscape on the water's edge.",
+    location: "Amchit, Lebanon",
+    type: "Residential / Pavilion",
     size: "—",
     budget: "—",
     status: "—",
     photos: 5,
+    team: ["Andrew Georges", "Charbel Abou Chacra", "Nahi El Khoury", "Joe Chamata"],
+    collaborators: [],
   },
   {
     id: "p07",
@@ -105,6 +119,8 @@ const PROJECTS = [
     budget: "—",
     status: "—",
     photos: 5,
+    team: ["Andrew Georges", "Charbel Abou Chacra", "Nahi El Khoury", "Joe Chamata"],
+    collaborators: [],
   },
   {
     id: "p06",
@@ -117,6 +133,8 @@ const PROJECTS = [
     budget: "—",
     status: "—",
     photos: 5,
+    team: ["Andrew Georges", "Charbel Abou Chacra", "Nahi El Khoury", "Joe Chamata"],
+    collaborators: [],
   },
   {
     id: "p05",
@@ -129,6 +147,8 @@ const PROJECTS = [
     budget: "—",
     status: "—",
     photos: 5,
+    team: ["Andrew Georges", "Charbel Abou Chacra", "Nahi El Khoury", "Joe Chamata"],
+    collaborators: [],
   },
   {
     id: "p04",
@@ -141,6 +161,8 @@ const PROJECTS = [
     budget: "—",
     status: "—",
     photos: 6,
+    team: ["Andrew Georges", "Charbel Abou Chacra", "Nahi El Khoury", "Joe Chamata"],
+    collaborators: [],
   },
   {
     id: "p03",
@@ -153,6 +175,8 @@ const PROJECTS = [
     budget: "—",
     status: "—",
     photos: 5,
+    team: ["Andrew Georges", "Charbel Abou Chacra", "Nahi El Khoury", "Joe Chamata"],
+    collaborators: [],
   },
   {
     id: "p02",
@@ -165,6 +189,8 @@ const PROJECTS = [
     budget: "—",
     status: "Honourable Mention",
     photos: 4,
+    team: ["Andrew Georges", "Charbel Abou Chacra", "Nahi El Khoury", "Joe Chamata"],
+    collaborators: [],
   },
   {
     id: "p01",
@@ -177,6 +203,8 @@ const PROJECTS = [
     budget: "—",
     status: "1st Prize",
     photos: 6,
+    team: ["Andrew Georges", "Charbel Abou Chacra", "Nahi El Khoury", "Joe Chamata"],
+    collaborators: [],
   },
 
 ];

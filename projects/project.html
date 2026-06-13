@@ -8,6 +8,26 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Karla:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400&family=EB+Garamond:ital,wght@0,400;0,500;1,400;1,500&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="../project.css">
+<style>
+  .people-section {
+    margin-top: 20px;
+    padding-top: 20px;
+    border-top: 1px solid #eee;
+  }
+  .people-key {
+    font-family: 'Karla', sans-serif;
+    font-size: 10px; font-weight: 600;
+    letter-spacing: 0.18em; text-transform: uppercase;
+    color: #ccc; display: block; margin-bottom: 8px;
+  }
+  .people-list { list-style: none; display: flex; flex-direction: column; gap: 3px; }
+  .people-list li { font-family: 'EB Garamond', serif; font-size: 13px; line-height: 1.5; color: #888; }
+  .not-found {
+    padding: 80px 40px;
+    font-family: 'EB Garamond', serif;
+    font-style: italic; font-size: 18px; color: #ccc;
+  }
+</style>
 </head>
 <body>
 
@@ -20,7 +40,7 @@
   </ul>
 </nav>
 
-<div class="layout">
+<div class="layout" id="layout">
   <aside class="sidebar">
     <a href="../work.html" class="back-link"><span class="back-arrow">&#8592;</span> All Work</a>
     <h1 class="proj-title" id="s-title"></h1>
@@ -28,11 +48,19 @@
     <p class="proj-desc" id="s-desc"></p>
     <dl class="meta">
       <div class="meta-row"><dt class="meta-key">Location</dt><dd class="meta-val" id="s-location"></dd></div>
-      <div class="meta-row"><dt class="meta-key">Type</dt><dd class="meta-val" id="s-type"></dd></div>
-      <div class="meta-row"><dt class="meta-key">Size</dt><dd class="meta-val" id="s-size"></dd></div>
-      <div class="meta-row"><dt class="meta-key">Budget</dt><dd class="meta-val" id="s-budget"></dd></div>
-      <div class="meta-row"><dt class="meta-key">Status</dt><dd class="meta-val" id="s-status"></dd></div>
+      <div class="meta-row"><dt class="meta-key">Type</dt>    <dd class="meta-val" id="s-type"></dd></div>
+      <div class="meta-row"><dt class="meta-key">Size</dt>    <dd class="meta-val" id="s-size"></dd></div>
+      <div class="meta-row"><dt class="meta-key">Budget</dt>  <dd class="meta-val" id="s-budget"></dd></div>
+      <div class="meta-row"><dt class="meta-key">Status</dt>  <dd class="meta-val" id="s-status"></dd></div>
     </dl>
+    <div class="people-section" id="s-team-wrap">
+      <span class="people-key">Project Team</span>
+      <ul class="people-list" id="s-team"></ul>
+    </div>
+    <div class="people-section" id="s-collab-wrap">
+      <span class="people-key">Collaborators</span>
+      <ul class="people-list" id="s-collab"></ul>
+    </div>
   </aside>
 
   <div class="image-field">
@@ -46,10 +74,14 @@
 
 <script src="../projects.js"></script>
 <script>
-  const pageId = location.pathname.split('/').pop().replace('.html', '');
+  const params  = new URLSearchParams(location.search);
+  const pageId  = params.get('id');
   const project = PROJECTS.find(p => p.id === pageId);
 
-  if (project) {
+  if (!project) {
+    document.getElementById('layout').innerHTML =
+      '<p class="not-found">Project not found.</p>';
+  } else {
     document.title = `MTGRP — ${project.title}`;
     document.getElementById('s-title').textContent    = project.title;
     document.getElementById('s-subtitle').textContent = project.subtitle;
@@ -60,13 +92,33 @@
     document.getElementById('s-budget').textContent   = project.budget;
     document.getElementById('s-status').textContent   = project.status;
 
+    const teamWrap = document.getElementById('s-team-wrap');
+    const teamList = document.getElementById('s-team');
+    if (project.team && project.team.length) {
+      project.team.forEach(name => {
+        const li = document.createElement('li');
+        li.textContent = name;
+        teamList.appendChild(li);
+      });
+    } else { teamWrap.style.display = 'none'; }
+
+    const collabWrap = document.getElementById('s-collab-wrap');
+    const collabList = document.getElementById('s-collab');
+    if (project.collaborators && project.collaborators.length) {
+      project.collaborators.forEach(name => {
+        const li = document.createElement('li');
+        li.textContent = name;
+        collabList.appendChild(li);
+      });
+    } else { collabWrap.style.display = 'none'; }
+
     const wrap = document.getElementById('image-wrap');
     for (let i = 1; i <= project.photos; i++) {
       const num = String(i).padStart(2, '0');
       wrap.innerHTML += `
         <div class="img-block">
           <!--
-            TO ADD A REAL PHOTO — replace the div.photo-ph with:
+            TO ADD A REAL PHOTO — replace div.photo-ph with:
             <img src="../photos/${project.id}-${num}.jpg"
                  style="width:100%;display:block;object-fit:cover;">
           -->

@@ -31,8 +31,7 @@ body {
 body::before {
   content: '';
   position: fixed;
-  inset: 0;
-  z-index: 0;
+  inset: 0; z-index: 0;
   pointer-events: none;
   background-image:
     linear-gradient(to right, rgba(0,0,0,0.045) 1px, transparent 1px),
@@ -41,152 +40,132 @@ body::before {
 }
 nav, main, footer { position: relative; z-index: 1; }
 
-/* ── NAV ───────────────────────────────── */
+/* ── NAV ── */
 nav {
   position: sticky; top: 0;
   background: var(--white);
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: 16px 40px;
-  z-index: 100;
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 16px 40px; z-index: 100;
 }
 .nav-logo {
-  font-family: var(--karla);
-  font-size: 15px; font-weight: 700;
-  letter-spacing: 0.08em;
-  color: var(--black); text-decoration: none;
+  font-family: var(--karla); font-size: 15px; font-weight: 700;
+  letter-spacing: 0.08em; color: var(--black); text-decoration: none;
 }
 .nav-logo:hover { color: var(--blue); }
 .nav-links { display: flex; gap: 32px; list-style: none; }
 .nav-links a {
-  font-family: var(--garamond);
-  font-style: italic; font-size: 16px;
-  color: var(--grey); text-decoration: none;
-  transition: color 0.15s;
+  font-family: var(--garamond); font-style: italic; font-size: 16px;
+  color: var(--grey); text-decoration: none; transition: color 0.15s;
 }
 .nav-links a:hover, .nav-links a.active { color: var(--blue); }
 
-/* ── MAIN ───────────────────────────────── */
-main { flex: 1; padding: 48px 40px 64px; }
+/* ── MAIN ── */
+main { flex: 1; padding: 48px 40px 80px; }
 
-.page-title {
+/* shared section label */
+.section-label {
   font-family: var(--karla);
   font-size: 11px; font-weight: 600;
   letter-spacing: 0.22em; text-transform: uppercase;
-  color: var(--grey); margin-bottom: 48px;
+  color: var(--grey);
 }
 
-/* ── PRACTICE STATEMENT ─────────────────── */
+/* ── STATEMENT ── */
 .statement {
   max-width: 680px;
-  margin-bottom: 72px;
+  margin-bottom: 80px;
 }
+.statement .section-label { margin-bottom: 32px; display: block; }
 .statement p {
   font-family: var(--garamond);
   font-size: clamp(18px, 2vw, 22px);
-  line-height: 1.65;
-  color: var(--black);
+  line-height: 1.65; color: var(--black);
   margin-bottom: 20px;
 }
-.statement p + p {
-  font-size: 15px;
-  color: var(--grey);
-  line-height: 1.85;
-}
-.statement p + p + p {
-  font-size: 15px;
-  color: var(--grey);
+.statement p.body {
+  font-size: 15px; color: var(--grey); line-height: 1.85;
 }
 
-/* ── TEAM ───────────────────────────────── */
-.team-label {
-  font-family: var(--karla);
-  font-size: 11px; font-weight: 600;
-  letter-spacing: 0.22em; text-transform: uppercase;
-  color: var(--grey); margin-bottom: 32px;
-}
+/* ── PARTNERS ── */
+.partners { margin-bottom: 80px; }
+.partners .section-label { display: block; margin-bottom: 32px; }
 
 .team-grid {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
-  gap: 0;
 }
-
 .member {
-  padding: 36px 48px 36px 0;
+  padding: 36px 64px 36px 0;
   border-top: 1px solid #eee;
 }
-.member:nth-child(odd) {
-  padding-right: 64px;
-  border-right: 1px solid #eee;
-}
-.member:nth-child(even) {
-  padding-left: 64px;
-  padding-right: 0;
-}
+.member:nth-child(even) { padding-left: 64px; padding-right: 0; border-left: 1px solid #eee; }
 
 .member-photo {
-  width: 100%;
-  aspect-ratio: 3/2;
+  width: 100%; aspect-ratio: 3/2;
   background: #ebebeb;
   margin-bottom: 20px;
+  display: flex; align-items: center; justify-content: center;
+  font-family: var(--karla); font-size: 10px;
+  letter-spacing: 0.14em; text-transform: uppercase; color: #bbb;
+}
+.member-name { font-family: var(--garamond); font-size: 20px; color: var(--black); margin-bottom: 4px; }
+.member-role { font-family: var(--garamond); font-style: italic; font-size: 14px; color: var(--grey); margin-bottom: 16px; }
+.member-bio  { font-family: var(--garamond); font-size: 14px; line-height: 1.8; color: var(--grey); }
+
+/* ── PAST & PRESENT TEAM ── */
+.past-team { margin-bottom: 80px; }
+.past-team .section-label { display: block; margin-bottom: 24px; }
+
+.name-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 0;
+}
+.name-row {
   display: flex;
-  align-items: center;
-  justify-content: center;
-  font-family: var(--karla);
-  font-size: 10px;
-  letter-spacing: 0.14em;
-  text-transform: uppercase;
-  color: #bbb;
-  /* swap: background: url('photos/andrew.jpg') center/cover; */
+  justify-content: space-between;
+  align-items: baseline;
+  padding: 11px 0;
+  border-top: 1px solid #eee;
+  padding-right: 40px;
 }
+.name-row:nth-child(3n) { padding-right: 0; }
+.name-val { font-family: var(--garamond); font-size: 16px; color: var(--black); }
+.name-note { font-family: var(--garamond); font-style: italic; font-size: 13px; color: var(--faint); }
 
-.member-name {
-  font-family: var(--garamond);
-  font-size: 20px;
-  color: var(--black);
-  margin-bottom: 4px;
+/* ── COLLABORATORS ── */
+.collaborators .section-label { display: block; margin-bottom: 24px; }
+
+.collab-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 0;
 }
-
-.member-role {
-  font-family: var(--garamond);
-  font-style: italic;
-  font-size: 14px;
-  color: var(--grey);
-  margin-bottom: 16px;
+.collab-item {
+  padding: 11px 40px 11px 0;
+  border-top: 1px solid #eee;
 }
+.collab-item:nth-child(3n) { padding-right: 0; }
+.collab-name { font-family: var(--garamond); font-size: 16px; color: var(--black); }
+.collab-type { font-family: var(--garamond); font-style: italic; font-size: 13px; color: var(--grey); display: block; }
 
-.member-bio {
-  font-family: var(--garamond);
-  font-size: 14px;
-  line-height: 1.8;
-  color: var(--grey);
-}
-
-/* ── FOOTER ────────────────────────────── */
+/* ── FOOTER ── */
 footer {
-  display: flex;
-  align-items: center;
-  justify-content: center;
+  display: flex; align-items: center; justify-content: center;
   padding: 20px 40px;
 }
 .footer-cities {
-  font-family: var(--garamond);
-  font-style: italic;
-  font-size: 13px;
-  color: var(--faint);
-  letter-spacing: 0.04em;
+  font-family: var(--garamond); font-style: italic;
+  font-size: 13px; color: var(--faint); letter-spacing: 0.04em;
 }
 
-/* ── MOBILE ────────────────────────────── */
+/* ── MOBILE ── */
 @media (max-width: 720px) {
   nav { padding: 14px 20px; }
-  main { padding: 32px 20px 48px; }
-  .team-grid { grid-template-columns: 1fr; }
-  .member, .member:nth-child(odd), .member:nth-child(even) {
-    padding: 32px 0; border-right: none;
-  }
+  main { padding: 32px 20px 60px; }
+  .team-grid, .name-grid, .collab-grid { grid-template-columns: 1fr; }
+  .member, .member:nth-child(even) { padding: 32px 0; border-left: none; }
+  .name-row, .collab-item { padding-right: 0; }
   footer { padding: 16px 20px; }
 }
 a:focus-visible { outline: 2px solid var(--blue); outline-offset: 3px; }
@@ -204,47 +183,104 @@ a:focus-visible { outline: 2px solid var(--blue); outline-offset: 3px; }
 </nav>
 
 <main>
-  <p class="page-title">About</p>
 
+  <!-- ── STATEMENT ── -->
   <div class="statement">
+    <span class="section-label">About</span>
     <p>MTGRP is an architecture practice working at the intersection of thermal conditions, open-ended use, and collective space. We pursue a political approach to material expression — buildings as proposals about how life is organised and shared.</p>
-    <p>Our work spans housing, adaptive reuse, urban design, and competition. Across these scales we return to the same questions: how a building manages energy and climate as a social act; how programme can remain underdetermined; how the shared spaces of a building carry as much weight as the private ones.</p>
-    <p>We are interested in metabolism and circularity not as technical positions but as political ones — in what it means to build with and within existing material and social structures rather than against them.</p>
+    <p class="body">Our work spans housing, adaptive reuse, urban design, and competition. Across these scales we return to the same questions: how a building manages energy and climate as a social act; how programme can remain underdetermined; how the shared spaces of a building carry as much weight as the private ones.</p>
+    <p class="body">We are interested in metabolism and circularity not as technical positions but as political ones — in what it means to build with and within existing material and social structures rather than against them.</p>
   </div>
 
-  <p class="team-label">Partners</p>
+  <!-- ── PARTNERS ── -->
+  <div class="partners">
+    <span class="section-label">Partners</span>
+    <div class="team-grid">
 
-  <div class="team-grid">
+      <div class="member">
+        <div class="member-photo">Photo</div>
+        <p class="member-name">Andrew Georges</p>
+        <p class="member-role">Partner</p>
+        <p class="member-bio">Add a short bio for Andrew here — background, education, areas of focus within the practice, and any particular research interests or external roles.</p>
+      </div>
 
-    <div class="member">
-      <div class="member-photo">Photo</div>
-      <p class="member-name">Andrew Georges</p>
-      <p class="member-role">Partner</p>
-      <p class="member-bio">Andrew studied architecture at the Lebanese American University (BArch) before completing the Master of Advanced Studies in Collective Housing (MCH) at ETSAM and ETH Zurich. His research, culminating in the thesis Unframing Collective Housing Through Ideology, informs a practice deeply engaged with the politics of space, modular systems, and architectural ghosts. Operating from Madrid, his work bridges these theoretical frameworks with the mechanics of circularity and metabolism. Recent andrew was awarded for the Europan-winning Ruckhalde masterplan in St. Gallen.</p>
+      <div class="member">
+        <div class="member-photo">Photo</div>
+        <p class="member-name">Charbel Abou Chacra</p>
+        <p class="member-role">Partner</p>
+        <p class="member-bio">Add a short bio for Charbel here — background, education, areas of focus within the practice, and any particular research interests or external roles.</p>
+      </div>
+
+      <div class="member">
+        <div class="member-photo">Photo</div>
+        <p class="member-name">Nahi El Khoury</p>
+        <p class="member-role">Partner</p>
+        <p class="member-bio">Add a short bio for Nahi here — background, education, areas of focus within the practice, and any particular research interests or external roles.</p>
+      </div>
+
+      <div class="member">
+        <div class="member-photo">Photo</div>
+        <p class="member-name">Joe Chamata</p>
+        <p class="member-role">Partner</p>
+        <p class="member-bio">Add a short bio for Joe here — background, education, areas of focus within the practice, and any particular research interests or external roles.</p>
+      </div>
+
     </div>
-
-    <div class="member">
-      <div class="member-photo">Photo</div>
-      <p class="member-name">Charbel Abou Chacra</p>
-      <p class="member-role">Partner</p>
-      <p class="member-bio">Add a short bio for Charbel here — background, education, areas of focus within the practice, and any particular research interests or external roles.</p>
-    </div>
-
-    <div class="member">
-      <div class="member-photo">Photo</div>
-      <p class="member-name">Nahi El Khoury</p>
-      <p class="member-role">Partner</p>
-      <p class="member-bio">Add a short bio for Nahi here — background, education, areas of focus within the practice, and any particular research interests or external roles.</p>
-    </div>
-
-    <div class="member">
-      <div class="member-photo">Photo</div>
-      <p class="member-name">Joe Chamata</p>
-      <p class="member-role">Partner</p>
-      <p class="member-bio">Add a short bio for Joe here — background, education, areas of focus within the practice, and any particular research interests or external roles.</p>
-    </div>
-
   </div>
+
+  <!-- ── PAST & PRESENT TEAM ── -->
+  <div class="past-team">
+    <span class="section-label">Team</span>
+    <div class="name-grid">
+      <!--
+        Add team members here as .name-row divs.
+        name-note is optional — use it for years active, role, or location.
+        Example:
+        <div class="name-row">
+          <span class="name-val">Jana Novák</span>
+          <span class="name-note">2021–2023</span>
+        </div>
+      -->
+      <div class="name-row">
+        <span class="name-val">Andrew Georges</span>
+        <span class="name-note">Partner</span>
+      </div>
+      <div class="name-row">
+        <span class="name-val">Charbel Abou Chacra</span>
+        <span class="name-note">Partner</span>
+      </div>
+      <div class="name-row">
+        <span class="name-val">Nahi El Khoury</span>
+        <span class="name-note">Partner</span>
+      </div>
+      <div class="name-row">
+        <span class="name-val">Joe Chamata</span>
+        <span class="name-note">Partner</span>
+      </div>
+      <!-- add past members below -->
+    </div>
+  </div>
+
+  <!-- ── COLLABORATORS ── -->
+  <div class="collaborators">
+    <span class="section-label">Collaborators</span>
+    <div class="collab-grid">
+      <!--
+        Add collaborating firms / studios here as .collab-item divs.
+        collab-type is optional — use it for discipline (Engineer, Landscape, etc.)
+        Example:
+        <div class="collab-item">
+          <span class="collab-name">Arup</span>
+          <span class="collab-type">Structural Engineering</span>
+        </div>
+      -->
+      <div class="collab-item">
+        <span class="collab-name">Add collaborator</span>
+        <span class="collab-type">Discipline</span>
+      </div>
+    </div>
+  </div>
+
 </main>
 
 <footer>
