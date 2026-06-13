@@ -49,7 +49,7 @@ const PROJECTS = [
     budget: "—",
     status: "Winner",
     photos: 5,
-    team: ["Andrew Georges", "Jorge Sanchez Bajo", "Bettina Kagelmacher", "Roman Schober"],
+    team: ["Andrew Georges, Jorge Sanchez Bajo, Bettina Kagelmacher, Roman Schober"],
     collaborators: ["tebt+","Bettina Kagelmacher", "Roman Schober"],
   },
   {
@@ -63,7 +63,7 @@ const PROJECTS = [
     budget: "—",
     status: "Competition entry",
     photos: 5,
-    team: ["Andrew Georges", "Jorge Sanchez Bajo", "Bettina Kagelmacher", "Roman Schober"],
+    team: ["Andrew Georges, Jorge Sanchez Bajo, Bettina Kagelmacher, Roman Schober"],
     collaborators: ["tebt+","Bettina Kagelmacher", "Roman Schober"],
   },
   {
