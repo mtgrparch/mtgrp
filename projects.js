@@ -104,7 +104,7 @@ const PROJECTS = [
     size: "—",
     budget: "—",
     status: "—",
-    photos: 5,
+    photos: 10,
     team: ["Andrew Georges", "Jorge Sanchez Bajo", "Andres Solano"],
     collaborators: ["tebt+","esteoeste estudio"],
   },
