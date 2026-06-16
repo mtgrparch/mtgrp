@@ -133,6 +133,40 @@ main { flex: 1; padding: 48px 40px 80px; }
 .name-val { font-family: var(--garamond); font-size: 16px; color: var(--black); }
 .name-note { font-family: var(--garamond); font-style: italic; font-size: 13px; color: var(--faint); }
 
+/* ── PUBLICATIONS ── */
+.publications { margin-bottom: 80px; }
+.publications .section-label { display: block; margin-bottom: 24px; }
+ 
+.pub-list { display: flex; flex-direction: column; }
+ 
+.pub-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  padding: 12px 0;
+  border-top: 1px solid #eee;
+  text-decoration: none;
+  color: var(--black);
+  transition: color 0.15s;
+  gap: 40px;
+}
+.pub-item:last-child { border-bottom: 1px solid #eee; }
+.pub-item:hover .pub-title { color: var(--blue); }
+ 
+.pub-title {
+  font-family: var(--garamond);
+  font-size: 17px;
+  transition: color 0.15s;
+}
+.pub-meta {
+  font-family: var(--garamond);
+  font-style: italic;
+  font-size: 13px;
+  color: var(--grey);
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+  
 /* ── COLLABORATORS ── */
 .collaborators .section-label { display: block; margin-bottom: 24px; }
 
@@ -261,6 +295,24 @@ a:focus-visible { outline: 2px solid var(--blue); outline-offset: 3px; }
     </div>
   </div>
 
+<!-- ── PUBLICATIONS ── -->
+<div class="publications">
+  <span class="section-label">Publications</span>
+  <div class="pub-list">
+ 
+    <a class="pub-item" href="https://www.europan-europe.eu/en/exchanges/die-den-gletscher-bewohnen" target="_blank" rel="noopener">
+      <span class="pub-title">Die Den Gletscher Bewohnen</span>
+      <span class="pub-meta">Europan 18 Portrait &mdash; 2026</span>
+    </a>
+ 
+    <a class="pub-item" href="https://unbuiltarch.org/en/the-walled-garden-2/" target="_blank" rel="noopener">
+      <span class="pub-title">Walled Garden</span>
+      <span class="pub-meta">unbuiltarch Journal &mdash; 2023</span>
+    </a>
+ 
+  </div>
+</div>
+  
   <!-- ── COLLABORATORS ── -->
   <div class="collaborators">
     <span class="section-label">Collaborators</span>
