@@ -203,7 +203,7 @@ const PROJECTS = [
     budget: "—",
     status: "1st Prize",
     photos: 6,
-    team: ["Charbel Abou Chacra", "Nahi El Khoury", "Kay Bardawil", "????", "????"],
+    team: ["Charbel Abou Chacra", "Nahi El Khoury", "Kay Bardawil", "Charbel Corbani", "????"],
     collaborators: [],
   },
 
