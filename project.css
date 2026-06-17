@@ -71,9 +71,13 @@ nav {
   padding: 40px 32px 32px;
   display: flex;
   flex-direction: column;
-  overflow: hidden; /* sidebar never scrolls */
+  overflow-y: auto; 
+  overflow-x: hidden; 
   height: 100%;
+  scrollbar-width: none;
 }
+
+.sidebar::-webkit-scrollbar { display: none; }
 
 .back-link {
   font-family: var(--karla);
