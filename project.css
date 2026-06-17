@@ -167,10 +167,12 @@ nav {
   display: block;
 }
 
-/* each placeholder gets a slightly different aspect ratio for visual rhythm */
-.img-block:nth-child(3n+1) { aspect-ratio: 4/3; }
-.img-block:nth-child(3n+2) { aspect-ratio: 3/4; }
-.img-block:nth-child(3n)   { aspect-ratio: 16/9; }
+.img-block img {
+  width: 100%;      /* Forces the image to fill the exact width of the column */
+  height: auto;     /* Lets the image scale its height naturally based on its original proportions */
+  display: block;   /* Removes the tiny invisible gap browsers put under images */
+}
+
 
 .photo-ph {
   width: 100%;
