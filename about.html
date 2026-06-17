@@ -93,22 +93,30 @@ main { flex: 1; padding: 48px 40px 80px; }
 
 .team-grid {
   display: grid;
-  grid-template-columns: repeat(2, 1fr);
+  grid-template-columns: repeat(4, 1fr);
+  gap: 0 32px;
 }
 .member {
-  padding: 36px 64px 36px 0;
+  padding: 36px 0;
   border-top: 1px solid #eee;
 }
-.member:nth-child(even) { padding-left: 64px; padding-right: 0; border-left: 1px solid #eee; }
 
 .member-photo {
-  width: 100%; aspect-ratio: 3/2;
+  width: 100%; aspect-ratio: 3/4;
   background: #ebebeb;
   margin-bottom: 20px;
+  overflow: hidden;
   display: flex; align-items: center; justify-content: center;
   font-family: var(--karla); font-size: 10px;
   letter-spacing: 0.14em; text-transform: uppercase; color: #bbb;
 }
+
+.member-photo img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
 .member-name { font-family: var(--garamond); font-size: 20px; color: var(--black); margin-bottom: 4px; }
 .member-role { font-family: var(--garamond); font-style: italic; font-size: 14px; color: var(--grey); margin-bottom: 16px; }
 .member-bio  { font-family: var(--garamond); font-size: 14px; line-height: 1.8; color: var(--grey); }
@@ -199,7 +207,7 @@ footer {
   nav { padding: 14px 20px; }
   main { padding: 32px 20px 60px; }
   .team-grid, .name-grid, .collab-grid { grid-template-columns: 1fr; }
-  .member, .member:nth-child(even) { padding: 32px 0; border-left: none; }
+  .member { padding: 32px 0; }
   .name-row, .collab-item { padding-right: 0; }
   footer { padding: 16px 20px; }
 }
@@ -257,7 +265,7 @@ a:focus-visible { outline: 2px solid var(--blue); outline-offset: 3px; }
         <div class="member-photo">Photo</div>
         <p class="member-name">Joe Chamata</p>
         <p class="member-role">Co-Founder</p>
-        <p class="member-bio">Joe is a partner at the firm and has a background in architecture and urban design. He has worked on various projects focusing on sustainable design and community engagement. His research interests include the intersection of technology and architecture, as well as the role of design in addressing social challenges.</p>
+        <p class="member-bio">Joe studied architecture at Université Saint-Esprit de Kaslik (BArch, MArch). His academic research, established in the thesis Automation: Humanoid x Machine, investigates fabrication, robotic production, and mass customization with a specific focus on architectural assemblies and joinery. This academic focus translated directly into applied prototyping as part of the Beirut Makers collective; where he was granted funding in 2022 to build a physical prototype for the group's exhibition at the Beirut Art Center. In 2023, he was awarded second prize for Play as Preservation in the Never Enough Architecture competition. Professionally, Joe operates between Beirut and the Gulf, applying his technical and research-driven background to large-scale developments across Saudi Arabia and the UAE. His experience includes the development of Qiddiya city, where he leads teams and coordinates multidisciplinary sub-consultants.</p>
       </div>
 
     </div>
