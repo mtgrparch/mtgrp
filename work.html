@@ -160,6 +160,12 @@ a:focus-visible { outline: 2px solid var(--blue); outline-offset: 3px; }
 
   document.querySelector('.page-title').textContent = `Work — ${PROJECTS.length} projects`;
 </script>
-
+<script>
+  // Check if URL ends with ".html"
+  if (window.location.pathname.endsWith('.html')) {
+    // Redirect to the same page without ".html"
+    window.location.href = window.location.pathname.replace('.html', '');
+  }
+</script>
 </body>
 </html>
