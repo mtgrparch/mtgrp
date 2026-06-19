@@ -188,22 +188,23 @@ footer {
 <footer>
   <span class="footer-cities">Beirut &nbsp;&mdash;&nbsp; Madrid &nbsp;&mdash;&nbsp; Milan</span>
 </footer>
+
 <script>
 // Plan slideshow - cycles through .landing-plan images every 3 seconds
-const slides = document.querySelectorAll(#plan-wrap .landing-plan');
+const slides = document.querySelectorAll('#plan-wrap .landing-plan');
 let current = 0;
 
 if (slides.length > 1) {
-setInterval( () =>/ }
-
-slides[current].classList.remove('active')
-
-current = (current + 1) % slides.length;
-slides[current].classList.add('active'); 
-}, 3000);
+  setInterval(() => {
+    slides[current].classList.remove('active');
+    
+    current = (current + 1) % slides.length;
+    
+    slides[current].classList.add('active'); 
+  }, 3000);
 }
-
 </script>
+
   
 </body>
 </html>
