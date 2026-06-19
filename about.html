@@ -355,6 +355,12 @@ a:focus-visible { outline: 2px solid var(--blue); outline-offset: 3px; }
 <footer>
   <span class="footer-cities">Beirut &nbsp;&mdash;&nbsp; Madrid &nbsp;&mdash;&nbsp; Milan</span>
 </footer>
-
+<script>
+  // Check if URL ends with ".html"
+  if (window.location.pathname.endsWith('.html')) {
+    // Redirect to the same page without ".html"
+    window.location.href = window.location.pathname.replace('.html', '');
+  }
+</script>
 </body>
 </html>
