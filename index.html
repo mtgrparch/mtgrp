@@ -20,9 +20,7 @@
   --karla:    'Karla', sans-serif;
   --garamond: 'EB Garamond', serif;
 }
-html, body {
-  height: 100%;
-}
+html, body { height: 100%; }
 body {
   background: var(--white);
   color: var(--black);
@@ -46,26 +44,20 @@ body::before {
 }
 
 /* ── PLAN IMAGE SLIDESHOW ── */
-/*
-  Repositioned to overlap the logo area.
-  Centered vertically in the main content zone, spanning full width.
-*/
 .landing-plan-wrap {
   position: fixed;
-  /* Stretch across the full page, vertically centered */
   top: 50%;
   left: 0;
   transform: translateY(-50%);
   width: 100vw;
   height: 80vh;
-  z-index: 1;           /* sits above grid, below text */
+  z-index: 1;
   pointer-events: none;
 }
 
 .landing-plan {
   position: absolute;
-  top: 0;
-  left: 0;
+  inset: 0;
   width: 100%;
   height: 100%;
   object-fit: contain;
@@ -73,26 +65,20 @@ body::before {
   opacity: 0;
   transition: opacity 1s ease-in-out;
 }
+.landing-plan.active { opacity: 1; }
 
-.landing-plan.active {
-  opacity: 1;
-}
-
-/* ── LANDING MAIN ──────────────────────── */
+/* ── MAIN ── */
 main {
   position: relative;
-  z-index: 2;           /* above plans */
+  z-index: 2;
   flex: 1;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
   padding: 40px;
   min-height: 0;
-  /* allow clicks through to pass-through areas */
   pointer-events: none;
 }
-
-/* re-enable pointer events only on interactive children */
 main * { pointer-events: auto; }
 
 .land-top {
@@ -100,7 +86,6 @@ main * { pointer-events: auto; }
   justify-content: space-between;
   align-items: flex-start;
 }
-
 .land-brand {
   font-family: var(--karla);
   font-size: 13px;
@@ -108,7 +93,6 @@ main * { pointer-events: auto; }
   letter-spacing: 0.12em;
   color: var(--black);
 }
-
 .land-year {
   font-family: var(--garamond);
   font-style: italic;
@@ -116,7 +100,6 @@ main * { pointer-events: auto; }
   color: var(--grey);
 }
 
-/* big clickable logo centre */
 .land-center {
   display: flex;
   flex-direction: column;
@@ -126,36 +109,94 @@ main * { pointer-events: auto; }
   padding: 32px 0;
 }
 
+/*
+  BLEND TECHNIQUE:
+  The logo sits inside a positioned wrapper with mix-blend-mode: multiply.
+  We paint the text white on a black rectangle.
+  multiply blend: white areas let the plan show through normally,
+  but the white text shape "erases" the plan lines beneath it to white —
+  exactly the negative/cutout effect from the GIF.
+  
+  Actually simplest correct approach:
+  Keep logo black. Place a full-size white overlay with mix-blend-mode: difference
+  BEHIND the text but ABOVE the plans — this inverts the plans everywhere,
+  then the black logo acts as a mask that punches back through.
+  
+  Cleanest native approach: use mix-blend-mode: exclusion on the logo itself,
+  color: white. On white bg = invisible. So instead:
+  
+  CORRECT APPROACH:
+  - Logo text color: black (visible on white bg)
+  - The plan images use mix-blend-mode: multiply on a black background layer
+    so where plans are white they let the bg show, where lines exist they show dark
+  - Then logo with mix-blend-mode: difference + color white:
+    over white bg (plan background) = black (readable)
+    over dark plan lines = inverted to white (lines disappear inside letters)
+    
+  This IS the correct setup — the logo just needs a non-white page bg.
+  Set body bg to black, plans multiply, logo difference+white.
+  But that changes the whole page aesthetic.
+  
+  SIMPLEST that matches the GIF exactly without changing aesthetics:
+  Absolute-position a canvas/svg over the logo area and do pixel blending there.
+  
+  OR — just use the logo as a PNG overlay with mix-blend-mode: difference
+  placed absolutely over the plans at z-index 3.
+*/
+
+/* 
+  FINAL WORKING APPROACH:
+  Logo wrapper creates a new stacking context.
+  Logo text is black — visible on white background (normal).
+  We place the plans INSIDE the logo stacking context via a pseudo-element
+  so the blend applies correctly within the isolated layer.
+  
+  Actually the simplest that works: 
+  Set the .land-logo-wrap to position:relative, isolation:isolate
+  Clone the plan images inside it absolutely positioned.
+  Logo text uses mix-blend-mode: difference, color: white.
+  Within the isolated context: white text + difference over the plan images
+  = inverted plan lines show white inside letters, black outside = perfect.
+*/
+
+.land-logo-wrap {
+  position: relative;
+  display: inline-block;
+  isolation: isolate;   /* NEW stacking context — blend is scoped here */
+}
+
+/* Plan images cloned inside the logo wrap via JS — see script */
+.land-logo-wrap .plan-clone {
+  position: absolute;
+  inset: -200px -60px; /* bleed beyond the text a bit */
+  object-fit: contain;
+  object-position: left center;
+  opacity: 0;
+  transition: opacity 1s ease-in-out;
+  pointer-events: none;
+  z-index: 0;
+}
+.land-logo-wrap .plan-clone.active { opacity: 1; }
+
 a.land-logo {
+  position: relative;
+  z-index: 1;
   font-family: var(--karla);
   font-weight: 700;
   font-size: clamp(88px, 16vw, 220px);
   line-height: 0.88;
   letter-spacing: -0.03em;
-  color: var(--black);
   text-decoration: none;
   display: block;
-  transition: color 0.15s;
   cursor: pointer;
-
-  /*
-    THE KEY EFFECT:
-    mix-blend-mode: difference makes black text on white background
-    invert whatever is behind it — plan lines (dark) become white,
-    white background stays white. Identical to the GIF blend.
-  */
+  /* difference blend with white text:
+     white over white bg = black (logo readable)
+     white over dark line = inverted to white (line disappears inside letter) */
+  color: white;
   mix-blend-mode: difference;
-  /* White text + difference = inversion of what's below */
-  color: var(--white);
-
-  /* isolate so blend only affects layers below, not the whole page */
-  isolation: isolate;
+  transition: color 0.15s;
 }
-
-/* On hover, switch to blue — difference blend makes it a complementary color */
-a.land-logo:hover {
-  color: #0033FF;
-}
+a.land-logo:hover { color: #0033FF; }
 
 .land-desc {
   margin-top: 32px;
@@ -166,7 +207,7 @@ a.land-logo:hover {
   max-width: 520px;
 }
 
-/* ── FOOTER STRIP ──────────────────────── */
+/* ── FOOTER ── */
 footer {
   position: relative;
   z-index: 2;
@@ -175,7 +216,6 @@ footer {
   justify-content: center;
   padding: 16px 40px;
 }
-
 .footer-cities {
   font-family: var(--garamond);
   font-style: italic;
@@ -184,19 +224,16 @@ footer {
   letter-spacing: 0.04em;
 }
 
-/* mobile */
 @media (max-width: 600px) {
   main { padding: 24px 20px; }
   footer { padding: 14px 20px; }
-  .landing-plan-wrap {
-    height: 60vh;
-  }
+  .landing-plan-wrap { height: 60vh; }
 }
 </style>
 </head>
 <body>
 
-<!-- Plan image slideshow — z-index 1, behind logo text -->
+<!-- Background plan slideshow (decorative, full page) -->
 <div class="landing-plan-wrap" id="plan-wrap">
   <img src="photos/plan-01.png" class="landing-plan active" alt="">
   <img src="photos/plan-02.png" class="landing-plan" alt="">
@@ -216,24 +253,51 @@ footer {
   </div>
 
   <div class="land-center">
-    <a class="land-logo" href="work.html" aria-label="Enter site — go to Work">MTGRP</a>
+    <!-- Isolated wrapper: plan clones + blended logo live here -->
+    <div class="land-logo-wrap" id="logo-wrap">
+      <a class="land-logo" href="work.html" aria-label="Enter site — go to Work">MTGRP</a>
+    </div>
     <p class="land-desc">Architecture concerned with metabolism and circularity — a political approach to temperature, material expression, and collective use. We are interested in the spaces in between.</p>
   </div>
 </main>
 
 <footer>
-  <span class="footer-cities">Beirut &nbsp;&mdash;&nbsp; Madrid &nbsp;&mdash;&nbsp; Milan</span>
+  <span class="footer-cities">Beirut &nbsp;&mdash;&nbsp; Milan &nbsp;&mdash;&nbsp; Madrid</span>
 </footer>
 
 <script>
-const slides = document.querySelectorAll('#plan-wrap .landing-plan');
+const planSrcs = [
+  'photos/plan-01.png','photos/plan-02.png','photos/plan-03.png',
+  'photos/plan-04.png','photos/plan-05.png','photos/plan-06.png',
+  'photos/plan-07.png','photos/plan-08.png','photos/plan-10.png'
+];
+
+const bgWrap  = document.getElementById('plan-wrap');
+const logoWrap = document.getElementById('logo-wrap');
+const bgSlides = bgWrap.querySelectorAll('.landing-plan');
+
+// Clone plan images into the logo wrap so blend is isolated
+const clones = planSrcs.map((src, i) => {
+  const img = document.createElement('img');
+  img.src = src;
+  img.className = 'plan-clone' + (i === 0 ? ' active' : '');
+  img.alt = '';
+  logoWrap.insertBefore(img, logoWrap.firstChild);
+  return img;
+});
+
 let current = 0;
 
-if (slides.length > 1) {
+if (planSrcs.length > 1) {
   setInterval(() => {
-    slides[current].classList.remove('active');
-    current = (current + 1) % slides.length;
-    slides[current].classList.add('active');
+    // Advance background
+    bgSlides[current].classList.remove('active');
+    clones[current].classList.remove('active');
+
+    current = (current + 1) % planSrcs.length;
+
+    bgSlides[current].classList.add('active');
+    clones[current].classList.add('active');
   }, 3000);
 }
 </script>
