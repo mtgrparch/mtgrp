@@ -46,13 +46,19 @@ body::before {
 }
 
 /* ── PLAN IMAGE SLIDESHOW ── */
+/*
+  Repositioned to overlap the logo area.
+  Centered vertically in the main content zone, spanning full width.
+*/
 .landing-plan-wrap {
   position: fixed;
-  right: -40px;
-  bottom: 60px;
-  width: 55vw;
-  aspect-ratio: 1 / 1; /* adjust to match your plan's proportions, e.g. 4/3, 16/9 */
-  z-index: 0;
+  /* Stretch across the full page, vertically centered */
+  top: 50%;
+  left: 0;
+  transform: translateY(-50%);
+  width: 100vw;
+  height: 80vh;
+  z-index: 1;           /* sits above grid, below text */
   pointer-events: none;
 }
 
@@ -63,6 +69,7 @@ body::before {
   width: 100%;
   height: 100%;
   object-fit: contain;
+  object-position: center center;
   opacity: 0;
   transition: opacity 1s ease-in-out;
 }
@@ -74,14 +81,19 @@ body::before {
 /* ── LANDING MAIN ──────────────────────── */
 main {
   position: relative;
-  z-index: 1;
+  z-index: 2;           /* above plans */
   flex: 1;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
   padding: 40px;
   min-height: 0;
+  /* allow clicks through to pass-through areas */
+  pointer-events: none;
 }
+
+/* re-enable pointer events only on interactive children */
+main * { pointer-events: auto; }
 
 .land-top {
   display: flex;
@@ -125,9 +137,25 @@ a.land-logo {
   display: block;
   transition: color 0.15s;
   cursor: pointer;
+
+  /*
+    THE KEY EFFECT:
+    mix-blend-mode: difference makes black text on white background
+    invert whatever is behind it — plan lines (dark) become white,
+    white background stays white. Identical to the GIF blend.
+  */
+  mix-blend-mode: difference;
+  /* White text + difference = inversion of what's below */
+  color: var(--white);
+
+  /* isolate so blend only affects layers below, not the whole page */
+  isolation: isolate;
 }
 
-a.land-logo:hover { color: var(--blue); }
+/* On hover, switch to blue — difference blend makes it a complementary color */
+a.land-logo:hover {
+  color: #0033FF;
+}
 
 .land-desc {
   margin-top: 32px;
@@ -141,7 +169,7 @@ a.land-logo:hover { color: var(--blue); }
 /* ── FOOTER STRIP ──────────────────────── */
 footer {
   position: relative;
-  z-index: 1;
+  z-index: 2;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -160,12 +188,15 @@ footer {
 @media (max-width: 600px) {
   main { padding: 24px 20px; }
   footer { padding: 14px 20px; }
+  .landing-plan-wrap {
+    height: 60vh;
+  }
 }
 </style>
 </head>
 <body>
 
-<!-- Plan image slideshow sits behind everything, z-index: 0 -->
+<!-- Plan image slideshow — z-index 1, behind logo text -->
 <div class="landing-plan-wrap" id="plan-wrap">
   <img src="photos/plan-01.png" class="landing-plan active" alt="">
   <img src="photos/plan-02.png" class="landing-plan" alt="">
@@ -195,21 +226,17 @@ footer {
 </footer>
 
 <script>
-// Plan slideshow - cycles through .landing-plan images every 3 seconds
 const slides = document.querySelectorAll('#plan-wrap .landing-plan');
 let current = 0;
 
 if (slides.length > 1) {
   setInterval(() => {
     slides[current].classList.remove('active');
-    
     current = (current + 1) % slides.length;
-    
-    slides[current].classList.add('active'); 
+    slides[current].classList.add('active');
   }, 3000);
 }
 </script>
 
-  
 </body>
 </html>
