@@ -26,10 +26,10 @@ const PROJECTS = [
 
   {
     id: "p13",
-    title: "XXXXXXXXXX",
-    subtitle: "XXXXXXXXXX",
-    desc: "XXXXXXXXXX",
-    location: "XXXXXXXXXX",
+    title: "TBA",
+    subtitle: "Coming Soon",
+    desc: "TBA",
+    location: "TBA",
     type: "—",
     size: "—",
     budget: "—",
