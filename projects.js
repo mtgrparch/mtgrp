@@ -168,7 +168,7 @@ const PROJECTS = [
     id: "p05",
     title: "Amchit Fire Proving Grounds",
     subtitle: "Ephemeral Station",
-    desc: "A temporary firefighter training station in Amchit, Lebanon — designed to transform into a public park for children once its operational phase is complete. A single structure serving two sequential programmes, using material and landscape logic to negotiate the transition between them.",
+    desc: "A temporary firefighter training station in Amchit, Lebanon — designed to transform into a public park for children once its operational phase is complete. A single structure serving two sequential programmes, using material logic to negotiate the transition between them.",
     location: "Amchit, LB",
     type: "Public / Ephemeral",
     size: "—",
