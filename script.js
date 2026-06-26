@@ -124,11 +124,11 @@ function buildAboutHTML() {
         <span class="about-list-meta">Introductory Session - MCH</span>
       </div>
      <div class="about-list-item">
-        <span>Archival Work - Modern Architecture in Beirut</span>
+        <span>Archival Research - Modern Architecture in Beirut</span>
         <span class="about-list-meta">Arab Center for Architecture</span>
       </div>
      <div class="about-list-item">
-        <span>Advanced Graphics Workshop</span>
+        <span>Architectural Graphics Workshop</span>
         <span class="about-list-meta">Design X - Lebanese American University</span>
       </div>
     </div>
