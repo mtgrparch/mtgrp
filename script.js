@@ -76,7 +76,7 @@ function buildAboutHTML() {
   return `
     <div class="modal-title about-title">MTGRP</div>
     <p class="about-statement">
-      MTGRP is metagroupe is an architecture practice working at the intersection of thermal conditions, open-ended use, and collective space. We pursue a political approach to material expression — buildings as proposals about how life is organised and shared.
+      MTGRP is metagroupe is a collaborative architecture practice working at the intersection of thermal conditions, open-ended use, and collective space. We pursue a political approach to material expression — buildings as proposals about how life is organised and shared.
       <br><br>
       Our work spans housing, adaptive reuse, urban design, and competition. Across these scales we return to the same questions: how a building manages energy and climate as a social act; how programme can remain underdetermined; how the shared spaces of a building carry as much weight as the private ones.
       <br><br>
