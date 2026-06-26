@@ -1,215 +1,44 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta name="description" content="MTGRP or metagroupe architects is an architecture practice based in Beirut Lebanon, Madrid Spain, and Milan Italy working on housing, villas, adaptive reuse, and urban design. The members are Andrew Georges, Charbel Abou Chacra, Nahi El Khoury and Joe Chamata">
-<link rel="icon" href="photos/FAVICON/favicon.ico">
-<title>MTGRP</title>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Karla:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400&family=EB+Garamond:ital,wght@0,400;0,500;1,400;1,500&display=swap" rel="stylesheet">
-<style>
-*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-:root {
-  --white: #ffffff;
-  --black: #0a0a0a;
-  --blue:  #0033FF;
-  --grey:  #888;
-  --faint: #ccc;
-  --karla:    'Karla', sans-serif;
-  --garamond: 'EB Garamond', serif;
-}
-html, body {
-  height: 100%;
-}
-body {
-  background: var(--white);
-  color: var(--black);
-  font-family: var(--garamond);
-  -webkit-font-smoothing: antialiased;
-  display: flex;
-  flex-direction: column;
-}
-
-/* grid backdrop */
-body::before {
-  content: '';
-  position: fixed;
-  inset: 0;
-  z-index: 0;
-  pointer-events: none;
-  background-image:
-    linear-gradient(to right, rgba(0,0,0,0.045) 1px, transparent 1px),
-    linear-gradient(to bottom, rgba(0,0,0,0.045) 1px, transparent 1px);
-  background-size: 48px 48px;
-}
-
-/* ── PLAN IMAGE SLIDESHOW ── */
-.landing-plan-wrap {
-  position: fixed;
-  right: -40px;
-  bottom: 60px;
-  width: 55vw;
-  aspect-ratio: 1 / 1; /* adjust to match your plan's proportions, e.g. 4/3, 16/9 */
-  z-index: 0;
-  pointer-events: none;
-}
-
-.landing-plan {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  object-fit: contain;
-  opacity: 0;
-  transition: opacity 1s ease-in-out;
-}
-
-.landing-plan.active {
-  opacity: 1;
-}
-
-/* ── LANDING MAIN ──────────────────────── */
-main {
-  position: relative;
-  z-index: 1;
-  flex: 1;
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-  padding: 40px;
-  min-height: 0;
-}
-
-.land-top {
-  display: flex;
-  justify-content: space-between;
-  align-items: flex-start;
-}
-
-.land-brand {
-  font-family: var(--karla);
-  font-size: 13px;
-  font-weight: 600;
-  letter-spacing: 0.12em;
-  color: var(--black);
-}
-
-.land-year {
-  font-family: var(--garamond);
-  font-style: italic;
-  font-size: 13px;
-  color: var(--grey);
-}
-
-/* big clickable logo centre */
-.land-center {
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-  flex: 1;
-  justify-content: center;
-  padding: 32px 0;
-}
-
-a.land-logo {
-  font-family: var(--karla);
-  font-weight: 700;
-  font-size: clamp(88px, 16vw, 220px);
-  line-height: 0.88;
-  letter-spacing: -0.03em;
-  color: var(--black);
-  text-decoration: none;
-  display: block;
-  transition: color 0.15s;
-  cursor: pointer;
-}
-
-a.land-logo:hover { color: var(--blue); }
-
-.land-desc {
-  margin-top: 32px;
-  font-family: var(--garamond);
-  font-size: clamp(15px, 1.4vw, 18px);
-  line-height: 1.65;
-  color: var(--grey);
-  max-width: 520px;
-}
-
-/* ── FOOTER STRIP ──────────────────────── */
-footer {
-  position: relative;
-  z-index: 1;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  padding: 16px 40px;
-}
-
-.footer-cities {
-  font-family: var(--garamond);
-  font-style: italic;
-  font-size: 13px;
-  color: var(--faint);
-  letter-spacing: 0.04em;
-}
-
-/* mobile */
-@media (max-width: 600px) {
-  main { padding: 24px 20px; }
-  footer { padding: 14px 20px; }
-}
-</style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>MTGRP</title>
+  <link rel="icon" href="photos/FAVICON/favicon.ico">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Karla:wght@400;600;700;800&family=EB+Garamond:ital,wght@0,400;1,400&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
-<!-- Plan image slideshow sits behind everything, z-index: 0 -->
-<div class="landing-plan-wrap" id="plan-wrap">
-  <img src="photos/plan-01.png" class="landing-plan active" alt="">
-  <img src="photos/plan-02.png" class="landing-plan" alt="">
-  <img src="photos/plan-03.png" class="landing-plan" alt="">
-  <img src="photos/plan-04.png" class="landing-plan" alt="">
-  <img src="photos/plan-05.png" class="landing-plan" alt="">
-  <img src="photos/plan-06.png" class="landing-plan" alt="">
-  <img src="photos/plan-07.png" class="landing-plan" alt="">
-  <img src="photos/plan-08.png" class="landing-plan" alt="">
-  <img src="photos/plan-10.png" class="landing-plan" alt="">
-</div>
+  <!-- Top left: MTGRP wordmark -->
+  <div id="landing-desc">Architecture concerned with metabolism and circularity — a political approach to temperature, material expression, and collective use. We are interested in the spaces in between.</div>
+  <div id="wordmark">MTGRP</div>
 
-<main>
-  <div class="land-top">
-    <span class="land-brand">MTGRP</span>
-    <span class="land-year">Est. 2018</span>
+  <!-- Top right: + opens about modal -->
+  <div id="about-btn">+</div>
+
+  <!-- Bottom centre: offices -->
+  <div id="footer-cities">
+    <span id="weather-beirut">Beirut</span>
+    &nbsp;&mdash;&nbsp;
+    <span id="weather-madrid">Madrid</span>
+    &nbsp;&mdash;&nbsp;
+    <span id="weather-milan">Milan</span>
   </div>
 
-  <div class="land-center">
-    <a class="land-logo" href="work.html" aria-label="Enter site — go to Work">MTGRP</a>
-    <p class="land-desc">Architecture concerned with metabolism and circularity — a political approach to temperature, material expression, and collective use. We are interested in the spaces in between.</p>
+  <!-- Parallax columns injected by JS -->
+  <div class="parallax-wrapper" id="parallax-grid"></div>
+
+  <!-- Universal modal -->
+  <div id="modal-container" class="hidden">
+    <div class="modal-box">
+      <button id="close-modal">✕</button>
+      <div id="modal-content"></div>
+    </div>
   </div>
-</main>
 
-<footer>
-  <span class="footer-cities">Beirut &nbsp;&mdash;&nbsp; Madrid &nbsp;&mdash;&nbsp; Milan</span>
-</footer>
-
-<script>
-// Plan slideshow - cycles through .landing-plan images every 3 seconds
-const slides = document.querySelectorAll('#plan-wrap .landing-plan');
-let current = 0;
-
-if (slides.length > 1) {
-  setInterval(() => {
-    slides[current].classList.remove('active');
-    
-    current = (current + 1) % slides.length;
-    
-    slides[current].classList.add('active'); 
-  }, 3000);
-}
-</script>
-
-  
+  <script src="script.js"></script>
 </body>
 </html>
