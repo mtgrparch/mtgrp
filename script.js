@@ -41,7 +41,7 @@ const PARTNERS = [
 const COLLABORATORS = {
   // Fill these in — architects are individuals, offices are firms/studios
   architects: [
-    "Jorge Sanchez Bajo, Bettina Kagelmacher, Roman Schober, Jaques Zekian, Mike Chaiban, Valerie Saab, Christina Karam, Ryuhei Ismael Kagawa, Jorge Andres Rodriguez Angel, Andrey Bader",
+    "Jorge Sanchez Bajo, Bettina Kagelmacher, Roman Schober, Andres Solano,Jaques Zekian, Mike Chaiban, Valerie Saab, Christina Karam, Ryuhei Ismael Kagawa, Jorge Andres Rodriguez Angel, Andrey Bader",
   ],
   offices: [
     "tebt+, esteoeste, superunion, b.noma, studio street 9",
@@ -95,6 +95,10 @@ function buildAboutHTML() {
         <span>Walled Garden</span>
         <span class="about-list-meta">unbuiltarch Journal &mdash; 2023</span>
       </a>
+      <a href="https://issuu.com/mch_master/docs/untagged_final_online_" target="_blank" rel="noopener" class="about-list-item">
+        <span>#Untagged - Issue 1: A Year in Collective Housing</span>
+        <span class="about-list-meta">#Untagged &mdash; 2023</span>
+      </a>
       <a href="https://beirutartcenter.org/event/beirut-makers-x-beirut-art-center/" target="_blank" rel="noopener" class="about-list-item">
         <span>Pliee - Beirut Makers Exhibition</span>
         <span class="about-list-meta">Beirut Art Center &mdash; 2022</span>
@@ -118,6 +122,14 @@ function buildAboutHTML() {
       <div class="about-list-item">
         <span>Housing in Beirut</span>
         <span class="about-list-meta">Introductory Session - MCH</span>
+      </div>
+     <div class="about-list-item">
+        <span>Archival Work - Modern Architecture in Beirut</span>
+        <span class="about-list-meta">Arab Center for Architecture</span>
+      </div>
+     <div class="about-list-item">
+        <span>Advanced Graphics Workshop</span>
+        <span class="about-list-meta">Design X - Lebanese American University</span>
       </div>
     </div>
 
