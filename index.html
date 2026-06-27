@@ -1,19 +1,78 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" itemscope itemtype="https://schema.org/WebSite">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>MTGRP</title>
+
+  <!-- ── PRIMARY META ── -->
+  <title>MTGRP — Architecture Practice | Beirut · Madrid · Milan</title>
+  <meta name="description" content="MTGRP (Metagroupe) is a collaborative architecture practice working at the intersection of metabolism, circularity, thermal conditions, and collective space. Offices in Beirut, Madrid, and Milan.">
+  <meta name="keywords" content="architecture, MTGRP, Metagroupe, Beirut, Madrid, Milan, collective housing, adaptive reuse, circularity, metabolism, competition, urbanism">
+  <meta name="author" content="MTGRP — Metagroupe">
+  <link rel="canonical" href="https://mtgrp.xyz/">
+
+  <!-- ── OPEN GRAPH (social sharing) ── -->
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://mtgrp.xyz/">
+  <meta property="og:title" content="MTGRP — Architecture Practice">
+  <meta property="og:description" content="A collaborative architecture practice working at the intersection of metabolism, circularity, thermal conditions, and collective space. Beirut · Madrid · Milan.">
+  <meta property="og:image" content="https://mtgrp.xyz/photos/og-cover.jpg">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:site_name" content="MTGRP">
+  <meta property="og:locale" content="en_GB">
+
+  <!-- ── TWITTER / X CARD ── -->
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="MTGRP — Architecture Practice">
+  <meta name="twitter:description" content="A collaborative architecture practice working at the intersection of metabolism, circularity, thermal conditions, and collective space. Beirut · Madrid · Milan.">
+  <meta name="twitter:image" content="https://mtgrp.xyz/photos/og-cover.jpg">
+
+  <!-- ── STRUCTURED DATA (JSON-LD) ── -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "ArchitectureFirm",
+    "name": "MTGRP",
+    "alternateName": "Metagroupe",
+    "url": "https://mtgrp.xyz",
+    "logo": "https://mtgrp.xyz/photos/FAVICON/favicon.ico",
+    "image": "https://mtgrp.xyz/photos/og-cover.jpg",
+    "description": "A collaborative architecture practice working at the intersection of metabolism, circularity, thermal conditions, and collective space.",
+    "email": "metagroupearch@gmail.com",
+    "foundingDate": "2018",
+    "sameAs": [
+      "https://www.instagram.com/metagroupe/"
+    ],
+    "location": [
+      { "@type": "Place", "name": "Beirut, Lebanon" },
+      { "@type": "Place", "name": "Madrid, Spain" },
+      { "@type": "Place", "name": "Milan, Italy" }
+    ],
+    "member": [
+      { "@type": "Person", "name": "Andrew Georges", "jobTitle": "Co-Founder" },
+      { "@type": "Person", "name": "Charbel Abou Chacra", "jobTitle": "Co-Founder" },
+      { "@type": "Person", "name": "Nahi El Khoury", "jobTitle": "Co-Founder" },
+      { "@type": "Person", "name": "Joe Chamata", "jobTitle": "Co-Founder" }
+    ]
+  }
+  </script>
+
+  <!-- ── FAVICON ── -->
   <link rel="icon" href="photos/FAVICON/favicon.ico">
+  <link rel="apple-touch-icon" href="photos/FAVICON/favicon.ico">
+
+  <!-- ── FONTS ── -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Karla:wght@400;600;700;800&family=EB+Garamond:ital,wght@0,400;1,400&display=swap" rel="stylesheet">
+
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
   <!-- Top left: MTGRP wordmark -->
-  <div id="landing-desc">Architecture concerned with metabolism and circularity — a political approach to temperature, material expression, and collective use. We are interested in the spaces in between.</div>
+  <div id="landing-desc" aria-live="polite" itemprop="description">Architecture concerned with metabolism and circularity — a political approach to temperature, material expression, and collective use. We are interested in the spaces in between.</div>
   <div id="wordmark">MTGRP</div>
 
   <!-- Top right: + opens about modal -->

@@ -700,7 +700,70 @@ async function fetchWeather() {
   });
 }
 
-// ── 8. INIT ───────────────────────────────────────────────────────────────────
+// ── MULTILINGUAL DESCRIPTION SLIDESHOW ───────────────────────────────────────
+//  Cycles the landing description through EN → FR → ES → IT → AR → EN …
+//  Cross-fade via opacity transition; Arabic switches text-direction.
+
+const DESC_SLIDES = [
+  {
+    lang: 'en',
+    dir: 'ltr',
+    text: 'Architecture concerned with metabolism and circularity — a political approach to temperature, material expression, and collective use. We are interested in the spaces in between.',
+  },
+  {
+    lang: 'fr',
+    dir: 'ltr',
+    text: 'Architecture attentive au métabolisme et à la circularité — une approche politique de la température, de l\'expression matérielle et de l\'usage collectif. Nous nous intéressons aux espaces intermédiaires.',
+  },
+  {
+    lang: 'es',
+    dir: 'ltr',
+    text: 'Arquitectura concernida con el metabolismo y la circularidad — una aproximación política a la temperatura, la expresión material y el uso colectivo. Nos interesan los espacios intermedios.',
+  },
+  {
+    lang: 'it',
+    dir: 'ltr',
+    text: 'Architettura che si confronta con il metabolismo e la circolarità — un approccio politico alla temperatura, all\'espressione materiale e all\'uso collettivo. Siamo interessati agli spazi intermedi.',
+  },
+  {
+    lang: 'ar',
+    dir: 'rtl',
+    text: 'عمارة معنيّة بالتمثيل الحيوي والتدوير — مقاربة سياسية للحرارة، والتعبير المادي، والاستخدام الجماعي. نحن مهتمّون بالفضاءات البينيّة.',
+  },
+];
+
+function initDescSlideshow() {
+  const el = document.getElementById('landing-desc');
+  if (!el) return;
+
+  // Ensure smooth fade transition
+  el.style.transition = 'opacity 0.6s ease';
+
+  let current = 0;
+
+  function showSlide(index) {
+    const slide = DESC_SLIDES[index];
+    // Fade out
+    el.style.opacity = '0';
+
+    setTimeout(() => {
+      el.textContent  = slide.text;
+      el.lang         = slide.lang;
+      el.dir          = slide.dir;
+      // Right-align Arabic text so it sits flush to the left edge of the panel
+      el.style.textAlign = slide.dir === 'rtl' ? 'right' : 'left';
+      // Fade back in
+      el.style.opacity = '1';
+    }, 600); // wait for fade-out to complete
+  }
+
+  setInterval(() => {
+    current = (current + 1) % DESC_SLIDES.length;
+    showSlide(current);
+  }, 5000); // 5 seconds per slide
+}
+
+
 window.addEventListener('DOMContentLoaded', () => {
   buildGrid();
 
@@ -713,4 +776,6 @@ window.addEventListener('DOMContentLoaded', () => {
 
   fetchWeather();
   setInterval(fetchWeather, 10 * 60 * 1000);
+
+  initDescSlideshow();
 });
