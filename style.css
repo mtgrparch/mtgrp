@@ -107,7 +107,14 @@ body {
   display: flex;
   flex-direction: column;
   gap: 12px;
+  
+  /* Advanced Hardware Acceleration */
   will-change: transform;
+  transform: translateZ(0);
+  -webkit-backface-visibility: hidden;
+  backface-visibility: hidden;
+  -webkit-perspective: 1000;
+  perspective: 1000;
 }
 
 .parallax-col img {
