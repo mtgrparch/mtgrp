@@ -138,29 +138,34 @@ body {
 #modal-container {
   position: fixed;
   inset: 0;
-  background: rgba(255,255,255,0.92);
+  background: rgba(255,255,255,0.55);
   z-index: 20;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  padding: 24px;
 }
 
 .modal-box {
-  position: relative;
-  width: 100%;
-  max-width: 860px;
-  max-height: 92vh;
+  position: absolute;
+  top: 0;
+  left: 0;
+  /* Two columns of the three-column grid: (100vw - 3×12px gap) × 2/3 */
+  width: calc((100vw - 36px) * 2 / 3 + 12px);
+  height: 100vh;
   background: #fff;
-  padding: 48px 52px 52px;
+  padding: 52px 52px 52px 48px;
   overflow-y: auto;
   -webkit-overflow-scrolling: touch;
+  /* Slide-in animation */
+  animation: modalSlideIn 0.32s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+@keyframes modalSlideIn {
+  from { transform: translateX(-32px); opacity: 0; }
+  to   { transform: translateX(0);     opacity: 1; }
 }
 
 #close-modal {
   position: absolute;
   top: 16px;
-  left: 18px;
+  right: 20px;
   background: none;
   border: none;
   font-size: 1rem;
@@ -342,9 +347,12 @@ body {
 
 /* ── MOBILE ── */
 @media (max-width: 768px) {
-  .modal-box { padding: 40px 20px 32px; }
+  .modal-box {
+    width: 100vw;
+    padding: 40px 20px 32px;
+  }
   .about-partners { grid-template-columns: 1fr 1fr; gap: 20px; }
-  #modal-container { padding: 12px; }
+  #modal-container { padding: 0; }
 }
 
 /* ── COLLABORATORS in about modal ── */
