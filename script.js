@@ -258,8 +258,8 @@ const PROJECTS = [
     status: "—",
     team: ["Joe Chamata","Christina Karam","Andrey Bader"],
     collab: [],
-    photos: 0,
-    preview: 0,
+    photos: 4,
+    preview: 2,
   },
   {
     id: "p06",
@@ -587,8 +587,7 @@ function onTouchMove(e) {
   const currentY = e.touches[0].clientY;
   const delta    = lastTouchY - currentY;
   touchVelocity  = delta * TOUCH_SCALE;
-  // Drive through velocity only — col.offset accumulates in updateParallax
-  velocity       = touchVelocity;
+  virtualScrollY += touchVelocity;
   lastTouchY     = currentY;
 }
 
@@ -620,10 +619,8 @@ function updateParallax() {
 
   for (const col of cachedCols) {
     if (col.halfHeight <= 0) continue;
-    // Accumulate unboundedly — never wrap the stored offset
-    col.offset = (col.offset || 0) + velocity * col.speed;
-    // Only wrap for the visual transform so the column loops seamlessly
-    const visual = ((col.offset % col.halfHeight) + col.halfHeight) % col.halfHeight;
+    const raw    = virtualScrollY * col.speed;
+    const visual = ((raw % col.halfHeight) + col.halfHeight) % col.halfHeight;
     col.el.style.transform = `translate3d(0, -${visual.toFixed(2)}px, 0)`;
   }
 
@@ -733,14 +730,24 @@ function initDescSlideshow() {
 
 window.addEventListener('DOMContentLoaded', () => {
   buildGrid();
-  initScrollCache();
 
   const grid = document.getElementById('parallax-grid');
   grid.addEventListener('touchstart', onTouchStart, { passive: false });
   grid.addEventListener('touchmove',  onTouchMove,  { passive: false });
   grid.addEventListener('touchend',   onTouchEnd,   { passive: true  });
 
-  requestAnimationFrame(updateParallax);
+  // Wait for images to load before measuring scrollHeight for halfHeight.
+  // If images take longer than 3s, measure anyway with whatever has loaded.
+  const allImgs = Array.from(grid.querySelectorAll('img'));
+  const allLoaded = Promise.all(allImgs.map(img =>
+    img.complete ? Promise.resolve() :
+    new Promise(res => { img.onload = res; img.onerror = res; })
+  ));
+  Promise.race([allLoaded, new Promise(res => setTimeout(res, 3000))])
+    .then(() => {
+      initScrollCache();
+      requestAnimationFrame(updateParallax);
+    });
 
   fetchWeather();
   setInterval(fetchWeather, 10 * 60 * 1000);
