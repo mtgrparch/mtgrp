@@ -587,7 +587,8 @@ function onTouchMove(e) {
   const currentY = e.touches[0].clientY;
   const delta    = lastTouchY - currentY;
   touchVelocity  = delta * TOUCH_SCALE;
-  virtualScrollY += touchVelocity;
+  // Drive through velocity only — col.offset accumulates in updateParallax
+  velocity       = touchVelocity;
   lastTouchY     = currentY;
 }
 
@@ -619,9 +620,11 @@ function updateParallax() {
 
   for (const col of cachedCols) {
     if (col.halfHeight <= 0) continue;
-    let y = virtualScrollY * col.speed % col.halfHeight;
-    if (y < 0) y += col.halfHeight;
-    col.el.style.transform = `translate3d(0, -${y.toFixed(2)}px, 0)`;
+    // Each column tracks its own accumulated offset — never resets, no jump.
+    col.offset = (col.offset || 0) + velocity * col.speed;
+    // Wrap within [0, halfHeight) continuously
+    col.offset = ((col.offset % col.halfHeight) + col.halfHeight) % col.halfHeight;
+    col.el.style.transform = `translate3d(0, -${col.offset.toFixed(2)}px, 0)`;
   }
 
   requestAnimationFrame(updateParallax);
