@@ -188,7 +188,7 @@ const PROJECTS = [
     size: "12.4 ha",
     budget: "—",
     status: "1st Prize",
-    team: ["Andrew Georges, Jorge Sanchez Bajo, Bettina Kagelmacher, Roman Schober"],
+    team: ["Andrew Georges", "Jorge Sanchez Bajo", "Bettina Kagelmacher", "Roman Schober"],
     collab: ["tebt+","Bettina Kagelmacher", "Roman Schober"],
     photos: 7,
     preview: 3,
@@ -203,7 +203,7 @@ const PROJECTS = [
     size: "—",
     budget: "—",
     status: "Competition",
-    team: ["Andrew Georges, Jorge Sanchez Bajo, Bettina Kagelmacher, Roman Schober"],
+    team: ["Andrew Georges", "Jorge Sanchez Bajo", "Bettina Kagelmacher", "Roman Schober"],
     collab: ["tebt+","Bettina Kagelmacher", "Roman Schober"],
     photos: 11,
     preview: 3,
@@ -486,7 +486,7 @@ function buildProjectHTML(p) {
 // Use screen.width for mobile detection — more reliable than innerWidth at load time
 const isMobile   = Math.min(window.screen.width, window.screen.height) <= 768;
 const COL_COUNT  = isMobile ? 1 : 3;
-const SPEEDS     = isMobile ? [1.0] : [0.85, 1.0, 0.75];
+const SPEEDS     = isMobile ? [1.0] : [0.7, 1.35, 0.55];
 const MARGINS    = isMobile ? [0]   : [0, -200, -110];
 
 // Build a flat list of PREVIEW tiles for the grid — only projects with photos
@@ -622,12 +622,27 @@ function onTouchEnd() {
 let cachedCols = [];
 
 function initScrollCache() {
-  // We only cache the DOM nodes and dataset speeds.
-  // We read scrollHeight dynamically in updateParallax to prevent breaking if images load slowly.
-  cachedCols = Array.from(document.querySelectorAll('.parallax-col')).map(col => ({
+  const cols = document.querySelectorAll('.parallax-col');
+  
+  cachedCols = Array.from(cols).map(col => ({
     el: col,
-    speed: parseFloat(col.dataset.speed)
+    speed: parseFloat(col.dataset.speed),
+    halfHeight: 0 // Will be populated by the ResizeObserver
   }));
+
+  // The secret weapon: only recalculate heights when the DOM actually changes
+  // (e.g., when lazy-loaded images load and expand the column)
+  const observer = new ResizeObserver(entries => {
+    entries.forEach(entry => {
+      const colData = cachedCols.find(c => c.el === entry.target);
+      if (colData) {
+        // Read the height once and cache it
+        colData.halfHeight = entry.target.scrollHeight / 2;
+      }
+    });
+  });
+
+  cols.forEach(col => observer.observe(col));
 }
 
 function updateParallax() {
@@ -637,16 +652,16 @@ function updateParallax() {
   if (Math.abs(velocity) < 0.05) velocity = 0;
 
   cachedCols.forEach(col => {
-    // Read the height here so it is always accurate, even as lazy-loaded images come in.
-    // This is still much faster than running document.querySelectorAll every frame.
-    const halfHeight = col.el.scrollHeight / 2;
-    if (halfHeight <= 0) return;
+    // Rely entirely on the cached height, ZERO layout reads in the animation loop
+    if (col.halfHeight <= 0) return;
 
     let y = -(virtualScrollY * col.speed);
+    
     // Wrap visually so the column loops safely
-    y = ((y % halfHeight) + halfHeight) % halfHeight - halfHeight;
+    y = ((y % col.halfHeight) + col.halfHeight) % col.halfHeight - col.halfHeight;
 
-    col.el.style.transform = `translateY(${y}px)`;
+    // Use translate3d to force GPU hardware acceleration
+    col.el.style.transform = `translate3d(0, ${y}px, 0)`;
   });
 
   requestAnimationFrame(updateParallax);
