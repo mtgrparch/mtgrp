@@ -5,8 +5,6 @@
 // ─────────────────────────────────────────────────────────────────────────────
 
 // ── 1. ABOUT DATA ────────────────────────────────────────────────────────────
-//  Partner photos: put files at photos/team-andrew.jpg etc.
-//  Partner bios: fill in the bio strings below.
 const PARTNERS = [
   {
     name: "Andrew Georges",
@@ -36,10 +34,7 @@ const PARTNERS = [
 
 
 // ── COLLABORATORS ─────────────────────────────────────────────────────────────
-//  Two columns: architects (individuals) and offices (firms).
-//  Add names to the arrays below — they appear in the about modal.
 const COLLABORATORS = {
-  // Fill these in — architects are individuals, offices are firms/studios
   architects: [
     "Jorge Sanchez Bajo, Bettina Kagelmacher, Roman Schober, Andres Solano,Jaques Zekian, Mike Chaiban, Valerie Saab, Christina Karam, Ryuhei Ismael Kagawa, Jorge Andres Rodriguez Angel, Andrey Bader",
   ],
@@ -145,23 +140,6 @@ function buildAboutHTML() {
 }
 
 // ── 2. PROJECT REGISTRY ───────────────────────────────────────────────────────
-//  id         — unique key, matches photo filenames: photos/p01-01.webp etc.
-//  title      — project name
-//  subtitle   — typology / competition note
-//  desc       — description shown in modal
-//  location   — city / country
-//  type       — programme
-//  size       — area or scale
-//  budget     — if disclosed
-//  status     — current status
-//  team       — array of names
-//  collab     — array of collaborator names
-//  photos     — TOTAL photos available (files: photos/<id>-01.webp …)
-//  preview    — how many appear in the grid (2–4 recommended); rest shown in modal only
-//
-//  ORDER: newest first. The grid shuffles them visually anyway.
-// ─────────────────────────────────────────────────────────────────────────────
-
 const PROJECTS = [
   {
     id: "p13",
@@ -618,31 +596,15 @@ function onTouchEnd() {
   velocity = touchVelocity;
 }
 
-// Cache system for optimized performance
 let cachedCols = [];
 
 function initScrollCache() {
   const cols = document.querySelectorAll('.parallax-col');
-  
+  // Simple cache, no ResizeObserver required
   cachedCols = Array.from(cols).map(col => ({
     el: col,
-    speed: parseFloat(col.dataset.speed),
-    halfHeight: 0 // Will be populated by the ResizeObserver
+    speed: parseFloat(col.dataset.speed)
   }));
-
-  // The secret weapon: only recalculate heights when the DOM actually changes
-  // (e.g., when lazy-loaded images load and expand the column)
-  const observer = new ResizeObserver(entries => {
-    entries.forEach(entry => {
-      const colData = cachedCols.find(c => c.el === entry.target);
-      if (colData) {
-        // Read the height once and cache it
-        colData.halfHeight = entry.target.scrollHeight / 2;
-      }
-    });
-  });
-
-  cols.forEach(col => observer.observe(col));
 }
 
 function updateParallax() {
@@ -652,18 +614,21 @@ function updateParallax() {
   if (Math.abs(velocity) < 0.05) velocity = 0;
 
   cachedCols.forEach(col => {
-    // Rely entirely on the cached height, ZERO layout reads in the animation loop
-    if (col.halfHeight <= 0) return;
+    // Read the scrollHeight dynamically. 
+    // It is safe to read here because transform (below) does NOT trigger layout thrashing.
+    const halfHeight = col.el.scrollHeight / 2;
+    if (halfHeight <= 0) return;
 
     // 1. Calculate raw scroll distance
     let rawY = virtualScrollY * col.speed;
     
-    // 2. Wrap it cleanly between 0 and halfHeight. 
-    // This formula ensures it starts at 0 and loops seamlessly in BOTH directions.
-    let wrappedY = ((rawY % col.halfHeight) + col.halfHeight) % col.halfHeight;
+    // 2. Wrap it cleanly between 0 and halfHeight-1.
+    // This perfectly prevents jumping, regardless of whether you scroll up or down.
+    let y = rawY % halfHeight;
+    if (y < 0) y += halfHeight;
 
-    // 3. Translate negatively (moves the column UP as you scroll DOWN)
-    col.el.style.transform = `translate3d(0, -${wrappedY}px, 0)`;
+    // 3. Move the column UP using hardware-accelerated translation
+    col.el.style.transform = `translate3d(0, -${y}px, 0)`;
   });
 
   requestAnimationFrame(updateParallax);
@@ -772,7 +737,7 @@ function initDescSlideshow() {
 
 window.addEventListener('DOMContentLoaded', () => {
   buildGrid();
-  initScrollCache(); // Build the DOM cache exactly once
+  initScrollCache();
 
   const grid = document.getElementById('parallax-grid');
   grid.addEventListener('touchstart', onTouchStart, { passive: false });
