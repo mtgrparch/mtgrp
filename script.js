@@ -568,6 +568,8 @@ window.addEventListener('wheel', e => {
   if (!modalContainer.classList.contains('hidden')) return;
   e.preventDefault();
   velocity += e.deltaY * WHEEL_SCALE;
+  if (velocity >  40) velocity =  40;  // cap so fast flicks don't overshoot
+  if (velocity < -40) velocity = -40;
 }, { passive: false });
 
 // Touch
@@ -616,7 +618,7 @@ function updateParallax() {
     if (halfHeight <= 0) continue;
     let y = (virtualScrollY * col.speed) % halfHeight;
     if (y < 0) y += halfHeight;
-    col.el.style.transform = `translate3d(0, -${y.toFixed(2)}px, 0)`;
+    col.el.style.transform = `translate3d(0, -${Math.round(y)}px, 0)`;
   }
 
   requestAnimationFrame(updateParallax);
