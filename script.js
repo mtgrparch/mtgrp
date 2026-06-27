@@ -145,7 +145,7 @@ function buildAboutHTML() {
 }
 
 // ── 2. PROJECT REGISTRY ───────────────────────────────────────────────────────
-//  id         — unique key, matches photo filenames: photos/p01-01.jpg etc.
+//  id         — unique key, matches photo filenames: photos/p01-01.webp etc.
 //  title      — project name
 //  subtitle   — typology / competition note
 //  desc       — description shown in modal
@@ -455,9 +455,11 @@ function buildProjectHTML(p) {
   // All photos shown in modal (not just preview)
   let imagesHTML = '';
   if (p.photos > 0) {
+    // Add fallback for modal images
+    const handleImgError = "this.onerror=null; this.src=this.src.replace('.webp', '.gif');";
     const imgs = Array.from({ length: p.photos }, (_, i) => {
       const num = String(i + 1).padStart(2, '0');
-      return `<img src="photos/${p.id}-${num}.webp" loading="lazy" alt="${p.title} ${num}">`;
+      return `<img src="photos/${p.id}-${num}.webp" onerror="${handleImgError}" loading="lazy" alt="${p.title} ${num}">`;
     }).join('');
     imagesHTML = `<div class="modal-images">${imgs}</div>`;
   }
@@ -481,9 +483,6 @@ function buildProjectHTML(p) {
 }
 
 // ── 5. BUILD PARALLAX GRID ────────────────────────────────────────────────────
-//  Each project contributes placeholder tiles (one per photo slot, min 1).
-//  When you add real photos, replace the placeholder src with the real path.
-
 // Use screen.width for mobile detection — more reliable than innerWidth at load time
 const isMobile   = Math.min(window.screen.width, window.screen.height) <= 768;
 const COL_COUNT  = isMobile ? 1 : 3;
@@ -518,9 +517,10 @@ function buildGrid() {
     col.dataset.speed = SPEEDS[ci];
     col.style.marginTop = `${MARGINS[ci]}px`;
 
-    // All tiles now have a real src — placeholders are gone
+    // Add fallback for grid images
+    const handleImgError = "this.onerror=null; this.src=this.src.replace('.webp', '.gif');";
     const tileHTML = colTiles.map(tile =>
-      `<img src="${tile.src}" data-id="${tile.projectId}" alt="${tile.label}" loading="lazy">`
+      `<img src="${tile.src}" onerror="${handleImgError}" data-id="${tile.projectId}" alt="${tile.label}" loading="lazy">`
     ).join('');
 
     // Duplicate for infinite loop
@@ -577,21 +577,8 @@ function attachClickListeners() {
     });
   });
 }
-// ── 7. SMOOTH INERTIA SCROLL ──────────────────────────────────────────────────
-//
-//  The flip/lag bug happens when virtualScrollY grows unboundedly and the
-//  modulo wrapping causes a discontinuous jump mid-lerp.
-//
-//  Fix: we never let the raw scroll value drift far from zero. Instead we
-//  accumulate scroll into a "velocity" variable and apply momentum decay
-//  each frame — this gives smooth inertia without ever needing modulo on
-//  the raw input value. The per-column wrap only applies to the final
-//  visual offset, not to the running total.
-//
-//  virtualScrollY  = running total (unbounded but normalised)
-//  velocity        = pixels/frame remaining momentum
-//  FRICTION        = how fast momentum decays (0.88 = natural feel)
 
+// ── 7. SMOOTH INERTIA SCROLL ──────────────────────────────────────────────────
 let virtualScrollY = 0;
 let velocity       = 0;
 const FRICTION     = 0.88;   // momentum decay per frame — lower = stops faster
@@ -631,27 +618,35 @@ function onTouchEnd() {
   velocity = touchVelocity;
 }
 
+// Cache system for optimized performance
+let cachedCols = [];
+
+function initScrollCache() {
+  // We only cache the DOM nodes and dataset speeds.
+  // We read scrollHeight dynamically in updateParallax to prevent breaking if images load slowly.
+  cachedCols = Array.from(document.querySelectorAll('.parallax-col')).map(col => ({
+    el: col,
+    speed: parseFloat(col.dataset.speed)
+  }));
+}
+
 function updateParallax() {
-  // Apply velocity → position, then decay velocity
-  velocity      *= FRICTION;
+  velocity *= FRICTION;
   virtualScrollY += velocity;
 
-  // Stop adding tiny residual movement below threshold
   if (Math.abs(velocity) < 0.05) velocity = 0;
 
-  document.querySelectorAll('.parallax-col').forEach(col => {
-    const speed      = parseFloat(col.dataset.speed);
-    const halfHeight = col.scrollHeight / 2;
+  cachedCols.forEach(col => {
+    // Read the height here so it is always accurate, even as lazy-loaded images come in.
+    // This is still much faster than running document.querySelectorAll every frame.
+    const halfHeight = col.el.scrollHeight / 2;
     if (halfHeight <= 0) return;
 
-    // Raw offset for this column
-    let y = -(virtualScrollY * speed);
-
-    // Wrap visually so the column loops — modulo only on final display value
-    // Using the positive-safe form: always produces a value in [−halfHeight, 0)
+    let y = -(virtualScrollY * col.speed);
+    // Wrap visually so the column loops safely
     y = ((y % halfHeight) + halfHeight) % halfHeight - halfHeight;
 
-    col.style.transform = `translateY(${y}px)`;
+    col.el.style.transform = `translateY(${y}px)`;
   });
 
   requestAnimationFrame(updateParallax);
@@ -760,6 +755,7 @@ function initDescSlideshow() {
 
 window.addEventListener('DOMContentLoaded', () => {
   buildGrid();
+  initScrollCache(); // Build the DOM cache exactly once
 
   const grid = document.getElementById('parallax-grid');
   grid.addEventListener('touchstart', onTouchStart, { passive: false });
