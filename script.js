@@ -444,7 +444,7 @@ function buildWorkListHTML() {
 }
 
 // ── 4. PROJECT MODAL HTML ─────────────────────────────────────────────────────
-function buildProjectHTML(p) {
+async function buildProjectHTML(p) {
   const teamHTML = p.team && p.team.length
     ? `<ul class="modal-team-list">${p.team.map(n => `<li>${n}</li>`).join('')}</ul>`
     : '—';
@@ -455,11 +455,18 @@ function buildProjectHTML(p) {
   // All photos shown in modal (not just preview)
   let imagesHTML = '';
   if (p.photos > 0) {
-    const imgs = Array.from({ length: p.photos }, (_, i) => {
-      const num = String(i + 1).padStart(2, '0');
-      return `<img src="photos/${p.id}-${num}.webp" loading="lazy" alt="${p.title} ${num}">`;
-    }).join('');
-    imagesHTML = `<div class="modal-images">${imgs}</div>`;
+    // Build src list async — resolveImgSrc tries .webp then .gif
+    const srcs = await Promise.all(
+      Array.from({ length: p.photos }, (_, i) => {
+        const num = String(i + 1).padStart(2, '0');
+        return resolveImgSrc(`photos/${p.id}-${num}`);
+      })
+    );
+    const imgs = srcs
+      .filter(Boolean)
+      .map(src => `<img src="${src}" loading="lazy" alt="${p.title}">`)
+      .join('');
+    if (imgs) imagesHTML = `<div class="modal-images">${imgs}</div>`;
   }
 
   return `
@@ -481,33 +488,53 @@ function buildProjectHTML(p) {
 }
 
 // ── 5. BUILD PARALLAX GRID ────────────────────────────────────────────────────
-//  Each project contributes placeholder tiles (one per photo slot, min 1).
-//  When you add real photos, replace the placeholder src with the real path.
 
 // Use screen.width for mobile detection — more reliable than innerWidth at load time
 const isMobile   = Math.min(window.screen.width, window.screen.height) <= 768;
 const COL_COUNT  = isMobile ? 1 : 3;
-const SPEEDS     = isMobile ? [1.0] : [0.7, 1.35, 0.55];
+const SPEEDS     = isMobile ? [1.0] : [0.85, 1.0, 0.75];  // gentler spread, middle no longer 1.35
 const MARGINS    = isMobile ? [0]   : [0, -200, -110];
 
-// Build a flat list of PREVIEW tiles for the grid — only projects with photos
-function buildTileList() {
-  const tiles = [];
+// Resolve the real URL for a numbered image: tries .webp first, falls back to .gif.
+// Returns the working URL, or null if neither exists.
+function resolveImgSrc(base) {
+  return fetch(`${base}.webp`, { method: 'HEAD' })
+    .then(r => r.ok ? `${base}.webp` : fetch(`${base}.gif`, { method: 'HEAD' }))
+    .then(r => {
+      if (typeof r === 'string') return r;   // already resolved to .webp string
+      return r.ok ? r.url : null;
+    })
+    .catch(() => null);
+}
+
+// Build a flat list of PREVIEW tiles for the grid — only projects with photos.
+// Returns a Promise that resolves to the tile array once all srcs are confirmed.
+async function buildTileList() {
+  const candidates = [];
   PROJECTS.forEach(p => {
-    if (p.photos <= 0 || (p.preview ?? 3) <= 0) return; // hidden from grid; accessible via work list
+    if (p.photos <= 0 || (p.preview ?? 3) <= 0) return;
     const count = Math.min(p.preview ?? 3, p.photos);
     for (let i = 1; i <= count; i++) {
       const num = String(i).padStart(2, '0');
-      tiles.push({ src: `photos/${p.id}-${num}.webp`, projectId: p.id, label: p.title });
+      candidates.push({ base: `photos/${p.id}-${num}`, projectId: p.id, label: p.title });
     }
   });
-  // shuffle so projects interleave across columns
-  return tiles.sort(() => Math.random() - 0.5);
+
+  // Resolve all srcs in parallel
+  const resolved = await Promise.all(
+    candidates.map(async c => {
+      const src = await resolveImgSrc(c.base);
+      return src ? { src, projectId: c.projectId, label: c.label } : null;
+    })
+  );
+
+  // Drop nulls (files that didn't exist in either format), then shuffle
+  return resolved.filter(Boolean).sort(() => Math.random() - 0.5);
 }
 
-function buildGrid() {
+async function buildGrid() {
   const grid = document.getElementById('parallax-grid');
-  const tiles = buildTileList();
+  const tiles = await buildTileList();
   const columns = Array.from({ length: COL_COUNT }, () => []);
 
   tiles.forEach((tile, i) => columns[i % COL_COUNT].push(tile));
@@ -536,10 +563,13 @@ const modalContainer = document.getElementById('modal-container');
 const modalContent   = document.getElementById('modal-content');
 const closeBtn       = document.getElementById('close-modal');
 
-function openModal(html) {
+async function openModal(htmlOrPromise) {
   velocity = 0;
-  modalContent.innerHTML = html;
   modalContainer.classList.remove('hidden');
+  modalContent.innerHTML = '<p style="color:#ccc;font-style:italic;font-size:0.85rem;padding:8px 0">Loading…</p>';
+
+  const html = await htmlOrPromise;
+  modalContent.innerHTML = html;
 
   // Work list rows → open project modal
   document.querySelectorAll('.work-row').forEach(row => {
@@ -579,80 +609,85 @@ function attachClickListeners() {
 }
 // ── 7. SMOOTH INERTIA SCROLL ──────────────────────────────────────────────────
 //
-//  The flip/lag bug happens when virtualScrollY grows unboundedly and the
-//  modulo wrapping causes a discontinuous jump mid-lerp.
-//
-//  Fix: we never let the raw scroll value drift far from zero. Instead we
-//  accumulate scroll into a "velocity" variable and apply momentum decay
-//  each frame — this gives smooth inertia without ever needing modulo on
-//  the raw input value. The per-column wrap only applies to the final
-//  visual offset, not to the running total.
-//
-//  virtualScrollY  = running total (unbounded but normalised)
-//  velocity        = pixels/frame remaining momentum
-//  FRICTION        = how fast momentum decays (0.88 = natural feel)
+//  Performance fixes:
+//  - Column elements and halfHeights cached once after buildGrid, not queried every frame
+//  - scrollHeight read once at init (and on resize), never inside rAF
+//  - Touch: movement applied only once (in rAF loop via velocity), not double-applied
+//  - Speeds evened out — middle column no longer dramatically faster than the others
+//  - will-change: transform already set in CSS; transform uses px (GPU composited)
 
 let virtualScrollY = 0;
 let velocity       = 0;
-const FRICTION     = 0.88;   // momentum decay per frame — lower = stops faster
-const WHEEL_SCALE  = 0.7;    // wheel sensitivity
-const TOUCH_SCALE  = 1.6;    // touch drag sensitivity
+const FRICTION     = 0.88;   // momentum decay — lower = stops faster
+const WHEEL_SCALE  = 0.7;
+const TOUCH_SCALE  = 1.0;    // reduced from 1.6 — was over-sensitive on mobile
 
-// Mouse wheel — add to velocity rather than position directly
+// Cache of { el, speed, halfHeight } — populated after buildGrid resolves
+let colCache = [];
+
+function buildColCache() {
+  colCache = Array.from(document.querySelectorAll('.parallax-col')).map(el => ({
+    el,
+    speed:      parseFloat(el.dataset.speed),
+    halfHeight: el.scrollHeight / 2,
+  }));
+}
+
+// Rebuild cache on resize (halfHeights may change)
+window.addEventListener('resize', () => {
+  clearTimeout(window._resizeTimer);
+  window._resizeTimer = setTimeout(buildColCache, 200);
+}, { passive: true });
+
+// ── Wheel ──
 window.addEventListener('wheel', e => {
   if (!modalContainer.classList.contains('hidden')) return;
   e.preventDefault();
   velocity += e.deltaY * WHEEL_SCALE;
 }, { passive: false });
 
-// Touch
-let touchStartY  = 0;
-let lastTouchY   = 0;
+// ── Touch ──
+let lastTouchY    = 0;
 let touchVelocity = 0;
+let touching      = false;
 
 function onTouchStart(e) {
-  touchStartY   = e.touches[0].clientY;
-  lastTouchY    = touchStartY;
+  lastTouchY    = e.touches[0].clientY;
   touchVelocity = 0;
+  touching      = true;
+  velocity      = 0; // cancel any coasting when finger lands
 }
 
 function onTouchMove(e) {
   if (!modalContainer.classList.contains('hidden')) return;
   e.preventDefault();
-  const currentY = e.touches[0].clientY;
-  const delta    = lastTouchY - currentY;
-  touchVelocity  = delta * TOUCH_SCALE;
-  virtualScrollY += touchVelocity;
-  lastTouchY     = currentY;
+  const currentY    = e.touches[0].clientY;
+  const delta       = (lastTouchY - currentY) * TOUCH_SCALE;
+  touchVelocity     = delta;
+  velocity          = delta;       // drive directly so it feels instant
+  virtualScrollY   += delta;
+  lastTouchY        = currentY;
 }
 
 function onTouchEnd() {
-  // hand off touch momentum to the velocity system so it coasts naturally
-  velocity = touchVelocity;
+  touching = false;
+  // velocity already set in onTouchMove — rAF loop coasts it with FRICTION
 }
 
+// ── rAF loop ──
 function updateParallax() {
-  // Apply velocity → position, then decay velocity
-  velocity      *= FRICTION;
-  virtualScrollY += velocity;
+  if (!touching) {
+    velocity       *= FRICTION;
+    virtualScrollY += velocity;
+    if (Math.abs(velocity) < 0.05) velocity = 0;
+  }
 
-  // Stop adding tiny residual movement below threshold
-  if (Math.abs(velocity) < 0.05) velocity = 0;
-
-  document.querySelectorAll('.parallax-col').forEach(col => {
-    const speed      = parseFloat(col.dataset.speed);
-    const halfHeight = col.scrollHeight / 2;
-    if (halfHeight <= 0) return;
-
-    // Raw offset for this column
-    let y = -(virtualScrollY * speed);
-
-    // Wrap visually so the column loops — modulo only on final display value
-    // Using the positive-safe form: always produces a value in [−halfHeight, 0)
-    y = ((y % halfHeight) + halfHeight) % halfHeight - halfHeight;
-
-    col.style.transform = `translateY(${y}px)`;
-  });
+  for (const c of colCache) {
+    if (c.halfHeight <= 0) continue;
+    let y = -(virtualScrollY * c.speed);
+    y = ((y % c.halfHeight) + c.halfHeight) % c.halfHeight - c.halfHeight;
+    c.el.style.transform = `translateY(${y}px)`;
+  }
 
   requestAnimationFrame(updateParallax);
 }
@@ -759,14 +794,16 @@ function initDescSlideshow() {
 
 
 window.addEventListener('DOMContentLoaded', () => {
-  buildGrid();
+  buildGrid().then(() => {
+    buildColCache();
 
-  const grid = document.getElementById('parallax-grid');
-  grid.addEventListener('touchstart', onTouchStart, { passive: false });
-  grid.addEventListener('touchmove',  onTouchMove,  { passive: false });
-  grid.addEventListener('touchend',   onTouchEnd,   { passive: true  });
+    const grid = document.getElementById('parallax-grid');
+    grid.addEventListener('touchstart', onTouchStart, { passive: true  });
+    grid.addEventListener('touchmove',  onTouchMove,  { passive: false });
+    grid.addEventListener('touchend',   onTouchEnd,   { passive: true  });
 
-  requestAnimationFrame(updateParallax);
+    requestAnimationFrame(updateParallax);
+  });
 
   fetchWeather();
   setInterval(fetchWeather, 10 * 60 * 1000);
