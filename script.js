@@ -140,6 +140,7 @@ function buildAboutHTML() {
       <tr><td>Instagram</td><td><a href="https://www.instagram.com/metagroupe/" target="_blank" style="color:#0033FF;text-decoration:none">@metagroupe</a></td></tr>
       <tr><td>Offices</td><td>Beirut &nbsp;·&nbsp; Madrid &nbsp;·&nbsp; Milan</td></tr>
       <tr><td>Est.</td><td>2018</td></tr>
+      <tr><td>Work</td><td><span id="open-work-list" style="color:#0033FF;cursor:pointer;">All projects &rarr;</span></td></tr>
     </table>`;
 }
 
@@ -489,17 +490,15 @@ const COL_COUNT  = isMobile ? 1 : 3;
 const SPEEDS     = isMobile ? [1.0] : [0.7, 1.35, 0.55];
 const MARGINS    = isMobile ? [0]   : [0, -200, -110];
 
-// Build a flat list of PREVIEW tiles for the grid (p.preview per project)
+// Build a flat list of PREVIEW tiles for the grid — only projects with photos
 function buildTileList() {
   const tiles = [];
   PROJECTS.forEach(p => {
-    const count = p.photos > 0 ? Math.min(p.preview ?? 3, p.photos) : 1;
+    if (p.photos <= 0 || (p.preview ?? 3) <= 0) return; // hidden from grid; accessible via work list
+    const count = Math.min(p.preview ?? 3, p.photos);
     for (let i = 1; i <= count; i++) {
       const num = String(i).padStart(2, '0');
-      const src = p.photos > 0
-        ? `photos/${p.id}-${num}.webp`
-        : null; // null = show styled placeholder
-      tiles.push({ src, projectId: p.id, label: p.title });
+      tiles.push({ src: `photos/${p.id}-${num}.webp`, projectId: p.id, label: p.title });
     }
   });
   // shuffle so projects interleave across columns
@@ -519,23 +518,10 @@ function buildGrid() {
     col.dataset.speed = SPEEDS[ci];
     col.style.marginTop = `${MARGINS[ci]}px`;
 
-    // Build tile HTML — real img or placeholder div
-    const tileHTML = colTiles.map(tile => {
-      if (tile.src) {
-        return `<img src="${tile.src}" data-id="${tile.projectId}" alt="${tile.label}" loading="lazy">`;
-      } else {
-        // Placeholder — styled box showing project title
-        return `
-          <div class="img-placeholder" data-id="${tile.projectId}"
-               style="width:100%;background:#f0f0f0;min-height:220px;
-                      display:flex;align-items:flex-end;padding:16px;
-                      cursor:pointer;box-sizing:border-box;
-                      font-family:'EB Garamond',serif;font-style:italic;
-                      font-size:0.9rem;color:#aaa;">
-            ${tile.label}
-          </div>`;
-      }
-    }).join('');
+    // All tiles now have a real src — placeholders are gone
+    const tileHTML = colTiles.map(tile =>
+      `<img src="${tile.src}" data-id="${tile.projectId}" alt="${tile.label}" loading="lazy">`
+    ).join('');
 
     // Duplicate for infinite loop
     col.innerHTML = tileHTML + tileHTML;
@@ -554,7 +540,8 @@ function openModal(html) {
   velocity = 0;
   modalContent.innerHTML = html;
   modalContainer.classList.remove('hidden');
-  // After opening work list, attach row click handlers
+
+  // Work list rows → open project modal
   document.querySelectorAll('.work-row').forEach(row => {
     row.addEventListener('click', () => {
       const p = PROJECTS.find(x => x.id === row.dataset.id);
@@ -563,6 +550,12 @@ function openModal(html) {
     row.addEventListener('mouseenter', () => row.style.color = '#0033FF');
     row.addEventListener('mouseleave', () => row.style.color = '');
   });
+
+  // About modal → "All projects" link
+  const workListLink = document.getElementById('open-work-list');
+  if (workListLink) {
+    workListLink.addEventListener('click', () => openModal(buildWorkListHTML()));
+  }
 }
 
 closeBtn.addEventListener('click', () => modalContainer.classList.add('hidden'));
@@ -577,8 +570,7 @@ document.getElementById('about-btn').addEventListener('click', () => openModal(b
 
 
 function attachClickListeners() {
-  // both real <img> and placeholder <div> tiles
-  document.querySelectorAll('.parallax-col img, .img-placeholder').forEach(el => {
+  document.querySelectorAll('.parallax-col img').forEach(el => {
     el.addEventListener('click', () => {
       const p = PROJECTS.find(x => x.id === el.dataset.id);
       if (p) openModal(buildProjectHTML(p));
