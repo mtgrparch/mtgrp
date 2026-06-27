@@ -49,7 +49,7 @@ function buildAboutHTML() {
       <div class="partner-photo">
         <img src="${p.photo}" alt="${p.name}"
              onerror="this.parentElement.innerHTML='Photo'"
-             loading="lazy">
+             loading="lazy" decoding="async">
       </div>
       <div class="partner-name">${p.name}</div>
       <div class="partner-role">${p.role}</div>
@@ -433,11 +433,11 @@ function buildProjectHTML(p) {
   // All photos shown in modal (not just preview)
   let imagesHTML = '';
   if (p.photos > 0) {
-    // Add fallback for modal images
+    // Add fallback for modal images, and decoding="async" for smoother mobile loading
     const handleImgError = "this.onerror=null; this.src=this.src.replace('.webp', '.gif');";
     const imgs = Array.from({ length: p.photos }, (_, i) => {
       const num = String(i + 1).padStart(2, '0');
-      return `<img src="photos/${p.id}-${num}.webp" onerror="${handleImgError}" loading="lazy" alt="${p.title} ${num}">`;
+      return `<img src="photos/${p.id}-${num}.webp" onerror="${handleImgError}" loading="lazy" decoding="async" alt="${p.title} ${num}">`;
     }).join('');
     imagesHTML = `<div class="modal-images">${imgs}</div>`;
   }
@@ -495,10 +495,10 @@ function buildGrid() {
     col.dataset.speed = SPEEDS[ci];
     col.style.marginTop = `${MARGINS[ci]}px`;
 
-    // Add fallback for grid images
+    // Add fallback for grid images + decoding="async"
     const handleImgError = "this.onerror=null; this.src=this.src.replace('.webp', '.gif');";
     const tileHTML = colTiles.map(tile =>
-      `<img src="${tile.src}" onerror="${handleImgError}" data-id="${tile.projectId}" alt="${tile.label}" loading="lazy">`
+      `<img src="${tile.src}" onerror="${handleImgError}" data-id="${tile.projectId}" alt="${tile.label}" loading="lazy" decoding="async">`
     ).join('');
 
     // Duplicate for infinite loop
@@ -628,7 +628,8 @@ function updateParallax() {
     if (y < 0) y += halfHeight;
 
     // 3. Move the column UP using hardware-accelerated translation
-    col.el.style.transform = `translate3d(0, -${y}px, 0)`;
+    // Using toFixed(2) prevents excessive sub-pixel calculations on mobile GPUs, drastically reducing lag
+    col.el.style.transform = `translate3d(0, -${y.toFixed(2)}px, 0)`;
   });
 
   requestAnimationFrame(updateParallax);

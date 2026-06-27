@@ -6,6 +6,8 @@ body {
   font-family: 'EB Garamond', Georgia, serif;
   overflow: hidden;
   touch-action: none;
+  /* CRITICAL FOR MOBILE: Prevents iOS Safari from fighting custom scroll with its native rubber-banding */
+  overscroll-behavior: none; 
 }
 
 /* ── BOTTOM LEFT: MTGRP LOGO ── */
