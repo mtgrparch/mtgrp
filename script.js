@@ -464,16 +464,18 @@ function buildProjectHTML(p) {
   return `
     <div class="modal-title">${p.title}</div>
     ${p.subtitle ? `<span class="modal-subtitle">${p.subtitle}</span>` : ''}
-    <table class="modal-data-table">
-      <tr><td>Location</td><td>${p.location}</td></tr>
-      <tr><td>Type</td><td>${p.type}</td></tr>
-      <tr><td>Size</td><td>${p.size}</td></tr>
-      <tr><td>Budget</td><td>${p.budget}</td></tr>
-      <tr><td>Status</td><td>${p.status}</td></tr>
-      <tr><td>Team</td><td>${teamHTML}</td></tr>
-      ${collabHTML ? `<tr><td>Collaborators</td><td>${collabHTML}</td></tr>` : ''}
-    </table>
-    <p class="modal-desc">${p.desc}</p>
+    <div class="modal-body-cols">
+      <table class="modal-data-table">
+        <tr><td>Location</td><td>${p.location}</td></tr>
+        <tr><td>Type</td><td>${p.type}</td></tr>
+        <tr><td>Size</td><td>${p.size}</td></tr>
+        <tr><td>Budget</td><td>${p.budget}</td></tr>
+        <tr><td>Status</td><td>${p.status}</td></tr>
+        <tr><td>Team</td><td>${teamHTML}</td></tr>
+        ${collabHTML ? `<tr><td>Collaborators</td><td>${collabHTML}</td></tr>` : ''}
+      </table>
+      <p class="modal-desc">${p.desc}</p>
+    </div>
     ${imagesHTML}`;
 }
 

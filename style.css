@@ -213,6 +213,31 @@ body {
   margin-bottom: 20px;
 }
 
+/* Two-column layout: meta table left, description right */
+.modal-body-cols {
+  display: grid;
+  grid-template-columns: 220px 1fr;
+  gap: 0 40px;
+  align-items: start;
+  margin-bottom: 28px;
+}
+
+.modal-body-cols .modal-data-table {
+  margin-bottom: 0;
+}
+
+.modal-body-cols .modal-desc {
+  margin-bottom: 0;
+  padding-top: 6px; /* optically align with first table row */
+}
+
+@media (max-width: 600px) {
+  .modal-body-cols {
+    grid-template-columns: 1fr;
+    gap: 20px 0;
+  }
+}
+
 .modal-data-table td {
   padding: 7px 0;
   vertical-align: top;
