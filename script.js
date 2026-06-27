@@ -464,7 +464,7 @@ function buildProjectHTML(p) {
 // Use screen.width for mobile detection — more reliable than innerWidth at load time
 const isMobile   = Math.min(window.screen.width, window.screen.height) <= 768;
 const COL_COUNT  = isMobile ? 1 : 3;
-const SPEEDS     = isMobile ? [1.0] : [0.7, 1.35, 0.55];
+const SPEEDS     = isMobile ? [1.0] : [0.7, 1.0, 0.55];
 const MARGINS    = isMobile ? [0]   : [0, -200, -110];
 
 // Build a flat list of PREVIEW tiles for the grid — only projects with photos
