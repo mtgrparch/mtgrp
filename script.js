@@ -599,38 +599,30 @@ function onTouchEnd() {
 let cachedCols = [];
 
 function initScrollCache() {
-  const cols = document.querySelectorAll('.parallax-col');
-  // Simple cache, no ResizeObserver required
-  cachedCols = Array.from(cols).map(col => ({
-    el: col,
-    speed: parseFloat(col.dataset.speed)
+  cachedCols = Array.from(document.querySelectorAll('.parallax-col')).map(col => ({
+    el:         col,
+    speed:      parseFloat(col.dataset.speed),
+    halfHeight: col.scrollHeight / 2,
   }));
 }
 
-function updateParallax() {
-  velocity *= FRICTION;
-  virtualScrollY += velocity;
+// Rebuild on resize so halfHeights stay accurate
+window.addEventListener('resize', () => {
+  clearTimeout(window._rsz);
+  window._rsz = setTimeout(initScrollCache, 150);
+}, { passive: true });
 
+function updateParallax() {
+  velocity       *= FRICTION;
+  virtualScrollY += velocity;
   if (Math.abs(velocity) < 0.05) velocity = 0;
 
-  cachedCols.forEach(col => {
-    // Read the scrollHeight dynamically. 
-    // It is safe to read here because transform (below) does NOT trigger layout thrashing.
-    const halfHeight = col.el.scrollHeight / 2;
-    if (halfHeight <= 0) return;
-
-    // 1. Calculate raw scroll distance
-    let rawY = virtualScrollY * col.speed;
-    
-    // 2. Wrap it cleanly between 0 and halfHeight-1.
-    // This perfectly prevents jumping, regardless of whether you scroll up or down.
-    let y = rawY % halfHeight;
-    if (y < 0) y += halfHeight;
-
-    // 3. Move the column UP using hardware-accelerated translation
-    // Using toFixed(2) prevents excessive sub-pixel calculations on mobile GPUs, drastically reducing lag
+  for (const col of cachedCols) {
+    if (col.halfHeight <= 0) continue;
+    let y = virtualScrollY * col.speed % col.halfHeight;
+    if (y < 0) y += col.halfHeight;
     col.el.style.transform = `translate3d(0, -${y.toFixed(2)}px, 0)`;
-  });
+  }
 
   requestAnimationFrame(updateParallax);
 }
