@@ -655,13 +655,15 @@ function updateParallax() {
     // Rely entirely on the cached height, ZERO layout reads in the animation loop
     if (col.halfHeight <= 0) return;
 
-    let y = -(virtualScrollY * col.speed);
+    // 1. Calculate raw scroll distance
+    let rawY = virtualScrollY * col.speed;
     
-    // Wrap visually so the column loops safely
-    y = ((y % col.halfHeight) + col.halfHeight) % col.halfHeight - col.halfHeight;
+    // 2. Wrap it cleanly between 0 and halfHeight. 
+    // This formula ensures it starts at 0 and loops seamlessly in BOTH directions.
+    let wrappedY = ((rawY % col.halfHeight) + col.halfHeight) % col.halfHeight;
 
-    // Use translate3d to force GPU hardware acceleration
-    col.el.style.transform = `translate3d(0, ${y}px, 0)`;
+    // 3. Translate negatively (moves the column UP as you scroll DOWN)
+    col.el.style.transform = `translate3d(0, -${wrappedY}px, 0)`;
   });
 
   requestAnimationFrame(updateParallax);
