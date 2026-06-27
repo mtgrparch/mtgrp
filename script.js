@@ -587,7 +587,7 @@ function onTouchMove(e) {
   const currentY = e.touches[0].clientY;
   const delta    = lastTouchY - currentY;
   touchVelocity  = delta * TOUCH_SCALE;
-  virtualScrollY += touchVelocity;
+  velocity       = touchVelocity;
   lastTouchY     = currentY;
 }
 
@@ -603,7 +603,15 @@ function initScrollCache() {
     el:         col,
     speed:      parseFloat(col.dataset.speed),
     halfHeight: col.scrollHeight / 2,
+    pos:        0,
   }));
+}
+
+function refreshHalfHeights() {
+  // Re-measure after images load — pos stays intact, no jump
+  cachedCols.forEach(col => {
+    col.halfHeight = col.el.scrollHeight / 2;
+  });
 }
 
 // Rebuild on resize so halfHeights stay accurate
@@ -614,14 +622,16 @@ window.addEventListener('resize', () => {
 
 function updateParallax() {
   velocity       *= FRICTION;
-  virtualScrollY += velocity;
   if (Math.abs(velocity) < 0.05) velocity = 0;
 
   for (const col of cachedCols) {
     if (col.halfHeight <= 0) continue;
-    const raw    = virtualScrollY * col.speed;
-    const visual = ((raw % col.halfHeight) + col.halfHeight) % col.halfHeight;
-    col.el.style.transform = `translate3d(0, -${visual.toFixed(2)}px, 0)`;
+    // Move by delta this frame only — never accumulate into a large number
+    col.pos += velocity * col.speed;
+    // Wrap pos smoothly: small step, so it never jumps
+    if (col.pos >= col.halfHeight) col.pos -= col.halfHeight;
+    if (col.pos < 0)               col.pos += col.halfHeight;
+    col.el.style.transform = `translate3d(0, -${col.pos.toFixed(2)}px, 0)`;
   }
 
   requestAnimationFrame(updateParallax);
@@ -736,18 +746,18 @@ window.addEventListener('DOMContentLoaded', () => {
   grid.addEventListener('touchmove',  onTouchMove,  { passive: false });
   grid.addEventListener('touchend',   onTouchEnd,   { passive: true  });
 
-  // Wait for images to load before measuring scrollHeight for halfHeight.
-  // If images take longer than 3s, measure anyway with whatever has loaded.
+  // Start immediately with whatever heights are available
+  initScrollCache();
+  requestAnimationFrame(updateParallax);
+
+  // Re-measure once images have loaded (pos stays intact — no visual jump)
   const allImgs = Array.from(grid.querySelectorAll('img'));
   const allLoaded = Promise.all(allImgs.map(img =>
     img.complete ? Promise.resolve() :
     new Promise(res => { img.onload = res; img.onerror = res; })
   ));
   Promise.race([allLoaded, new Promise(res => setTimeout(res, 3000))])
-    .then(() => {
-      initScrollCache();
-      requestAnimationFrame(updateParallax);
-    });
+    .then(refreshHalfHeights);
 
   fetchWeather();
   setInterval(fetchWeather, 10 * 60 * 1000);
