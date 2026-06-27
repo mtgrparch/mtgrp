@@ -489,73 +489,83 @@ async function buildProjectHTML(p) {
 
 // ── 5. BUILD PARALLAX GRID ────────────────────────────────────────────────────
 
-// Use screen.width for mobile detection — more reliable than innerWidth at load time
 const isMobile   = Math.min(window.screen.width, window.screen.height) <= 768;
 const COL_COUNT  = isMobile ? 1 : 3;
-const SPEEDS     = isMobile ? [1.0] : [0.85, 1.0, 0.75];  // gentler spread, middle no longer 1.35
+const SPEEDS     = isMobile ? [1.0] : [0.85, 1.0, 0.75];
 const MARGINS    = isMobile ? [0]   : [0, -200, -110];
 
-// Resolve the real URL for a numbered image: tries .webp first, falls back to .gif.
-// Returns the working URL, or null if neither exists.
-function resolveImgSrc(base) {
-  return fetch(`${base}.webp`, { method: 'HEAD' })
-    .then(r => r.ok ? `${base}.webp` : fetch(`${base}.gif`, { method: 'HEAD' }))
-    .then(r => {
-      if (typeof r === 'string') return r;   // already resolved to .webp string
-      return r.ok ? r.url : null;
-    })
-    .catch(() => null);
+// Cache of { el, speed, halfHeight } — built once images have loaded
+let colCache = [];
+
+function buildColCache() {
+  colCache = Array.from(document.querySelectorAll('.parallax-col')).map(el => ({
+    el,
+    speed:      parseFloat(el.dataset.speed),
+    halfHeight: el.scrollHeight / 2,
+  }));
 }
 
-// Build a flat list of PREVIEW tiles for the grid — only projects with photos.
-// Returns a Promise that resolves to the tile array once all srcs are confirmed.
-async function buildTileList() {
-  const candidates = [];
+window.addEventListener('resize', () => {
+  clearTimeout(window._resizeTimer);
+  window._resizeTimer = setTimeout(buildColCache, 200);
+}, { passive: true });
+
+// Synchronous — no HEAD requests. onerror on each <img> handles gif fallback.
+function buildTileList() {
+  const tiles = [];
   PROJECTS.forEach(p => {
     if (p.photos <= 0 || (p.preview ?? 3) <= 0) return;
     const count = Math.min(p.preview ?? 3, p.photos);
     for (let i = 1; i <= count; i++) {
       const num = String(i).padStart(2, '0');
-      candidates.push({ base: `photos/${p.id}-${num}`, projectId: p.id, label: p.title });
+      tiles.push({ base: `photos/${p.id}-${num}`, projectId: p.id, label: p.title });
     }
   });
-
-  // Resolve all srcs in parallel
-  const resolved = await Promise.all(
-    candidates.map(async c => {
-      const src = await resolveImgSrc(c.base);
-      return src ? { src, projectId: c.projectId, label: c.label } : null;
-    })
-  );
-
-  // Drop nulls (files that didn't exist in either format), then shuffle
-  return resolved.filter(Boolean).sort(() => Math.random() - 0.5);
+  return tiles.sort(() => Math.random() - 0.5);
 }
 
-async function buildGrid() {
-  const grid = document.getElementById('parallax-grid');
-  const tiles = await buildTileList();
+function buildGrid() {
+  const grid    = document.getElementById('parallax-grid');
+  const tiles   = buildTileList();
   const columns = Array.from({ length: COL_COUNT }, () => []);
 
   tiles.forEach((tile, i) => columns[i % COL_COUNT].push(tile));
 
   columns.forEach((colTiles, ci) => {
     const col = document.createElement('div');
-    col.className = 'parallax-col';
-    col.dataset.speed = SPEEDS[ci];
+    col.className      = 'parallax-col';
+    col.dataset.speed  = SPEEDS[ci];
     col.style.marginTop = `${MARGINS[ci]}px`;
 
-    // All tiles now have a real src — placeholders are gone
-    const tileHTML = colTiles.map(tile =>
-      `<img src="${tile.src}" data-id="${tile.projectId}" alt="${tile.label}" loading="lazy">`
+    // .webp src; if it 404s, onerror swaps in the .gif once (guarded by gifTried flag)
+    const tileHTML = colTiles.map(t =>
+      `<img src="${t.base}.webp"
+            data-gif="${t.base}.gif"
+            data-id="${t.projectId}"
+            alt="${t.label}"
+            onerror="if(!this.dataset.gifTried){this.dataset.gifTried=1;this.src=this.dataset.gif}">`
     ).join('');
 
-    // Duplicate for infinite loop
-    col.innerHTML = tileHTML + tileHTML;
+    col.innerHTML = tileHTML + tileHTML; // duplicate for infinite loop
     grid.appendChild(col);
   });
 
   attachClickListeners();
+
+  // Measure scrollHeight only after images have painted.
+  // Race between all-loaded and a 2s safety timeout.
+  const allImgs = Array.from(grid.querySelectorAll('img'));
+  const allLoaded = Promise.all(allImgs.map(img =>
+    img.complete
+      ? Promise.resolve()
+      : new Promise(res => { img.onload = res; img.onerror = res; })
+  ));
+
+  Promise.race([allLoaded, new Promise(res => setTimeout(res, 2000))])
+    .then(() => requestAnimationFrame(() => {
+      buildColCache();
+      requestAnimationFrame(updateParallax);
+    }));
 }
 
 // ── 6. MODAL SYSTEM ───────────────────────────────────────────────────────────
@@ -794,16 +804,12 @@ function initDescSlideshow() {
 
 
 window.addEventListener('DOMContentLoaded', () => {
-  buildGrid().then(() => {
-    buildColCache();
+  buildGrid(); // starts rAF loop internally once images are measured
 
-    const grid = document.getElementById('parallax-grid');
-    grid.addEventListener('touchstart', onTouchStart, { passive: true  });
-    grid.addEventListener('touchmove',  onTouchMove,  { passive: false });
-    grid.addEventListener('touchend',   onTouchEnd,   { passive: true  });
-
-    requestAnimationFrame(updateParallax);
-  });
+  const grid = document.getElementById('parallax-grid');
+  grid.addEventListener('touchstart', onTouchStart, { passive: true  });
+  grid.addEventListener('touchmove',  onTouchMove,  { passive: false });
+  grid.addEventListener('touchend',   onTouchEnd,   { passive: true  });
 
   fetchWeather();
   setInterval(fetchWeather, 10 * 60 * 1000);
