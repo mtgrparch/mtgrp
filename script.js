@@ -258,7 +258,7 @@ const PROJECTS = [
     status: "—",
     team: ["Joe Chamata","Christina Karam","Andrey Bader"],
     collab: [],
-    photos: 4,
+    photos: 5,
     preview: 2,
   },
   {
