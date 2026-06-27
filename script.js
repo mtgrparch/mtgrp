@@ -80,6 +80,10 @@ function buildAboutHTML() {
 
     <div class="about-partners">${partnersHTML}</div>
 
+    <table class="about-contact-table" style="margin-bottom: 8px;">
+      <tr><td>Work</td><td><span id="open-work-list" style="color:#0033FF;cursor:pointer;">All projects &rarr;</span></td></tr>
+    </table>
+
     <div class="about-list-section">
       <div class="collabs-label">Publications</div>
       <a href="https://www.europan-europe.eu/en/exchanges/die-den-gletscher-bewohnen" target="_blank" rel="noopener" class="about-list-item">
@@ -135,7 +139,6 @@ function buildAboutHTML() {
       <tr><td>Instagram</td><td><a href="https://www.instagram.com/metagroupe/" target="_blank" style="color:#0033FF;text-decoration:none">@metagroupe</a></td></tr>
       <tr><td>Offices</td><td>Beirut &nbsp;·&nbsp; Madrid &nbsp;·&nbsp; Milan</td></tr>
       <tr><td>Est.</td><td>2018</td></tr>
-      <tr><td>Work</td><td><span id="open-work-list" style="color:#0033FF;cursor:pointer;">All projects &rarr;</span></td></tr>
     </table>`;
 }
 
