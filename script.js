@@ -149,13 +149,16 @@ const PROJECTS = [
     title: "A Well-Tempered House",
     subtitle: "Family Housing",
     desc: "A house perched on a steep hillside in Ghazir, Lebanon. Deep thermal walls form the structural and spatial logic of the house, while a series of terraces negotiate the steep slope of the site. The house is designed to be passively cooled in summer and passively heated in winter, with a focus on natural ventilation, solar orientation, and thermal mass.",
-    location: "Ghazir, LB",
-    type: "Housing",
-    size: "—",
-    budget: "-",
-    status: "Ongoing",
-    team: ["Andrew Georges"],
-    collab: [],
+    info: [
+      { label: "Location", value: "Ghazir, LB" },
+      { label: "Type",     value: "Housing" },
+      { label: "Status",   value: "Ongoing" },
+      { label: "Avg Hot",   value: "23°C" },
+      { label: "Avg Cold",   value: "13°C" },
+      { label: "Elevation",   value: "380m" },
+      { label: "Coordinates",   value: "34°N36°E" },
+      { label: "Team",     value: ["Andrew Georges"] },
+    ],
     photos: 2,
     preview: 1,
   },
@@ -164,13 +167,18 @@ const PROJECTS = [
     title: "A Home in the Sun",
     subtitle: "Home for Seniors",
     desc: "An elderly care facility organized around the natural circadian rhythm to mitigate the disorientation associated with dementia. The architecture establishes a clear structural dichotomy: a dense, in-situ concrete communal core consolidates daytime collective programs, while prefabricated timber wings hold the private, quiet residential households. Designed as a replicable prototype, the modular kit of parts adapts to two distinct topographies. In Lysá nad Labem, the households are compacted into a three-storey pinwheel forming an urban edge, whereas in Milovice, the same units unfold into a two-storey horizontal arrangement following the gentle slope of the land. The project relies on passive climate strategies, utilizing high thermal mass and cross-ventilation, while the landscape functions as an active therapeutic instrument calibrated to provide temporal and olfactory orientation.",
-    location: "Lysá nad Labem, CZ",
-    type: "Housing",
-    size: "—",
-    budget: "212,227,500 Kč",
-    status: "Competition",
-    team: ["Andrew Georges", "Charbel Abou Chacra", "Nahi El Khoury", "Jorge Sanchez Bajo"],
-    collab: ["tebt+"],
+    info: [
+      { label: "Location",      value: "Lysá nad Labem, CZ" },
+      { label: "Type",          value: "Housing" },
+      { label: "Budget",        value: "212,227,500 Kč" },
+      { label: "Status",        value: "Competition" },
+      { label: "Avg Hot",   value: "17°C" },
+      { label: "Avg Cold",   value: "3°C" },
+      { label: "Elevation",   value: "183m" },
+      { label: "Coordinates",   value: "50°N15°E" },
+      { label: "Team",          value: ["Andrew Georges", "Charbel Abou Chacra", "Nahi El Khoury", "Jorge Sanchez Bajo"] },
+      { label: "Collaborators", value: ["tebt+"] },
+    ],
     photos: 10,
     preview: 7,
   },
@@ -179,13 +187,18 @@ const PROJECTS = [
     title: "Die Den Gletscher Bewohnen",
     subtitle: "Europan — Winner",
     desc: "Winning entry for the Europan competition. The project addresses the geological threshold between molasse and moraine, proposing a model of dwelling that is responsive to the terrain, water, and social change. The glacier is not backdrop but partner — a slow, material presence that shapes the logic of the building.",
-    location: "St. Galen, CH",
-    type: "Competition",
-    size: "12.4 ha",
-    budget: "—",
-    status: "1st Prize",
-    team: ["Andrew Georges", "Jorge Sanchez Bajo", "Bettina Kagelmacher", "Roman Schober"],
-    collab: ["tebt+","Bettina Kagelmacher", "Roman Schober"],
+    info: [
+      { label: "Location",      value: "St. Gallen, CH" },
+      { label: "Type",          value: "Competition" },
+      { label: "Size",          value: "12.4 ha" },
+      { label: "Status",        value: "1st Prize" },
+      { label: "Avg Hot",   value: "14°C" },
+      { label: "Avg Cold",   value: "2°C" },
+      { label: "Elevation",   value: "684m" },
+      { label: "Coordinates",   value: "47°N09°E" },
+      { label: "Team",          value: ["Andrew Georges", "Jorge Sanchez Bajo", "Bettina Kagelmacher", "Roman Schober"] },
+      { label: "Collaborators", value: ["tebt+"] },
+    ],
     photos: 7,
     preview: 3,
   },
@@ -194,13 +207,17 @@ const PROJECTS = [
     title: "Holcim Visitor Center",
     subtitle: "Competition Entry",
     desc: "Competition entry for the Holcim Visitor Center. Positioned as a precise interface between industrial production and the public, the proposal engages with the material logic of cement. The building acts as a transparent, functional framework rather than a conventional shell, performing its own material origin while physically manifesting the circular economy and flexible, future-proof architectural design.",
-    location: "Siggenthal, CH",
-    type: "Cultural",
-    size: "—",
-    budget: "—",
-    status: "Competition",
-    team: ["Andrew Georges", "Jorge Sanchez Bajo", "Bettina Kagelmacher", "Roman Schober"],
-    collab: ["tebt+","Bettina Kagelmacher", "Roman Schober"],
+    info: [
+      { label: "Location",      value: "Siggenthal, CH" },
+      { label: "Type",          value: "Cultural" },
+      { label: "Status",        value: "Competition" },
+      { label: "Avg Hot",   value: "16°C" },
+      { label: "Avg Cold",   value: "3°C" },
+      { label: "Elevation",   value: "358m" },
+      { label: "Coordinates",   value: "48°N08°E" },
+      { label: "Team",          value: ["Andrew Georges", "Jorge Sanchez Bajo", "Bettina Kagelmacher", "Roman Schober"] },
+      { label: "Collaborators", value: ["tebt+"] },
+    ],
     photos: 11,
     preview: 3,
   },
@@ -209,13 +226,16 @@ const PROJECTS = [
     title: "Santa María de Valdeiglesias",
     subtitle: "Adaptive Reuse — 2nd Prize",
     desc: "Second prize in the competition for the adaptive reuse of the monastery of Santa María de Valdeiglesias. The project negotiates between the preserved fabric of a historic religious complex and a contemporary programme for collective inhabitation — working with rather than against the existing spatial hierarchies of monastic life.",
-    location: "Pelayos de la Presa, ES",
-    type: "Heritage / Adaptive Reuse",
-    size: "—",
-    budget: "—",
-    status: "2nd Prize",
-    team: ["Andrew Georges", "Nahi El Khoury", "Joe Chamata"],
-    collab: [],
+    info: [
+      { label: "Location", value: "Pelayos de la Presa, ES" },
+      { label: "Type",     value: "Heritage / Adaptive Reuse" },
+      { label: "Status",   value: "2nd Prize" },
+      { label: "Avg Hot",   value: "21°C" },
+      { label: "Avg Cold",   value: "8°C" },
+      { label: "Elevation",   value: "570m" },
+      { label: "Coordinates",   value: "40°N04°W" },
+      { label: "Team",     value: ["Andrew Georges", "Nahi El Khoury", "Joe Chamata"] },
+    ],
     photos: 5,
     preview: 3,
   },
@@ -224,13 +244,15 @@ const PROJECTS = [
     title: "Papushevo Park",
     subtitle: "Urban Development",
     desc: "An urban development combining a public park, kindergarten, and office buildings. The park is the structuring element of the ensemble, a ground that organises collective life rather than filling residual space between built volumes.",
-    location: "Papushevo, RU",
-    type: "Urban / Mixed Use",
-    size: "—",
-    budget: "—",
-    status: "—",
-    team: ["Andrew Georges", "Charbel Abou Chacra", "Nahi El Khoury", "Joe Chamata","Mike Chaiban"],
-    collab: [],
+    info: [
+      { label: "Location", value: "Papushevo, RU" },
+      { label: "Type",     value: "Urban / Mixed Use" },
+      { label: "Avg Hot",   value: "15°C" },
+      { label: "Avg Cold",   value: "-3°C" },
+      { label: "Elevation",   value: "170m" },
+      { label: "Coordinates",   value: "56°N37°E" },
+      { label: "Team",     value: ["Andrew Georges", "Charbel Abou Chacra", "Nahi El Khoury", "Joe Chamata", "Mike Chaiban"] },
+    ],
     photos: 7,
     preview: 3,
   },
@@ -239,13 +261,16 @@ const PROJECTS = [
     title: "Casa de Aperos",
     subtitle: "Collective Housing",
     desc: "A proposal for a self-sufficient commune in Eivissa grounded in principles of degrowth and scarcity. Conceived as an adaptable infrastructure stripped to its basic conditions, the project utilizes a proximity modular system constructed from salvaged local demolition materials. Learning from the vernacular Casa Payesa, it adapts traditional mass and passive climate strategies for collective living. The architecture actively engages the user in sustainable practices, functioning alongside an operational manual to reduce traditional energy consumption.",
-    location: "Eivissa, ES",
-    type: "Housing",
-    size: "—",
-    budget: "—",
-    status: "—",
-    team: ["Andrew Georges", "Jorge Sanchez Bajo", "Andres Solano"],
-    collab: ["tebt+","esteoeste estudio"],
+    info: [
+      { label: "Location",      value: "Eivissa, ES" },
+      { label: "Type",          value: "Housing" },
+      { label: "Avg Hot",   value: "22°C" },
+      { label: "Avg Cold",   value: "14°C" },
+      { label: "Elevation",   value: "81m" },
+      { label: "Coordinates",   value: "39°N01°E" },
+      { label: "Team",          value: ["Andrew Georges", "Jorge Sanchez Bajo", "Andres Solano"] },
+      { label: "Collaborators", value: ["tebt+", "esteoeste estudio"] },
+    ],
     photos: 10,
     preview: 5,
   },
@@ -254,13 +279,11 @@ const PROJECTS = [
     title: "Three Brothers",
     subtitle: "Three Pavilions",
     desc: "Three pavilions for three brothers on the coast of Amchit, Lebanon. Each pavilion is distinct — a singular response to a shared site — while the three together constitute a small domestic landscape on the water's edge.",
-    location: "Amchit, Lebanon",
-    type: "Residential / Pavilion",
-    size: "—",
-    budget: "—",
-    status: "—",
-    team: ["Joseph Hourany","Andrew Georges"],
-    collab: [],
+    info: [
+      { label: "Location", value: "Amchit, Lebanon" },
+      { label: "Type",     value: "Residential / Pavilion" },
+      { label: "Team",     value: ["Joseph Hourany", "Andrew Georges"] },
+    ],
     photos: 7,
     preview: 3,
   },
@@ -269,13 +292,11 @@ const PROJECTS = [
     title: "Salt Nest",
     subtitle: "Adaptive Reuse",
     desc: "Perched on a rugged Sicilian cliff, the Salt Nest breathes new life into an abandoned stone Customs House, transforming a historic relic into an immersive visitor retreat. Embracing principles of material circularity and structural minimalism, the design introduces translucent, geometric roof volumes clad in crystallized salt panels grown sustainably from the surrounding Mediterranean Sea. Inside, the reimagined interior unfolds vertically, hosting a coffee shop, reading nooks, and a layered museum sequence that culminates in a delicate rooftop observation deck suspended between the earth and the sky. Ultimately, the intervention engages in a quiet dialogue with the raw coastal landscape and the ghosts of its past, offering visitors a poetic connection to light, terrain, and the natural elements.",
-    location: "Punta Bianca, IT",
-    type: "Visitor Center / Pavilion",
-    size: "—",
-    budget: "—",
-    status: "—",
-    team: ["Joe Chamata","Christina Karam","Andrey Bader"],
-    collab: [],
+    info: [
+      { label: "Location", value: "Punta Bianca, IT" },
+      { label: "Type",     value: "Visitor Center / Pavilion" },
+      { label: "Team",     value: ["Joe Chamata", "Christina Karam", "Andrey Bader"] },
+    ],
     photos: 5,
     preview: 2,
   },
@@ -284,13 +305,12 @@ const PROJECTS = [
     title: "Cárcel Abierta",
     subtitle: "Adaptive Reuse",
     desc: "Adaptive reuse of a prison in Chile. The project addresses the conversion of a site of confinement into a structure for collective life — working through the existing spatial order of the penitentiary as an architectural argument about openness and enclosure.",
-    location: "Talca, CL",
-    type: "Heritage / Adaptive Reuse",
-    size: "—",
-    budget: "—",
-    status: "—",
-    team: ["Marwan Zouein", "Andrew Georges", "Nahi El Khoury", "Beatriz Sendin Jimenez"],
-    collab: ["[casaleganitos]","n'undo"],
+    info: [
+      { label: "Location",      value: "Talca, CL" },
+      { label: "Type",          value: "Heritage / Adaptive Reuse" },
+      { label: "Team",          value: ["Marwan Zouein", "Andrew Georges", "Nahi El Khoury", "Beatriz Sendin Jimenez"] },
+      { label: "Collaborators", value: ["[casaleganitos]", "n'undo"] },
+    ],
     photos: 6,
     preview: 2,
   },
@@ -298,15 +318,15 @@ const PROJECTS = [
     id: "p05b",
     title: "Above All, a Shared Resource",
     subtitle: "Ephemeral Installation",
-    desc: "Pliée: A blank piece of paper offers infinite experimentation and as structuralists we began with a fold. Pliée is a wooden structure inspired by the mechanism of simple origami. The folded structure is meant to define its own parameters and create functional spaces on the roof through shading mechanisms while the roof’s connection to the sky is defined, intentional, and purposeful while remaining flexible and mobile.",
-    location: "Beirut, LB",
-    type: "Public / Ephemeral",
-    size: "—",
-    budget: "600$",
-    status: "—",
-    team: ["Joe Chamata", "Mike Chaiban", "Christina Karam"],
-    collab: ["Bits to Atoms"],
-    photos: 5,   
+    desc: "Pliée: A blank piece of paper offers infinite experimentation and as structuralists we began with a fold. Pliée is a wooden structure inspired by the mechanism of simple origami. The folded structure is meant to define its own parameters and create functional spaces on the roof through shading mechanisms while the roof's connection to the sky is defined, intentional, and purposeful while remaining flexible and mobile.",
+    info: [
+      { label: "Location",      value: "Beirut, LB" },
+      { label: "Type",          value: "Public / Ephemeral" },
+      { label: "Budget",        value: "600$" },
+      { label: "Team",          value: ["Joe Chamata", "Mike Chaiban", "Christina Karam"] },
+      { label: "Collaborators", value: ["Bits to Atoms"] },
+    ],
+    photos: 5,
     preview: 1,
   },
   {
@@ -314,13 +334,11 @@ const PROJECTS = [
     title: "Amchit Fire Proving Grounds",
     subtitle: "Ephemeral Station",
     desc: "A temporary firefighter training station in Amchit, Lebanon — designed to transform into a public park for children once its operational phase is complete. A single structure serving two sequential programmes, using material logic to negotiate the transition between them.",
-    location: "Amchit, LB",
-    type: "Public / Ephemeral",
-    size: "—",
-    budget: "—",
-    status: "—",
-    team: ["Andrew Georges", "Charbel Abou Chacra", "Nahi El Khoury", "Joe Chamata"],
-    collab: [],
+    info: [
+      { label: "Location", value: "Amchit, LB" },
+      { label: "Type",     value: "Public / Ephemeral" },
+      { label: "Team",     value: ["Andrew Georges", "Charbel Abou Chacra", "Nahi El Khoury", "Joe Chamata"] },
+    ],
     photos: 0,
     preview: 0,
   },
@@ -329,13 +347,11 @@ const PROJECTS = [
     title: "Dancing House",
     subtitle: "Adaptive Reuse & Coliving",
     desc: "A collaborative adaptive project for a traditional house in Beit Mery. The existing structure is adapted for a coliving situation with communal activities, and the garden is populated with a series of follies that extend the collective life of the house into the landscape.",
-    location: "Beit Mery, LB",
-    type: "Residential / Coliving",
-    size: "—",
-    budget: "—",
-    status: "—",
-    team: ["Andrew Georges", "Charbel Abou Chacra", "Nahi El Khoury", "Joe Chamata","Mike Chaiban"],
-    collab: [],
+    info: [
+      { label: "Location", value: "Beit Mery, LB" },
+      { label: "Type",     value: "Residential / Coliving" },
+      { label: "Team",     value: ["Andrew Georges", "Charbel Abou Chacra", "Nahi El Khoury", "Joe Chamata", "Mike Chaiban"] },
+    ],
     photos: 0,
     preview: 0,
   },
@@ -344,13 +360,12 @@ const PROJECTS = [
     title: "RAZ House",
     subtitle: "Interior Design",
     desc: "Interior design for a duplex apartment. A wooden box organized life accross two floors.",
-    location: "Aley, LB",
-    type: "Interior Design",
-    size: "Duplex — 2 floors",
-    budget: "—",
-    status: "—",
-    team: ["Andrew Georges", "Charbel Abou Chacra", "Nahi El Khoury", "Joe Chamata", "Mike Chaiban"],
-    collab: [],
+    info: [
+      { label: "Location", value: "Aley, LB" },
+      { label: "Type",     value: "Interior Design" },
+      { label: "Size",     value: "Duplex — 2 floors" },
+      { label: "Team",     value: ["Andrew Georges", "Charbel Abou Chacra", "Nahi El Khoury", "Joe Chamata", "Mike Chaiban"] },
+    ],
     photos: 0,
     preview: 0,
   },
@@ -359,13 +374,12 @@ const PROJECTS = [
     title: "AM House",
     subtitle: "Interior Design",
     desc: "Interior design for a penthouse. A steel platform forms a mezanine organizing life underneath it.",
-    location: "Nahr Ibrahim, LB",
-    type: "Interior Design",
-    size: "Penthouse",
-    budget: "—",
-    status: "—",
-    team: ["Andrew Georges", "Charbel Abou Chacra", "Nahi El Khoury", "Joe Chamata","Jaques Zekian"],
-    collab: [],
+    info: [
+      { label: "Location", value: "Nahr Ibrahim, LB" },
+      { label: "Type",     value: "Interior Design" },
+      { label: "Size",     value: "Penthouse" },
+      { label: "Team",     value: ["Andrew Georges", "Charbel Abou Chacra", "Nahi El Khoury", "Joe Chamata", "Jaques Zekian"] },
+    ],
     photos: 0,
     preview: 0,
   },
@@ -374,13 +388,11 @@ const PROJECTS = [
     title: "GOE Office Extension",
     subtitle: "Interior Design",
     desc: "xxxxxxxxxxx",
-    location: "xxxxxxx, LB",
-    type: "Interior Design",
-    size: "Penthouse",
-    budget: "—",
-    status: "—",
-    team: ["Andrew Georges", "Charbel Abou Chacra"],
-    collab: [],
+    info: [
+      { label: "Location", value: "Beit Chaar, LB" },
+      { label: "Type",     value: "Interior Design" },
+      { label: "Team",     value: ["Andrew Georges", "Charbel Abou Chacra"] },
+    ],
     photos: 0,
     preview: 0,
   },
@@ -389,13 +401,11 @@ const PROJECTS = [
     title: "Baglietto Pavilion",
     subtitle: "Competition — Honourable Mention",
     desc: "Competition entry for the Baglietto Pavilion, receiving an honourable mention. A proposal exploring temporary structure, public presence, and the architecture of gathering — a single gesture that is simultaneously enclosure and threshold.",
-    location: "—",
-    type: "Pavilion / Competition",
-    size: "—",
-    budget: "—",
-    status: "Honourable Mention",
-    team: ["Nahi El Khoury", "Valerie Saab"],
-    collab: [],
+    info: [
+      { label: "Type",   value: "Pavilion / Competition" },
+      { label: "Status", value: "Honourable Mention" },
+      { label: "Team",   value: ["Nahi El Khoury", "Valerie Saab"] },
+    ],
     photos: 0,
     preview: 0,
   },
@@ -404,13 +414,12 @@ const PROJECTS = [
     title: "KWL — Beirut River",
     subtitle: "Competition — 1st Prize",
     desc: "First prize in the KWL competition. The project reframes the infrastructure of the Beirut River as a site of meeting — proposing that the engineered channel, rather than dividing, can become the basis for a new form of urban public space. Infrastructure as meeting place.",
-    location: "Beirut, LB",
-    type: "Infrastructure / Public Space",
-    size: "—",
-    budget: "—",
-    status: "1st Prize",
-    team: ["Charbel Abou Chacra", "Nahi El Khoury", "Kay Bardawil", "Charbel Corbani", "Michelle Norenzian"],
-    collab: [],
+    info: [
+      { label: "Location", value: "Beirut, LB" },
+      { label: "Type",     value: "Infrastructure / Public Space" },
+      { label: "Status",   value: "1st Prize" },
+      { label: "Team",     value: ["Charbel Abou Chacra", "Nahi El Khoury", "Kay Bardawil", "Charbel Corbani", "Michelle Norenzian"] },
+    ],
     photos: 0,
     preview: 0,
   },
@@ -428,7 +437,7 @@ function buildWorkListHTML() {
           ${p.subtitle ? `<span style="font-style:italic;color:#888;font-size:0.85em"> — ${p.subtitle}</span>` : ''}
         </td>
         <td style="font-style:italic;font-size:0.85rem;color:#888;
-                   text-align:right;white-space:nowrap">${p.location}</td>
+                   text-align:right;white-space:nowrap">${(p.info.find ? p.info.find(r => r.label === "Location") : null)?.value || "—"}</td>
       </tr>`;
   }).join('');
 
@@ -441,17 +450,23 @@ function buildWorkListHTML() {
 
 // ── 4. PROJECT MODAL HTML ─────────────────────────────────────────────────────
 function buildProjectHTML(p) {
-  const teamHTML = p.team && p.team.length
-    ? `<ul class="modal-team-list">${p.team.map(n => `<li>${n}</li>`).join('')}</ul>`
-    : '—';
-  const collabHTML = p.collab && p.collab.length
-    ? `<ul class="modal-team-list">${p.collab.map(n => `<li>${n}</li>`).join('')}</ul>`
-    : null;
+  // Build info rows from p.info array — each entry is { label, value }
+  // Special values: 'team' and 'collab' render as lists automatically
+  const rowsHTML = (p.info || []).map(({ label, value }) => {
+    let cell;
+    if (label === 'Team' || label === 'Collaborators') {
+      const items = Array.isArray(value) ? value : [value];
+      cell = items.length
+        ? `<ul class="modal-team-list">${items.map(n => `<li>${n}</li>`).join('')}</ul>`
+        : '—';
+    } else {
+      cell = value || '—';
+    }
+    return `<tr><td>${label}</td><td>${cell}</td></tr>`;
+  }).join('');
 
-  // All photos shown in modal (not just preview)
   let imagesHTML = '';
   if (p.photos > 0) {
-    // Add fallback for modal images, and decoding="async" for smoother mobile loading
     const handleImgError = "this.onerror=null; this.src=this.src.replace('.webp', '.gif');";
     const imgs = Array.from({ length: p.photos }, (_, i) => {
       const num = String(i + 1).padStart(2, '0');
@@ -464,15 +479,7 @@ function buildProjectHTML(p) {
     <div class="modal-title">${p.title}</div>
     ${p.subtitle ? `<span class="modal-subtitle">${p.subtitle}</span>` : ''}
     <div class="modal-body-cols">
-      <table class="modal-data-table">
-        <tr><td>Location</td><td>${p.location}</td></tr>
-        <tr><td>Type</td><td>${p.type}</td></tr>
-        <tr><td>Size</td><td>${p.size}</td></tr>
-        <tr><td>Budget</td><td>${p.budget}</td></tr>
-        <tr><td>Status</td><td>${p.status}</td></tr>
-        <tr><td>Team</td><td>${teamHTML}</td></tr>
-        ${collabHTML ? `<tr><td>Collaborators</td><td>${collabHTML}</td></tr>` : ''}
-      </table>
+      <table class="modal-data-table">${rowsHTML}</table>
       <p class="modal-desc">${p.desc}</p>
     </div>
     ${imagesHTML}`;
