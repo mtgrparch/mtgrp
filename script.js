@@ -145,11 +145,26 @@ function buildAboutHTML() {
 // ── 2. PROJECT REGISTRY ───────────────────────────────────────────────────────
 const PROJECTS = [
   {
+    id: "p14",
+    title: "A Well-Tempered House",
+    subtitle: "Family Housing",
+    desc: "A house perched on a steep hillside in Ghazir, Lebanon. Deep thermal walls form the structural and spatial logic of the house, while a series of terraces negotiate the steep slope of the site. The house is designed to be passively cooled in summer and passively heated in winter, with a focus on natural ventilation, solar orientation, and thermal mass.",
+    location: "Ghazir, LB",
+    type: "Housing",
+    size: "—",
+    budget: "-",
+    status: "Ongoing",
+    team: ["Andrew Georges"],
+    collab: [],
+    photos: 2,
+    preview: 1,
+  },
+  {
     id: "p13",
     title: "A Home in the Sun",
     subtitle: "Home for Seniors",
     desc: "An elderly care facility organized around the natural circadian rhythm to mitigate the disorientation associated with dementia. The architecture establishes a clear structural dichotomy: a dense, in-situ concrete communal core consolidates daytime collective programs, while prefabricated timber wings hold the private, quiet residential households. Designed as a replicable prototype, the modular kit of parts adapts to two distinct topographies. In Lysá nad Labem, the households are compacted into a three-storey pinwheel forming an urban edge, whereas in Milovice, the same units unfold into a two-storey horizontal arrangement following the gentle slope of the land. The project relies on passive climate strategies, utilizing high thermal mass and cross-ventilation, while the landscape functions as an active therapeutic instrument calibrated to provide temporal and olfactory orientation.",
-    location: "Lysá nad Labem. CZ",
+    location: "Lysá nad Labem, CZ",
     type: "Housing",
     size: "—",
     budget: "212,227,500 Kč",
