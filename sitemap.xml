@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
-  <url><loc>https://mtgrp.xyz/</loc></url>
-  <url><loc>https://mtgrp.xyz/work.html</loc></url>
-  <url><loc>https://mtgrp.xyz/about.html</loc></url>
-  <url><loc>https://mtgrp.xyz/contact.html</loc></url>
+  <url>
+    <loc>https://mtgrp.xyz/</loc>
+    <lastmod>2026-07-01</lastmod>
+    <changefreq>weekly</changefreq>
+  </url>
 </urlset>
