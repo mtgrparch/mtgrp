@@ -285,7 +285,7 @@ const PROJECTS = [
       { label: "Team",     value: ["Joseph Hourany", "Andrew Georges"] },
     ],
     photos: 7,
-    preview: 3,
+    preview: 1,
   },
   {
     id: "p06c",
