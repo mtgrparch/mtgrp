@@ -623,25 +623,14 @@ function onTouchEnd() {
   velocity = touchVelocity;
 }
 
-// Cache column elements and their heights
+// Cache column elements only — scrollHeight read live each frame (safe with transform)
 let cachedCols = [];
 
-function updateScrollCache() {
-  cachedCols = Array.from(document.querySelectorAll('.parallax-col')).map(col => ({
-    el: col,
-    speed: parseFloat(col.dataset.speed),
-    halfHeight: col.scrollHeight / 2
-  }));
-}
-
 function initScrollCache() {
-  updateScrollCache();
-  
-  // Recalculate heights if the window resizes
-  window.addEventListener('resize', updateScrollCache);
-  
-  // Recalculate once images finish loading to ensure accurate heights
-  window.addEventListener('load', updateScrollCache);
+  cachedCols = Array.from(document.querySelectorAll('.parallax-col')).map(col => ({
+    el:    col,
+    speed: parseFloat(col.dataset.speed),
+  }));
 }
 
 function updateParallax() {
@@ -650,14 +639,16 @@ function updateParallax() {
   if (Math.abs(velocity) < 0.05) velocity = 0;
 
   for (const col of cachedCols) {
-    if (col.halfHeight <= 0) continue;
-    let y = (virtualScrollY * col.speed) % col.halfHeight;
-    if (y < 0) y += col.halfHeight;
+    const halfHeight = col.el.scrollHeight / 2;
+    if (halfHeight <= 0) continue;
+    let y = (virtualScrollY * col.speed) % halfHeight;
+    if (y < 0) y += halfHeight;
     col.el.style.transform = `translate3d(0, -${Math.round(y)}px, 0)`;
   }
 
   requestAnimationFrame(updateParallax);
 }
+
 
 
 // ── LIVE WEATHER ──────────────────────────────────────────────────────────────
