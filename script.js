@@ -135,7 +135,7 @@ function buildAboutHTML() {
     ${collabsHTML}
 
     <table class="about-contact-table" style="margin-top: 48px;">
-      <tr><td>Email</td><td><a href="mailto:metagroupearch@gmail.com" style="color:#0033FF;text-decoration:none">metagroupearch@gmail.com</a></td></tr>
+      <tr><td>Email</td><td><a href="mailto:studio@mtgrp.xyz" style="color:#0033FF;text-decoration:none">studio@mtgrp.xyz</a></td></tr>
       <tr><td>Instagram</td><td><a href="https://www.instagram.com/metagroupe/" target="_blank" style="color:#0033FF;text-decoration:none">@metagroupe</a></td></tr>
       <tr><td>Offices</td><td>Beirut &nbsp;·&nbsp; Madrid &nbsp;·&nbsp; Milan</td></tr>
       <tr><td>Est.</td><td>2018</td></tr>
