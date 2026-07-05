@@ -159,7 +159,7 @@ const PROJECTS = [
       { label: "Coordinates",   value: "34°N36°E" },
       { label: "Team",     value: ["Andrew Georges"] },
     ],
-    photos: 10,
+    photos: 12,
     preview: 1,
   },
   {
