@@ -36,7 +36,7 @@ const PARTNERS = [
 // ── COLLABORATORS ─────────────────────────────────────────────────────────────
 const COLLABORATORS = {
   architects: [
-    "Jorge Sanchez Bajo, Bettina Kagelmacher, Roman Schober, Andres Solano,Jaques Zekian, Mike Chaiban, Valerie Saab, Christina Karam, Ryuhei Ismael Kagawa, Jorge Andres Rodriguez Angel, Andrey Bader",
+    "Jorge Sanchez Bajo, Bettina Kagelmacher, Roman Schober, Andres Solano, Elie El Khoury, Jaques Zekian, Mike Chaiban, Valerie Saab, Christina Karam, Ryuhei Ismael Kagawa, Jorge Andres Rodriguez Angel, Andrey Bader",
   ],
   offices: [
     "tebt+, esteoeste, superunion, b.noma, studio street 9",
