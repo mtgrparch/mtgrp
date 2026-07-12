@@ -521,9 +521,12 @@ function buildGrid() {
     col.style.marginTop = `${MARGINS[ci]}px`;
 
     // Add fallback for grid images + decoding="async"
+    // Grid tiles loop infinitely, so lazy-loading forces a main-thread decode each
+    // time an image re-enters the viewport → periodic scroll hitches. There are only
+    // a handful of preview tiles, so load them eagerly and decode off the main thread.
     const handleImgError = "this.onerror=null; this.src=this.src.replace('.webp', '.gif');";
     const tileHTML = colTiles.map(tile =>
-      `<img src="${tile.src}" onerror="${handleImgError}" data-id="${tile.projectId}" alt="${tile.label}" loading="lazy" decoding="async">`
+      `<img src="${tile.src}" onerror="${handleImgError}" data-id="${tile.projectId}" alt="${tile.label}" loading="eager" decoding="async">`
     ).join('');
 
     // Duplicate for infinite loop
@@ -623,15 +626,28 @@ function onTouchEnd() {
   velocity = touchVelocity;
 }
 
-// Cache column elements only — scrollHeight read live each frame (safe with transform)
+// Cache column elements AND their half-height. Column heights are driven by CSS
+// (fixed vh image heights), so they're stable regardless of image load state —
+// measure once here instead of forcing a reflow via scrollHeight every frame.
 let cachedCols = [];
+
+function measureCols() {
+  for (const col of cachedCols) col.halfHeight = col.el.scrollHeight / 2;
+}
 
 function initScrollCache() {
   cachedCols = Array.from(document.querySelectorAll('.parallax-col')).map(col => ({
     el:    col,
     speed: parseFloat(col.dataset.speed),
+    halfHeight: 0,
   }));
+  measureCols();
 }
+
+// Heights depend on viewport (vh units) and on images finishing layout — re-measure
+// on resize and once everything has loaded, but never inside the animation loop.
+window.addEventListener('resize', measureCols);
+window.addEventListener('load', measureCols);
 
 function updateParallax() {
   velocity       *= FRICTION;
@@ -639,11 +655,13 @@ function updateParallax() {
   if (Math.abs(velocity) < 0.05) velocity = 0;
 
   for (const col of cachedCols) {
-    const halfHeight = col.el.scrollHeight / 2;
+    const halfHeight = col.halfHeight;
     if (halfHeight <= 0) continue;
     let y = (virtualScrollY * col.speed) % halfHeight;
     if (y < 0) y += halfHeight;
-    col.el.style.transform = `translate3d(0, -${Math.round(y)}px, 0)`;
+    // Sub-pixel translate3d — rounding to whole pixels made the slower columns
+    // advance in visible integer steps (micro-stutter) at low speeds.
+    col.el.style.transform = `translate3d(0, ${(-y).toFixed(2)}px, 0)`;
   }
 
   requestAnimationFrame(updateParallax);
