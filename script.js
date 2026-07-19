@@ -664,9 +664,232 @@ function updateParallax() {
     col.el.style.transform = `translate3d(0, ${(-y).toFixed(2)}px, 0)`;
   }
 
+  updateHud();
+
   requestAnimationFrame(updateParallax);
 }
 
+
+// ── 7b. DATA HUD — cursor telemetry ──────────────────────────────────────────
+//  Hovering a grid tile summons a trailing instrument readout of the project's
+//  data (coordinates, altitude, temperatures). Each line follows the cursor
+//  with a different inertia so the stack stretches like a streamer; text
+//  decodes in with an ASCII scramble; the coordinate arc-minutes are driven
+//  by the mouse position. Desktop / hover devices only.
+const HUD_ENABLED = !isMobile && window.matchMedia('(hover: hover)').matches;
+const HUD_GLYPHS  = '░▒▓#%/<>+=*';
+const HUD_LINES   = [
+  { key: 'title',  lerp: 0.32,  dx: 24, dy: -34, cls: 'hud-title' },
+  { key: 'meta',   lerp: 0.24,  dx: 24, dy: -16 },
+  { key: 'coords', lerp: 0.16,  dx: 24, dy: 20  },
+  { key: 'alt',    lerp: 0.12,  dx: 24, dy: 36  },
+  { key: 'temp',   lerp: 0.085, dx: 24, dy: 52  },
+];
+const HUD_SCRAMBLE_MS = 450;   // decode duration per line
+const HUD_STAGGER_MS  = 70;    // decode delay between lines
+const HUD_ALT_MS      = 900;   // altitude count-up duration
+
+let hudEl = null, hudCross = null, hudLineEls = [];
+let hudMx = -1e4, hudMy = -1e4;
+let hudProject = null, hudData = null, hudEnterAt = 0;
+let hudFlip = 0;  // 0 = readout right of cursor, 1 = flipped left (lerped)
+let hudImgEl = null;                       // tile currently under the cursor
+let hudSampleCtx = null, hudSampleTick = 0;
+let hudOnLight = false, hudSamplingBroken = false;
+
+function initDataHud() {
+  if (!HUD_ENABLED) return;
+  hudEl = document.createElement('div');
+  hudEl.id = 'data-hud';
+
+  hudCross = document.createElement('div');
+  hudCross.className = 'hud-line hud-cross';
+  hudCross.textContent = '+';
+  hudCross._x = 0; hudCross._y = 0;
+  hudEl.appendChild(hudCross);
+
+  hudLineEls = HUD_LINES.map(def => {
+    const el = document.createElement('div');
+    el.className = 'hud-line' + (def.cls ? ' ' + def.cls : '');
+    el._x = 0; el._y = 0;
+    hudEl.appendChild(el);
+    return el;
+  });
+
+  document.body.appendChild(hudEl);
+
+  const sampleCanvas = document.createElement('canvas');
+  sampleCanvas.width = 16; sampleCanvas.height = 10;
+  hudSampleCtx = sampleCanvas.getContext('2d', { willReadFrequently: true });
+
+  window.addEventListener('mousemove', e => { hudMx = e.clientX; hudMy = e.clientY; });
+  document.documentElement.addEventListener('mouseleave', () => { hudMx = -1e4; hudMy = -1e4; });
+}
+
+function hudInfo(p, label) {
+  const row = (p.info || []).find(r => r.label === label);
+  return row ? row.value : null;
+}
+
+function hudDataFor(p) {
+  const loc    = hudInfo(p, 'Location');
+  const status = hudInfo(p, 'Status') || hudInfo(p, 'Type');
+  const coords = hudInfo(p, 'Coordinates');                  // e.g. "34°N36°E"
+  const elev   = hudInfo(p, 'Elevation');                    // e.g. "380m"
+  const hot    = hudInfo(p, 'Avg Hot');
+  const cold   = hudInfo(p, 'Avg Cold');
+  const m      = coords ? coords.match(/(\d+)°([NS])\s*(\d+)°([EW])/) : null;
+  return {
+    num:   String(PROJECTS.indexOf(p) + 1).padStart(2, '0'),
+    title: p.title,
+    meta:  [loc, status].filter(Boolean).join(' — ') || null,
+    lat:   m ? { deg: +m[1], hemi: m[2] } : null,
+    lon:   m ? { deg: +m[3], hemi: m[4] } : null,
+    alt:   elev ? parseInt(elev, 10) : null,
+    temp:  (hot && cold) ? `T ${hot} / ${cold}` : null,
+  };
+}
+
+// Arc-minutes pan with the cursor — moving across the tile pans the reading
+function hudLiveCoords(d) {
+  const mm = String((hudMx / window.innerWidth  * 59) | 0).padStart(2, '0');
+  const ss = String((hudMy / window.innerHeight * 59) | 0).padStart(2, '0');
+  return `${d.lat.deg}°${mm}′${d.lat.hemi} — ${d.lon.deg}°${ss}′${d.lon.hemi}`;
+}
+
+// Average luminance (0–255) of the image pixels beneath the readout.
+// Tiles use object-fit: cover, so viewport coords are mapped back through the
+// cover crop into natural-image pixels before sampling.
+function hudSampleLuma(imgEl) {
+  if (!imgEl || !imgEl.naturalWidth) return null;
+  const rect   = imgEl.getBoundingClientRect();
+  const scale  = Math.max(rect.width / imgEl.naturalWidth, rect.height / imgEl.naturalHeight);
+  const offX   = rect.left + (rect.width  - imgEl.naturalWidth  * scale) / 2;
+  const offY   = rect.top  + (rect.height - imgEl.naturalHeight * scale) / 2;
+  // viewport region the readout occupies (flips to the left near the right edge)
+  const region = {
+    x: (hudFlip > 0.5 ? hudMx - 280 : hudMx),
+    y: hudMy - 44, w: 280, h: 110,
+  };
+  let sx = (region.x - offX) / scale;
+  let sy = (region.y - offY) / scale;
+  let sw = region.w / scale;
+  let sh = region.h / scale;
+  sx = Math.max(0, Math.min(sx, imgEl.naturalWidth  - 1));
+  sy = Math.max(0, Math.min(sy, imgEl.naturalHeight - 1));
+  sw = Math.min(sw, imgEl.naturalWidth  - sx);
+  sh = Math.min(sh, imgEl.naturalHeight - sy);
+  if (sw < 4 || sh < 4) return null;
+  hudSampleCtx.drawImage(imgEl, sx, sy, sw, sh, 0, 0, 16, 10);
+  const d = hudSampleCtx.getImageData(0, 0, 16, 10).data;
+  let sum = 0;
+  for (let i = 0; i < d.length; i += 4) {
+    sum += 0.2126 * d[i] + 0.7152 * d[i + 1] + 0.0722 * d[i + 2];
+  }
+  return sum / (d.length / 4);
+}
+
+// White text over dark imagery, MTGRP blue over light — with hysteresis so the
+// colour never flickers around the threshold. Sampled every 8th frame.
+function hudUpdateColor() {
+  if (hudSamplingBroken || !hudProject) return;
+  if (hudSampleTick++ % 8 !== 0) return;
+  try {
+    const luma = hudSampleLuma(hudImgEl);
+    if (luma === null) return;
+    if (!hudOnLight && luma > 160) hudOnLight = true;
+    else if (hudOnLight && luma < 140) hudOnLight = false;
+    hudEl.classList.toggle('on-light', hudOnLight);
+  } catch (e) {
+    // canvas tainted (cross-origin) — fall back to difference blending
+    hudSamplingBroken = true;
+    hudEl.classList.remove('on-light');
+    hudEl.classList.add('hud-blend');
+  }
+}
+
+function hudScramble(text, progress) {
+  const reveal = Math.floor(progress * text.length);
+  let out = text.slice(0, reveal);
+  for (let i = reveal; i < text.length; i++) {
+    out += text[i] === ' ' ? ' ' : HUD_GLYPHS[(Math.random() * HUD_GLYPHS.length) | 0];
+  }
+  return out;
+}
+
+function updateHud() {
+  if (!hudEl) return;
+  const now = performance.now();
+
+  // What's under the cursor right now? (columns drift beneath a still mouse,
+  // so this is re-checked every frame rather than relying on mouseenter)
+  let project = null;
+  if (modalContainer.classList.contains('hidden') && hudMx > -9999) {
+    const el = document.elementFromPoint(hudMx, hudMy);
+    if (el && el.tagName === 'IMG' && el.dataset.id && el.closest('.parallax-col')) {
+      project  = PROJECTS.find(p => p.id === el.dataset.id) || null;
+      hudImgEl = el;
+    }
+  }
+
+  if (project !== hudProject) {
+    const fromIdle = !hudProject;
+    hudProject = project;
+    if (project) {
+      hudData    = hudDataFor(project);
+      hudEnterAt = now;
+      if (fromIdle) {
+        // burst out from the point of contact rather than flying in from afar
+        hudCross._x = hudMx; hudCross._y = hudMy;
+        hudLineEls.forEach(el => { el._x = hudMx; el._y = hudMy; });
+      }
+    }
+    hudEl.classList.toggle('active', !!project);
+  }
+
+  // Flip the readout to the left of the cursor near the right edge
+  hudFlip += ((hudMx > window.innerWidth - 300 ? 1 : 0) - hudFlip) * 0.2;
+
+  hudUpdateColor();
+
+  // Crosshair rides tight to the cursor
+  hudCross._x += (hudMx - hudCross._x) * 0.55;
+  hudCross._y += (hudMy - hudCross._y) * 0.55;
+  hudCross.style.transform =
+    `translate3d(${hudCross._x.toFixed(1)}px, ${hudCross._y.toFixed(1)}px, 0) translate(-50%, -50%)`;
+
+  const t = now - hudEnterAt;
+  const altEase = 1 - Math.pow(1 - Math.min(t / HUD_ALT_MS, 1), 3);
+
+  HUD_LINES.forEach((def, i) => {
+    const el = hudLineEls[i];
+
+    // positions keep tracking even while faded out, so re-entry never jumps
+    const tx = hudMx + def.dx - hudFlip * def.dx * 2;
+    const ty = Math.min(Math.max(hudMy + def.dy, 10), window.innerHeight - 14);
+    el._x += (tx - el._x) * def.lerp;
+    el._y += (ty - el._y) * def.lerp;
+    el.style.transform =
+      `translate3d(${el._x.toFixed(1)}px, ${el._y.toFixed(1)}px, 0) translateX(${(-100 * hudFlip).toFixed(1)}%)`;
+
+    if (!hudProject) return;
+
+    let text = null;
+    switch (def.key) {
+      case 'title':  text = `${hudData.num} — ${hudData.title}` + (((now / 530) | 0) % 2 ? ' ▌' : ''); break;
+      case 'meta':   text = hudData.meta; break;
+      case 'coords': text = hudData.lat ? hudLiveCoords(hudData) : null; break;
+      case 'alt':    text = hudData.alt != null ? `ALT +${Math.round(altEase * hudData.alt)}M` : null; break;
+      case 'temp':   text = hudData.temp; break;
+    }
+
+    el.style.visibility = text ? 'visible' : 'hidden';
+    if (!text) return;
+
+    const prog = Math.min(Math.max((t - i * HUD_STAGGER_MS) / HUD_SCRAMBLE_MS, 0), 1);
+    el.textContent = prog >= 1 ? text : hudScramble(text, prog);
+  });
+}
 
 
 // ── LIVE WEATHER ──────────────────────────────────────────────────────────────
@@ -778,6 +1001,7 @@ window.addEventListener('DOMContentLoaded', () => {
   grid.addEventListener('touchend',   onTouchEnd,   { passive: true  });
 
   initScrollCache();
+  initDataHud();
   requestAnimationFrame(updateParallax);
 
   fetchWeather();

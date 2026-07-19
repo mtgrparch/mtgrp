@@ -130,6 +130,46 @@ body {
 
 @media (hover: hover) {
   .parallax-col img:hover { opacity: 0.75; }
+  .parallax-col img { cursor: crosshair; }
+}
+
+/* ── DATA HUD — cursor telemetry over the grid ── */
+#data-hud {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 15;
+}
+
+.hud-line {
+  position: absolute;
+  top: 0;
+  left: 0;
+  font-family: ui-monospace, 'Cascadia Mono', Consolas, 'Courier New', monospace;
+  font-size: 0.64rem;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: #fff;
+  white-space: nowrap;
+  will-change: transform;
+  opacity: 0;
+  transition: opacity 0.28s ease, color 0.3s ease;
+}
+
+#data-hud.active .hud-line { opacity: 1; }
+
+/* Over light imagery the HUD samples the pixels beneath it and flips to near-black */
+#data-hud.on-light .hud-line { color: #111; }
+
+/* Fallback if pixel sampling is unavailable (e.g. cross-origin canvas taint) */
+#data-hud.hud-blend .hud-line { color: #fff; mix-blend-mode: difference; }
+
+.hud-line.hud-title { font-weight: 700; }
+
+.hud-line.hud-cross {
+  font-size: 1.05rem;
+  letter-spacing: 0;
+  line-height: 1;
 }
 
 @media (max-width: 768px) {
