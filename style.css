@@ -164,6 +164,22 @@ body {
 /* Fallback if pixel sampling is unavailable (e.g. cross-origin canvas taint) */
 #data-hud.hud-blend .hud-line { color: #fff; mix-blend-mode: difference; }
 
+/* ── Mobile variant: static stack anchored left of the screen centre.
+     Positions live entirely in CSS — the JS only swaps text and classes ── */
+#data-hud.hud-mobile .hud-line { left: 16px; will-change: auto; }
+#data-hud.hud-mobile .hud-line:nth-child(1) { top: calc(50% - 34px); }
+#data-hud.hud-mobile .hud-line:nth-child(2) { top: calc(50% - 16px); }
+#data-hud.hud-mobile .hud-line:nth-child(3) { top: calc(50% + 20px); }
+#data-hud.hud-mobile .hud-line:nth-child(4) { top: calc(50% + 36px); }
+#data-hud.hud-mobile .hud-line:nth-child(5) { top: calc(50% + 52px); }
+
+/* blinking block cursor after the title — CSS-only, compositor-cheap */
+#data-hud.hud-mobile.active .hud-title::after {
+  content: ' ▌';
+  animation: hudBlink 1.06s steps(1) infinite;
+}
+@keyframes hudBlink { 50% { opacity: 0; } }
+
 .hud-line.hud-title { font-weight: 700; }
 
 .hud-line.hud-cross {

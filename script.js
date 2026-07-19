@@ -718,10 +718,6 @@ function initDataHud() {
 
   document.body.appendChild(hudEl);
 
-  const sampleCanvas = document.createElement('canvas');
-  sampleCanvas.width = 16; sampleCanvas.height = 10;
-  hudSampleCtx = sampleCanvas.getContext('2d', { willReadFrequently: true });
-
   window.addEventListener('mousemove', e => { hudMx = e.clientX; hudMy = e.clientY; });
   document.documentElement.addEventListener('mouseleave', () => { hudMx = -1e4; hudMy = -1e4; });
 }
@@ -760,14 +756,19 @@ function hudLiveCoords(d) {
 // Average luminance (0–255) of the image pixels beneath the readout.
 // Tiles use object-fit: cover, so viewport coords are mapped back through the
 // cover crop into natural-image pixels before sampling.
-function hudSampleLuma(imgEl) {
+function hudSampleLuma(imgEl, regionOverride) {
   if (!imgEl || !imgEl.naturalWidth) return null;
+  if (!hudSampleCtx) {
+    const sampleCanvas = document.createElement('canvas');
+    sampleCanvas.width = 16; sampleCanvas.height = 10;
+    hudSampleCtx = sampleCanvas.getContext('2d', { willReadFrequently: true });
+  }
   const rect   = imgEl.getBoundingClientRect();
   const scale  = Math.max(rect.width / imgEl.naturalWidth, rect.height / imgEl.naturalHeight);
   const offX   = rect.left + (rect.width  - imgEl.naturalWidth  * scale) / 2;
   const offY   = rect.top  + (rect.height - imgEl.naturalHeight * scale) / 2;
   // viewport region the readout occupies (flips to the left near the right edge)
-  const region = {
+  const region = regionOverride || {
     x: (hudFlip > 0.5 ? hudMx - 280 : hudMx),
     y: hudMy - 44, w: 280, h: 110,
   };
@@ -892,6 +893,95 @@ function updateHud() {
 }
 
 
+// ── 7c. MOBILE DATA HUD ───────────────────────────────────────────────────────
+//  Event-driven variant for touch devices: the tile crossing the screen centre
+//  is read out as a static left-anchored stack (positioned purely in CSS).
+//  All work happens at the moment the centre tile changes — one probe every
+//  150ms, a single colour sample, and a short self-terminating decode
+//  animation. Nothing is added to the per-frame scroll loop.
+let mhudEl = null, mhudLineEls = [], mhudProject = null, mhudAnimId = 0;
+
+function initMobileHud() {
+  mhudEl = document.createElement('div');
+  mhudEl.id = 'data-hud';
+  mhudEl.classList.add('hud-mobile');
+  mhudLineEls = Array.from({ length: 5 }, (_, i) => {
+    const el = document.createElement('div');
+    el.className = 'hud-line' + (i === 0 ? ' hud-title' : '');
+    mhudEl.appendChild(el);
+    return el;
+  });
+  document.body.appendChild(mhudEl);
+  setInterval(mhudCheck, 150);
+}
+
+function mhudCheck() {
+  let project = null, imgEl = null;
+  if (modalContainer.classList.contains('hidden')) {
+    const cx = window.innerWidth / 2, cy = window.innerHeight / 2;
+    // probe above/below centre too so the gap between tiles doesn't blink it off
+    for (const dy of [0, 80, -80]) {
+      const el = document.elementFromPoint(cx, cy + dy);
+      if (el && el.tagName === 'IMG' && el.dataset.id && el.closest('.parallax-col')) {
+        project = PROJECTS.find(p => p.id === el.dataset.id) || null;
+        imgEl = el;
+        break;
+      }
+    }
+  }
+  if (project === mhudProject) return;
+  mhudProject = project;
+  mhudEl.classList.toggle('active', !!project);
+  if (!project) return;
+
+  const d = hudDataFor(project);
+  // arc-minutes snapshot from the scroll position — varies reveal to reveal
+  const mm = String((((virtualScrollY / 7)   % 60) + 60) % 60 | 0).padStart(2, '0');
+  const ss = String((((virtualScrollY / 2.8) % 60) + 60) % 60 | 0).padStart(2, '0');
+  const texts = [
+    `${d.num} — ${d.title}`,
+    d.meta,
+    d.lat ? `${d.lat.deg}°${mm}′${d.lat.hemi} — ${d.lon.deg}°${ss}′${d.lon.hemi}` : null,
+    d.alt != null ? `ALT +${d.alt}M` : null,
+    d.temp,
+  ];
+
+  // one colour sample per tile change (no hysteresis needed — single reading)
+  try {
+    const luma = hudSampleLuma(imgEl, {
+      x: 8, y: window.innerHeight / 2 - 44,
+      w: Math.min(280, window.innerWidth - 16), h: 110,
+    });
+    if (luma !== null) mhudEl.classList.toggle('on-light', luma > 150);
+  } catch (e) {
+    // canvas unavailable — keep whatever colour mode we had
+  }
+
+  mhudDecode(texts);
+}
+
+// One-shot decode: a short self-terminating rAF loop (~0.8s), cancelled and
+// restarted if the centre tile changes mid-animation.
+function mhudDecode(texts) {
+  const start = performance.now();
+  const id = ++mhudAnimId;
+  function step(now) {
+    if (id !== mhudAnimId) return;
+    let done = true;
+    texts.forEach((text, i) => {
+      const el = mhudLineEls[i];
+      el.style.visibility = text ? 'visible' : 'hidden';
+      if (!text) return;
+      const prog = Math.min(Math.max((now - start - i * HUD_STAGGER_MS) / HUD_SCRAMBLE_MS, 0), 1);
+      el.textContent = prog >= 1 ? text : hudScramble(text, prog);
+      if (prog < 1) done = false;
+    });
+    if (!done) requestAnimationFrame(step);
+  }
+  requestAnimationFrame(step);
+}
+
+
 // ── LIVE WEATHER ──────────────────────────────────────────────────────────────
 // Open-Meteo: free, no API key needed. Updates every 10 minutes.
 const WEATHER_CITIES = [
@@ -1001,7 +1091,7 @@ window.addEventListener('DOMContentLoaded', () => {
   grid.addEventListener('touchend',   onTouchEnd,   { passive: true  });
 
   initScrollCache();
-  initDataHud();
+  if (isMobile) initMobileHud(); else initDataHud();
   requestAnimationFrame(updateParallax);
 
   fetchWeather();
