@@ -675,11 +675,8 @@ function updateParallax() {
 //  data (coordinates, altitude, temperatures). Each line follows the cursor
 //  with a different inertia so the stack stretches like a streamer; text
 //  decodes in with an ASCII scramble; the coordinate arc-minutes are driven
-//  by the mouse position.
-//  On mobile there is no pointer: the tile crossing the screen centre is read
-//  instead, the stack anchors to the left edge, lines drag with the scroll
-//  velocity, and the arc-minutes pan with the scroll position.
-const HUD_ENABLED = isMobile || window.matchMedia('(hover: hover)').matches;
+//  by the mouse position. Desktop / hover devices only.
+const HUD_ENABLED = !isMobile && window.matchMedia('(hover: hover)').matches;
 const HUD_GLYPHS  = '░▒▓#%/<>+=*';
 const HUD_LINES   = [
   { key: 'title',  lerp: 0.32,  dx: 24, dy: -34, cls: 'hud-title' },
@@ -705,13 +702,11 @@ function initDataHud() {
   hudEl = document.createElement('div');
   hudEl.id = 'data-hud';
 
-  if (!isMobile) {
-    hudCross = document.createElement('div');
-    hudCross.className = 'hud-line hud-cross';
-    hudCross.textContent = '+';
-    hudCross._x = 0; hudCross._y = 0;
-    hudEl.appendChild(hudCross);
-  }
+  hudCross = document.createElement('div');
+  hudCross.className = 'hud-line hud-cross';
+  hudCross.textContent = '+';
+  hudCross._x = 0; hudCross._y = 0;
+  hudEl.appendChild(hudCross);
 
   hudLineEls = HUD_LINES.map(def => {
     const el = document.createElement('div');
@@ -727,10 +722,8 @@ function initDataHud() {
   sampleCanvas.width = 16; sampleCanvas.height = 10;
   hudSampleCtx = sampleCanvas.getContext('2d', { willReadFrequently: true });
 
-  if (!isMobile) {
-    window.addEventListener('mousemove', e => { hudMx = e.clientX; hudMy = e.clientY; });
-    document.documentElement.addEventListener('mouseleave', () => { hudMx = -1e4; hudMy = -1e4; });
-  }
+  window.addEventListener('mousemove', e => { hudMx = e.clientX; hudMy = e.clientY; });
+  document.documentElement.addEventListener('mouseleave', () => { hudMx = -1e4; hudMy = -1e4; });
 }
 
 function hudInfo(p, label) {
@@ -757,18 +750,11 @@ function hudDataFor(p) {
   };
 }
 
-// Arc-minutes pan with the cursor — moving across the tile pans the reading.
-// On mobile the scroll position pans them instead.
+// Arc-minutes pan with the cursor — moving across the tile pans the reading
 function hudLiveCoords(d) {
-  let mm, ss;
-  if (isMobile) {
-    mm = (((virtualScrollY / 7)   % 60) + 60) % 60 | 0;
-    ss = (((virtualScrollY / 2.8) % 60) + 60) % 60 | 0;
-  } else {
-    mm = (hudMx / window.innerWidth  * 59) | 0;
-    ss = (hudMy / window.innerHeight * 59) | 0;
-  }
-  return `${d.lat.deg}°${String(mm).padStart(2, '0')}′${d.lat.hemi} — ${d.lon.deg}°${String(ss).padStart(2, '0')}′${d.lon.hemi}`;
+  const mm = String((hudMx / window.innerWidth  * 59) | 0).padStart(2, '0');
+  const ss = String((hudMy / window.innerHeight * 59) | 0).padStart(2, '0');
+  return `${d.lat.deg}°${mm}′${d.lat.hemi} — ${d.lon.deg}°${ss}′${d.lon.hemi}`;
 }
 
 // Average luminance (0–255) of the image pixels beneath the readout.
@@ -780,11 +766,11 @@ function hudSampleLuma(imgEl) {
   const scale  = Math.max(rect.width / imgEl.naturalWidth, rect.height / imgEl.naturalHeight);
   const offX   = rect.left + (rect.width  - imgEl.naturalWidth  * scale) / 2;
   const offY   = rect.top  + (rect.height - imgEl.naturalHeight * scale) / 2;
-  // viewport region the readout occupies (flips to the left near the right
-  // edge on desktop; pinned to the left edge around the centre on mobile)
-  const region = isMobile
-    ? { x: 8, y: window.innerHeight / 2 - 44, w: Math.min(280, window.innerWidth - 16), h: 110 }
-    : { x: (hudFlip > 0.5 ? hudMx - 280 : hudMx), y: hudMy - 44, w: 280, h: 110 };
+  // viewport region the readout occupies (flips to the left near the right edge)
+  const region = {
+    x: (hudFlip > 0.5 ? hudMx - 280 : hudMx),
+    y: hudMy - 44, w: 280, h: 110,
+  };
   let sx = (region.x - offX) / scale;
   let sy = (region.y - offY) / scale;
   let sw = region.w / scale;
@@ -835,23 +821,14 @@ function updateHud() {
   if (!hudEl) return;
   const now = performance.now();
 
-  // Reading point: the cursor on desktop, the screen centre on mobile.
-  const px = isMobile ? window.innerWidth  / 2 : hudMx;
-  const py = isMobile ? window.innerHeight / 2 : hudMy;
-
-  // What's under the reading point right now? (tiles drift beneath it, so this
-  // is re-checked every frame rather than relying on mouseenter. On mobile,
-  // probe slightly above/below centre too so the 12px gap between tiles
-  // doesn't blink the readout off mid-scroll.)
+  // What's under the cursor right now? (columns drift beneath a still mouse,
+  // so this is re-checked every frame rather than relying on mouseenter)
   let project = null;
-  if (modalContainer.classList.contains('hidden') && (isMobile || hudMx > -9999)) {
-    for (const dy of (isMobile ? [0, 80, -80] : [0])) {
-      const el = document.elementFromPoint(px, py + dy);
-      if (el && el.tagName === 'IMG' && el.dataset.id && el.closest('.parallax-col')) {
-        project  = PROJECTS.find(p => p.id === el.dataset.id) || null;
-        hudImgEl = el;
-        break;
-      }
+  if (modalContainer.classList.contains('hidden') && hudMx > -9999) {
+    const el = document.elementFromPoint(hudMx, hudMy);
+    if (el && el.tagName === 'IMG' && el.dataset.id && el.closest('.parallax-col')) {
+      project  = PROJECTS.find(p => p.id === el.dataset.id) || null;
+      hudImgEl = el;
     }
   }
 
@@ -863,25 +840,23 @@ function updateHud() {
       hudEnterAt = now;
       if (fromIdle) {
         // burst out from the point of contact rather than flying in from afar
-        if (hudCross) { hudCross._x = px; hudCross._y = py; }
-        hudLineEls.forEach(el => { el._x = px; el._y = py; });
+        hudCross._x = hudMx; hudCross._y = hudMy;
+        hudLineEls.forEach(el => { el._x = hudMx; el._y = hudMy; });
       }
     }
     hudEl.classList.toggle('active', !!project);
   }
 
   // Flip the readout to the left of the cursor near the right edge
-  if (!isMobile) hudFlip += ((hudMx > window.innerWidth - 300 ? 1 : 0) - hudFlip) * 0.2;
+  hudFlip += ((hudMx > window.innerWidth - 300 ? 1 : 0) - hudFlip) * 0.2;
 
   hudUpdateColor();
 
-  // Crosshair rides tight to the cursor (desktop only)
-  if (hudCross) {
-    hudCross._x += (px - hudCross._x) * 0.55;
-    hudCross._y += (py - hudCross._y) * 0.55;
-    hudCross.style.transform =
-      `translate3d(${hudCross._x.toFixed(1)}px, ${hudCross._y.toFixed(1)}px, 0) translate(-50%, -50%)`;
-  }
+  // Crosshair rides tight to the cursor
+  hudCross._x += (hudMx - hudCross._x) * 0.55;
+  hudCross._y += (hudMy - hudCross._y) * 0.55;
+  hudCross.style.transform =
+    `translate3d(${hudCross._x.toFixed(1)}px, ${hudCross._y.toFixed(1)}px, 0) translate(-50%, -50%)`;
 
   const t = now - hudEnterAt;
   const altEase = 1 - Math.pow(1 - Math.min(t / HUD_ALT_MS, 1), 3);
@@ -889,14 +864,9 @@ function updateHud() {
   HUD_LINES.forEach((def, i) => {
     const el = hudLineEls[i];
 
-    // positions keep tracking even while faded out, so re-entry never jumps.
-    // Mobile: anchored to the left edge around the screen centre, dragged by
-    // the scroll velocity — slower lines lag further, fanning the stack out.
-    const tx = isMobile ? 16 : hudMx + def.dx - hudFlip * def.dx * 2;
-    const rawY = isMobile
-      ? py + def.dy + velocity * (1 - def.lerp) * 1.6
-      : hudMy + def.dy;
-    const ty = Math.min(Math.max(rawY, 10), window.innerHeight - 14);
+    // positions keep tracking even while faded out, so re-entry never jumps
+    const tx = hudMx + def.dx - hudFlip * def.dx * 2;
+    const ty = Math.min(Math.max(hudMy + def.dy, 10), window.innerHeight - 14);
     el._x += (tx - el._x) * def.lerp;
     el._y += (ty - el._y) * def.lerp;
     el.style.transform =
