@@ -500,11 +500,39 @@ function buildTileList() {
     const count = Math.min(p.preview ?? 3, p.photos);
     for (let i = 1; i <= count; i++) {
       const num = String(i).padStart(2, '0');
-      tiles.push({ src: `photos/${p.id}-${num}.webp`, projectId: p.id, label: p.title });
+      tiles.push({ name: `${p.id}-${num}`, projectId: p.id, label: p.title });
     }
   });
   // shuffle so projects interleave across columns
   return tiles.sort(() => Math.random() - 0.5);
+}
+
+// Grid tiles load pre-sized variants from photos/grid/ — the originals are
+// far too large to scroll smoothly (some are 40MP; decoded, the full set would
+// need ~1.6GB of memory, forcing constant eviction + re-decode = jank).
+// Fallback chain if a variant is missing: grid variant → original webp → gif.
+function gridImgFallback(img) {
+  if (img.dataset.fallback === 'gif') return;                // out of options
+  if (img.dataset.fallback === 'orig') {
+    img.dataset.fallback = 'gif';
+    img.src = `photos/${img.dataset.name}.gif`;
+  } else {
+    img.dataset.fallback = 'orig';
+    img.removeAttribute('srcset');
+    img.src = `photos/${img.dataset.name}.webp`;
+  }
+}
+
+// Decode every grid image up front (off the main thread) so tiles re-entering
+// the viewport mid-scroll never trigger a decode hitch.
+function warmDecodeGrid() {
+  const seen = new Set();
+  document.querySelectorAll('.parallax-col img').forEach(img => {
+    const key = img.currentSrc || img.src;
+    if (seen.has(key) || !img.decode) return;
+    seen.add(key);
+    img.decode().catch(() => {}); // fallback chain handles missing files
+  });
 }
 
 function buildGrid() {
@@ -520,13 +548,17 @@ function buildGrid() {
     col.dataset.speed = SPEEDS[ci];
     col.style.marginTop = `${MARGINS[ci]}px`;
 
-    // Add fallback for grid images + decoding="async"
     // Grid tiles loop infinitely, so lazy-loading forces a main-thread decode each
     // time an image re-enters the viewport → periodic scroll hitches. There are only
     // a handful of preview tiles, so load them eagerly and decode off the main thread.
-    const handleImgError = "this.onerror=null; this.src=this.src.replace('.webp', '.gif');";
+    // srcset serves the 800px rung to phones and the 1400px rung to large/retina
+    // screens; sizes mirrors the CSS column widths.
     const tileHTML = colTiles.map(tile =>
-      `<img src="${tile.src}" onerror="${handleImgError}" data-id="${tile.projectId}" alt="${tile.label}" loading="eager" decoding="async">`
+      `<img src="photos/grid/${tile.name}-1400.webp"
+            srcset="photos/grid/${tile.name}-800.webp 800w, photos/grid/${tile.name}-1400.webp 1400w"
+            sizes="(max-width: 768px) 100vw, 33vw"
+            onerror="gridImgFallback(this)" data-name="${tile.name}"
+            data-id="${tile.projectId}" alt="${tile.label}" loading="eager" decoding="async">`
     ).join('');
 
     // Duplicate for infinite loop
@@ -647,7 +679,7 @@ function initScrollCache() {
 // Heights depend on viewport (vh units) and on images finishing layout — re-measure
 // on resize and once everything has loaded, but never inside the animation loop.
 window.addEventListener('resize', measureCols);
-window.addEventListener('load', measureCols);
+window.addEventListener('load', () => { measureCols(); warmDecodeGrid(); });
 
 function updateParallax() {
   velocity       *= FRICTION;
