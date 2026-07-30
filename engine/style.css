@@ -1,0 +1,556 @@
+/* ══════════════════════════════════════════════════════════════════
+   THE MTGRP ENVIRONMENT ENGINE
+   Pure CSS. No framework, no build step. Deploys as static files.
+   ══════════════════════════════════════════════════════════════════ */
+
+:root {
+  --bg:          #0a0a0a;   /* body */
+  --surface:     #141414;   /* UI panels */
+  --surface-2:   #1c1c1c;   /* raised elements inside panels */
+  --line:        #2a2a2a;   /* hairlines */
+  --line-strong: #3a3a3a;
+  --text:        #f4f4f4;   /* primary */
+  --muted:       #888888;   /* secondary / labels */
+  --accent:      #f39c12;   /* MTGRP brand orange — used sparingly */
+
+  --panel-w:  30%;
+  --ease:     cubic-bezier(0.22, 0.61, 0.36, 1);
+  --fade:     0.6s;         /* the crossfade, per spec */
+
+  --font: "Helvetica Neue", Helvetica, Arial, sans-serif;
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+html, body {
+  height: 100%;
+  background: var(--bg);
+  color: var(--text);
+  font-family: var(--font);
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+body { overflow: hidden; }
+
+em { font-style: italic; color: var(--text); }
+
+/* ── LAYOUT ─────────────────────────────────────────────────────── */
+
+.engine {
+  display: grid;
+  grid-template-columns: 1fr var(--panel-w);
+  height: 100vh;
+  height: 100dvh;
+}
+
+/* ══════════════════════════════════════════════════════════════════
+   THE STAGE — left ~70%
+   ══════════════════════════════════════════════════════════════════ */
+
+.stage {
+  position: relative;
+  overflow: hidden;
+  background:
+    radial-gradient(120% 90% at 50% 45%, #131313 0%, var(--bg) 70%);
+  border-right: 1px solid var(--line);
+}
+
+/* The image stack itself.
+   `isolation: isolate` is load-bearing: it gives the stack its own
+   stacking context so the thermal layer's multiply blends against the
+   renders beneath it and not against the whole page. */
+.visual-stack {
+  position: absolute;
+  inset: 0;
+  isolation: isolate;
+}
+
+/* Every layer occupies the identical box. Pixel-perfect exports stack
+   exactly on top of one another. */
+.stack-layer {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;      /* preserves the isometric camera */
+  pointer-events: none;     /* never intercept a click */
+  user-select: none;
+  opacity: 0;
+  transition: opacity var(--fade) var(--ease);
+}
+
+/* 1 — THE SUPPORT. Permanent frame, always visible. */
+.base-layer {
+  z-index: 10;
+  opacity: 1;
+}
+
+/* 2 — THE INFILL. Mutually exclusive scenarios. */
+.layout-layer {
+  z-index: 20;
+}
+
+/* 3 — THE CLIMATE. Overlaid on everything, multiplied into it. */
+.thermal-layer {
+  z-index: 30;
+  mix-blend-mode: multiply;
+}
+
+/* The single class the JS toggles. */
+.stack-layer.active { opacity: 1; }
+
+/* ── Editorial overlays on the plate ────────────────────────────── */
+
+.stage-caption {
+  position: absolute;
+  top: clamp(24px, 4vh, 48px);
+  left: clamp(24px, 3vw, 56px);
+  z-index: 40;
+  pointer-events: none;
+  mix-blend-mode: difference;   /* stays legible over any render */
+}
+
+.stage-caption__eyebrow {
+  font-size: 0.66rem;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: #ffffff;
+  margin-bottom: 0.9em;
+}
+
+.stage-caption__title {
+  font-size: clamp(1.9rem, 3.4vw, 3.1rem);
+  font-weight: 700;
+  line-height: 0.98;
+  letter-spacing: -0.03em;
+  color: #ffffff;
+}
+
+.stage-readout {
+  position: absolute;
+  left: clamp(24px, 3vw, 56px);
+  bottom: clamp(24px, 4vh, 48px);
+  z-index: 40;
+  pointer-events: none;
+  display: grid;
+  gap: 1px;
+  background: var(--line);
+  border: 1px solid var(--line);
+  min-width: 268px;
+}
+
+.readout-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 2.5rem;
+  padding: 0.62rem 0.85rem;
+  background: rgba(10, 10, 10, 0.82);
+  backdrop-filter: blur(6px);
+}
+
+.readout-label {
+  font-size: 0.6rem;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+
+.readout-value {
+  font-size: 0.76rem;
+  letter-spacing: 0.02em;
+  color: var(--text);
+  transition: color 0.4s var(--ease);
+}
+
+/* Off-grid readouts turn brand orange — the one moment of alarm. */
+.stage-readout.is-offgrid .readout-value { color: var(--accent); }
+
+/* ══════════════════════════════════════════════════════════════════
+   THE PANEL — right ~30%
+   ══════════════════════════════════════════════════════════════════ */
+
+.panel {
+  background: var(--surface);
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  display: flex;
+  flex-direction: column;
+  scrollbar-width: thin;
+  scrollbar-color: var(--line-strong) var(--surface);
+}
+
+.panel::-webkit-scrollbar { width: 8px; }
+.panel::-webkit-scrollbar-track { background: var(--surface); }
+.panel::-webkit-scrollbar-thumb { background: var(--line-strong); }
+
+.panel__head {
+  padding: clamp(28px, 4vh, 44px) clamp(22px, 2vw, 34px) clamp(22px, 3vh, 32px);
+  border-bottom: 1px solid var(--line);
+}
+
+.panel__kicker {
+  font-size: 0.6rem;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--accent);
+  margin-bottom: 1.1em;
+}
+
+.panel__lede {
+  font-size: 0.84rem;
+  line-height: 1.72;
+  color: var(--muted);
+}
+
+.panel__lede em { color: var(--text); font-style: italic; }
+
+/* ── Modules ────────────────────────────────────────────────────── */
+
+.module {
+  padding: clamp(24px, 3.4vh, 36px) clamp(22px, 2vw, 34px);
+  border-bottom: 1px solid var(--line);
+}
+
+.module__head {
+  display: flex;
+  align-items: baseline;
+  gap: 0.85rem;
+  margin-bottom: 0.95rem;
+}
+
+.module__index {
+  font-size: 0.62rem;
+  letter-spacing: 0.14em;
+  color: var(--muted);
+  font-variant-numeric: tabular-nums;
+}
+
+.module__title {
+  font-size: 1.02rem;
+  font-weight: 700;
+  letter-spacing: -0.01em;
+  color: var(--text);
+}
+
+.module__body {
+  font-size: 0.79rem;
+  line-height: 1.7;
+  color: var(--muted);
+  margin-bottom: 1.4rem;
+}
+
+.module__note {
+  margin-top: 1.15rem;
+  padding-left: 0.85rem;
+  border-left: 1px solid var(--line-strong);
+  font-size: 0.735rem;
+  line-height: 1.68;
+  color: var(--muted);
+  transition: border-color 0.5s var(--ease), color 0.5s var(--ease);
+}
+
+.module__note--climate.is-offgrid {
+  border-left-color: var(--accent);
+  color: #b9b9b9;
+}
+
+/* ── Segmented layout selector ──────────────────────────────────── */
+
+.segmented {
+  display: grid;
+  gap: 1px;
+  background: var(--line);
+  border: 1px solid var(--line);
+}
+
+.seg-btn {
+  appearance: none;
+  border: 0;
+  background: var(--surface-2);
+  color: var(--muted);
+  font-family: inherit;
+  text-align: left;
+  padding: 0.85rem 0.95rem;
+  cursor: pointer;
+  display: flex;
+  flex-direction: column;
+  gap: 0.3rem;
+  position: relative;
+  transition: background 0.28s var(--ease), color 0.28s var(--ease);
+}
+
+/* The accent rule that slides in on the active scenario. */
+.seg-btn::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  width: 2px;
+  background: var(--accent);
+  transform: scaleY(0);
+  transform-origin: top;
+  transition: transform 0.35s var(--ease);
+}
+
+.seg-btn:hover { background: #232323; color: #cfcfcf; }
+
+.seg-btn.active {
+  background: #232323;
+  color: var(--text);
+}
+
+.seg-btn.active::before { transform: scaleY(1); }
+
+.seg-btn__label {
+  font-size: 0.8rem;
+  font-weight: 600;
+  letter-spacing: -0.005em;
+}
+
+.seg-btn__meta {
+  font-size: 0.64rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+
+.seg-btn.active .seg-btn__meta { color: var(--accent); }
+
+.seg-btn:focus-visible,
+.gate__input:focus-visible,
+.gate__submit:focus-visible {
+  outline: 1px solid var(--accent);
+  outline-offset: 2px;
+}
+
+.switch input:focus-visible + .switch__track {
+  outline: 1px solid var(--accent);
+  outline-offset: 3px;
+}
+
+/* ── The grid toggle ────────────────────────────────────────────── */
+
+.switch-row {
+  background: var(--surface-2);
+  border: 1px solid var(--line);
+  padding: 1rem 1.05rem;
+}
+
+.switch {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  cursor: pointer;
+}
+
+.switch input {
+  position: absolute;
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+
+.switch__track {
+  flex: none;
+  width: 62px;
+  height: 32px;
+  border-radius: 999px;
+  background: #2e2e2e;
+  border: 1px solid var(--line-strong);
+  position: relative;
+  transition: background 0.35s var(--ease), border-color 0.35s var(--ease);
+}
+
+.switch__thumb {
+  position: absolute;
+  top: 3px;
+  left: 3px;
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  background: var(--muted);
+  transition: transform 0.35s var(--ease), background 0.35s var(--ease);
+}
+
+/* Checked = grid connected. Unchecked = outage, and the switch goes orange. */
+.switch input:checked + .switch__track {
+  background: #2e2e2e;
+  border-color: var(--line-strong);
+}
+
+.switch input:checked + .switch__track .switch__thumb {
+  transform: translateX(30px);
+  background: var(--text);
+}
+
+.switch input:not(:checked) + .switch__track {
+  background: rgba(243, 156, 18, 0.16);
+  border-color: var(--accent);
+}
+
+.switch input:not(:checked) + .switch__track .switch__thumb {
+  background: var(--accent);
+}
+
+.switch__text {
+  display: flex;
+  flex-direction: column;
+  gap: 0.3rem;
+}
+
+.switch__label {
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: var(--text);
+}
+
+.switch__state {
+  font-size: 0.64rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--muted);
+  transition: color 0.35s var(--ease);
+}
+
+.switch__state.is-offgrid { color: var(--accent); }
+
+/* ── The lead gate ──────────────────────────────────────────────── */
+
+.module--gate { border-bottom: 0; }
+
+.gate { display: flex; flex-direction: column; }
+
+.gate__label {
+  font-size: 0.6rem;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--muted);
+  margin-bottom: 0.6rem;
+}
+
+.gate__input {
+  appearance: none;
+  background: var(--surface-2);
+  border: 1px solid var(--line-strong);
+  color: var(--text);
+  font-family: inherit;
+  font-size: 0.82rem;
+  padding: 0.8rem 0.9rem;
+  transition: border-color 0.25s var(--ease);
+}
+
+.gate__input::placeholder { color: #5c5c5c; }
+.gate__input:hover { border-color: #4a4a4a; }
+.gate__input.is-invalid { border-color: var(--accent); }
+
+.gate__error {
+  margin-top: 0.55rem;
+  font-size: 0.7rem;
+  color: var(--accent);
+}
+
+.gate__submit {
+  appearance: none;
+  border: 1px solid var(--accent);
+  background: var(--accent);
+  color: #0a0a0a;
+  font-family: inherit;
+  font-size: 0.76rem;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  padding: 0.95rem 1rem;
+  margin-top: 0.9rem;
+  cursor: pointer;
+  transition: background 0.25s var(--ease), color 0.25s var(--ease);
+}
+
+.gate__submit:hover {
+  background: transparent;
+  color: var(--accent);
+}
+
+.gate__submit[disabled] {
+  opacity: 0.55;
+  cursor: default;
+  background: var(--accent);
+  color: #0a0a0a;
+}
+
+.gate__success {
+  margin-top: 0.85rem;
+  font-size: 0.74rem;
+  line-height: 1.6;
+  color: var(--accent);
+}
+
+.gate__fineprint {
+  margin-top: 0.85rem;
+  font-size: 0.66rem;
+  line-height: 1.6;
+  color: #5c5c5c;
+}
+
+/* ── Panel footer ───────────────────────────────────────────────── */
+
+.panel__foot {
+  margin-top: auto;
+  padding: clamp(20px, 3vh, 28px) clamp(22px, 2vw, 34px);
+  border-top: 1px solid var(--line);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 0.64rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+
+.panel__foot a {
+  color: var(--muted);
+  text-decoration: none;
+  border-bottom: 1px solid var(--line-strong);
+  transition: color 0.25s var(--ease), border-color 0.25s var(--ease);
+}
+
+.panel__foot a:hover { color: var(--accent); border-color: var(--accent); }
+
+/* ══════════════════════════════════════════════════════════════════
+   RESPONSIVE — the split screen becomes a stack
+   ══════════════════════════════════════════════════════════════════ */
+
+@media (max-width: 1024px) {
+  :root { --panel-w: 38%; }
+}
+
+@media (max-width: 820px) {
+  body { overflow: auto; }
+
+  .engine {
+    grid-template-columns: 1fr;
+    height: auto;
+    min-height: 100dvh;
+  }
+
+  .stage {
+    height: 56vh;
+    min-height: 340px;
+    border-right: 0;
+    border-bottom: 1px solid var(--line);
+    position: sticky;
+    top: 0;
+    z-index: 5;
+  }
+
+  .stage-readout { min-width: 0; right: clamp(16px, 4vw, 24px); }
+  .readout-row { gap: 1.2rem; padding: 0.5rem 0.7rem; }
+
+  .panel { overflow-y: visible; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  * { transition-duration: 0.01ms !important; }
+}
