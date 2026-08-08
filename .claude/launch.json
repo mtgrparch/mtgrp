@@ -1,0 +1,11 @@
+{
+  "version": "0.0.1",
+  "configurations": [
+    {
+      "name": "mtgrp-static",
+      "runtimeExecutable": "python",
+      "runtimeArgs": ["-m", "http.server", "8471"],
+      "port": 8471
+    }
+  ]
+}
