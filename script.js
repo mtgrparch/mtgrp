@@ -158,7 +158,7 @@ function buildAboutHTML() {
       <tr><td>Est.</td><td>2018</td></tr>
     </table>
 
-    <p class="about-rights">© ${new Date().getFullYear()} MTGRP — Metagroupe. All drawings, images and texts are the property of MTGRP and their authors. Quoting and linking with attribution is welcome; reproduction, or use for training AI models, is not permitted without written consent.</p>`;
+    <p class="about-rights">© ${new Date().getFullYear()} MTGRP — Metagroupe. All drawings, images and texts are the property of MTGRP and their authors. Quoting and linking with attribution is welcome; reproduction, or use for training AI models, is not permitted without written consent. <a href="/privacy/" style="color:inherit">Privacy &amp; legal notice</a></p>`;
 }
 
 // ── 2. PROJECT REGISTRY ───────────────────────────────────────────────────────
