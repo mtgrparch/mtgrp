@@ -1,0 +1,112 @@
+# MTGRP (Metagroupe)
+
+> MTGRP (Metagroupe) is a collaborative architecture practice working at the intersection of metabolism, circularity, thermal conditions, and collective space. Founded in 2018, with offices in Beirut, Madrid, and Milan.
+
+MTGRP is an architecture practice run by four co-founders across Beirut (Lebanon), Madrid (Spain) and Milan (Italy). The work spans competitions, housing, adaptive reuse, interiors and ephemeral installations, with a focus on passive climate design, material circularity and collective space.
+
+Website: https://www.mtgrp.xyz/
+Contact: studio@mtgrp.xyz
+Instagram: https://www.instagram.com/metagroupe/
+
+## Usage
+
+AI search engines and assistants may read, index, quote and link to this site with attribution to MTGRP. Use of any text or images for training AI models is not permitted (see https://www.mtgrp.xyz/robots.txt and https://www.mtgrp.xyz/.well-known/tdmrep.json).
+
+## Partners
+
+- **Andrew Georges** (Co-Founder): Andrew studied architecture at the Lebanese American University (BArch) before completing the Master of Advanced Studies in Collective Housing (MCH) at Escuela Tecnica Superior de Arquitectura de Madrid and ETH Zurich. His research, culminating in the thesis Unframing Collective Housing Through Ideology, informs a practice deeply engaged with the politics of space, modular systems, and architectural ghosts. Operating from Madrid, his work bridges these theoretical frameworks with the mechanics of circularity and metabolism. Recently, Andrew was awarded for the Europan-winning Ruckhalde masterplan in St. Gallen.
+- **Charbel Abou Chakra** (Co-Founder): Charbel studied architecture at Université Saint-Esprit de Kaslik (BArch, MArch) before completing a Master of Science in Architecture and Urbanism at Politecnico di Milano. His research moves through the multisensory terrain of architecture and the collective memory held in a place. Charbel operates in Milan, and has been part of studios working on civic-scale buildings in Amsterdam, Milan, the G.C.C. and the Levant. He was awarded first prize in the KWL National Competition in 2019 for the Beirut River regeneration, and recently, has served as a guest tutor at the MIAW – Milan International Architecture Workshop at Politecnico di Milano.
+- **Nahi El Khoury** (Co-Founder): Nahi studied architecture at Université Saint-Esprit de Kaslik (BArch, MArch). His research circles the phenomenology of building, how architecture is felt under the hand before it is read, and the question of how architecture should be reflecting actions and projecting them, an interest that pulls him toward adaptive reuse and the slow transformation of existing structures rather than their erasure. Professionally, Nahi works on some of the region’s largest developments among them Diriyah, NEOM, and Expo 2030 Riyadh at the scale where computational, formally ambitious design has to survive its translation into something built. He dedicates a significant portion of his practice to research-driven and independent projects, driven by a desire to explore unanswered questions within the discipline.
+- **Joe Chamata** (Co-Founder): Joe studied architecture at Université Saint-Esprit de Kaslik (BArch, MArch). His academic research investigates fabrication, robotic production, and mass customization with a specific focus on architectural assemblies and joinery. This academic focus translated directly into applied prototyping as part of the Beirut Makers collective; where he was granted funding in 2022 to build a physical prototype for the group's exhibition at the Beirut Art Center. Professionally, Joe operates between Beirut and the Gulf, applying his technical and research-driven background to large-scale developments across Saudi Arabia and the UAE. His experience includes the development of Qiddiya city, where he leads teams and coordinates multidisciplinary sub-consultants.
+
+## Projects
+
+### A Well-Tempered House
+Family Housing · Ghazir, Lebanon · Ongoing
+
+A house perched on a steep hillside in Ghazir, Lebanon. Deep thermal walls form the structural and spatial logic of the house, while a series of terraces negotiate the steep slope of the site. The house is designed to be passively cooled in summer and passively heated in winter, with a focus on natural ventilation, solar orientation, and thermal mass.
+
+### A Home in the Sun
+Home for Seniors · Lysá nad Labem, Czech Republic · Competition
+
+An elderly care facility organized around the natural circadian rhythm to mitigate the disorientation associated with dementia. The architecture establishes a clear structural dichotomy: a dense, in-situ concrete communal core consolidates daytime collective programs, while prefabricated timber wings hold the private, quiet residential households. Designed as a replicable prototype, the modular kit of parts adapts to two distinct topographies. In Lysá nad Labem, the households are compacted into a three-storey pinwheel forming an urban edge, whereas in Milovice, the same units unfold into a two-storey horizontal arrangement following the gentle slope of the land. The project relies on passive climate strategies, utilizing high thermal mass and cross-ventilation, while the landscape functions as an active therapeutic instrument calibrated to provide temporal and olfactory orientation.
+
+### Die Den Gletscher Bewohnen
+Europan — Winner · St. Gallen, Switzerland · 1st Prize
+
+Winning entry for the Europan competition. The project addresses the geological threshold between molasse and moraine, proposing a model of dwelling that is responsive to the terrain, water, and social change. The glacier is not backdrop but partner — a slow, material presence that shapes the logic of the building.
+
+### Holcim Visitor Center
+Competition Entry · Siggenthal, Switzerland · Competition
+
+Competition entry for the Holcim Visitor Center. Positioned as a precise interface between industrial production and the public, the proposal engages with the material logic of cement. The building acts as a transparent, functional framework rather than a conventional shell, performing its own material origin while physically manifesting the circular economy and flexible, future-proof architectural design.
+
+### Santa María de Valdeiglesias
+Adaptive Reuse — 2nd Prize · Pelayos de la Presa, Spain · 2nd Prize
+
+Second prize in the competition for the adaptive reuse of the monastery of Santa María de Valdeiglesias. The project negotiates between the preserved fabric of a historic religious complex and a contemporary programme for collective inhabitation — working with rather than against the existing spatial hierarchies of monastic life.
+
+### Papushevo Park
+Urban Development · Papushevo, Russia
+
+An urban development combining a public park, kindergarten, and office buildings. The park is the structuring element of the ensemble, a ground that organises collective life rather than filling residual space between built volumes.
+
+### Casa de Aperos
+Collective Housing · Eivissa, Spain
+
+A proposal for a self-sufficient commune in Eivissa grounded in principles of degrowth and scarcity. Conceived as an adaptable infrastructure stripped to its basic conditions, the project utilizes a proximity modular system constructed from salvaged local demolition materials. Learning from the vernacular Casa Payesa, it adapts traditional mass and passive climate strategies for collective living. The architecture actively engages the user in sustainable practices, functioning alongside an operational manual to reduce traditional energy consumption.
+
+### Three Brothers
+Three Pavilions · Amchit, Lebanon
+
+Three pavilions for three brothers on the coast of Amchit, Lebanon. Each pavilion is distinct — a singular response to a shared site — while the three together constitute a small domestic landscape on the water's edge.
+
+### Salt Nest
+Adaptive Reuse · Punta Bianca, Italy
+
+Perched on a rugged Sicilian cliff, the Salt Nest breathes new life into an abandoned stone Customs House, transforming a historic relic into an immersive visitor retreat. Embracing principles of material circularity and structural minimalism, the design introduces translucent, geometric roof volumes clad in crystallized salt panels grown sustainably from the surrounding Mediterranean Sea. Inside, the reimagined interior unfolds vertically, hosting a coffee shop, reading nooks, and a layered museum sequence that culminates in a delicate rooftop observation deck suspended between the earth and the sky. Ultimately, the intervention engages in a quiet dialogue with the raw coastal landscape and the ghosts of its past, offering visitors a poetic connection to light, terrain, and the natural elements.
+
+### Cárcel Abierta
+Adaptive Reuse · Talca, Chile
+
+Adaptive reuse of a prison in Chile. The project addresses the conversion of a site of confinement into a structure for collective life — working through the existing spatial order of the penitentiary as an architectural argument about openness and enclosure.
+
+### Above All, a Shared Resource
+Ephemeral Installation · Beirut, Lebanon
+
+Pliée: A blank piece of paper offers infinite experimentation and as structuralists we began with a fold. Pliée is a wooden structure inspired by the mechanism of simple origami. The folded structure is meant to define its own parameters and create functional spaces on the roof through shading mechanisms while the roof's connection to the sky is defined, intentional, and purposeful while remaining flexible and mobile.
+
+### Amchit Fire Proving Grounds
+Ephemeral Station · Amchit, Lebanon
+
+A temporary firefighter training station in Amchit, Lebanon — designed to transform into a public park for children once its operational phase is complete. A single structure serving two sequential programmes, using material logic to negotiate the transition between them.
+
+### Dancing House
+Adaptive Reuse & Coliving · Beit Mery, Lebanon
+
+A collaborative adaptive project for a traditional house in Beit Mery. The existing structure is adapted for a coliving situation with communal activities, and the garden is populated with a series of follies that extend the collective life of the house into the landscape.
+
+### RAZ House
+Interior Design · Aley, Lebanon
+
+Interior design for a duplex apartment. A wooden box organized life accross two floors.
+
+### AM House
+Interior Design · Nahr Ibrahim, Lebanon
+
+Interior design for a penthouse. A steel platform forms a mezanine organizing life underneath it.
+
+### GOE Office Extension
+Interior Design · Beit Chaar, Lebanon
+
+xxxxxxxxxxx
+
+### Baglietto Pavilion
+Competition — Honourable Mention · Honourable Mention
+
+Competition entry for the Baglietto Pavilion, receiving an honourable mention. A proposal exploring temporary structure, public presence, and the architecture of gathering — a single gesture that is simultaneously enclosure and threshold.
+
+### KWL — Beirut River
+Competition — 1st Prize · Beirut, Lebanon · 1st Prize
+
+First prize in the KWL competition. The project reframes the infrastructure of the Beirut River as a site of meeting — proposing that the engineered channel, rather than dividing, can become the basis for a new form of urban public space. Infrastructure as meeting place.
