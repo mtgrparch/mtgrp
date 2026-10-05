@@ -189,6 +189,11 @@ const version = require('crypto').createHash('md5')
 html = html.replace(/(style\.css|script\.js)\?v=\w+/g, `$1?v=${version}`);
 html = replaceBetween(html, 'SEO:JSONLD', jsonLd(graph));
 html = replaceBetween(html, 'SEO:NOSCRIPT', noscript);
+// Grid tile proportions (from tools/make_grid_tiles.py), so the parallax grid
+// can lay every tile out before its image has downloaded
+const sizesPath = path.join(ROOT, 'photos/grid/sizes.json');
+const gridSizes = fs.existsSync(sizesPath) ? fs.readFileSync(sizesPath, 'utf8').trim() : '{}';
+html = replaceBetween(html, 'GRID:SIZES', `<script>window.GRID_SIZES = ${gridSizes};</script>`);
 fs.writeFileSync(indexPath, html);
 
 // ── Project pages ──

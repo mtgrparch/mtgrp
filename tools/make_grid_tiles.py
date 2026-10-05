@@ -84,6 +84,21 @@ for name in needed:
         made += 1
         print(f"  made  grid/{dst.name}  ({dst.stat().st_size // 1024}KB)")
 
+# ── Record every tile's size ─────────────────────────────────────────────────
+# The grid needs each tile's proportions BEFORE the image downloads, so the
+# columns have their final length from the first frame (otherwise tiles pop
+# in one by one on slow connections and the infinite scroll jumps).
+# build_seo.js embeds this file into index.html.
+import json
+sizes = {}
+for name in needed:
+    for candidate in (OUT / f"{name}-800.webp", PHOTOS / f"{name}.webp", PHOTOS / f"{name}.gif"):
+        if candidate.exists():
+            with Image.open(candidate) as im:
+                sizes[name] = list(im.size)
+            break
+(OUT / "sizes.json").write_text(json.dumps(sizes, separators=(",", ":"), sort_keys=True) + "\n")
+
 # ── Report leftovers from projects whose preview count was reduced ───────────
 wanted = {f"{n}-{w}.webp" for n in needed for w in WIDTHS}
 orphans = sorted(f.name for f in OUT.glob("*.webp") if f.name not in wanted)

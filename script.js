@@ -582,13 +582,18 @@ function buildGrid() {
     // a handful of preview tiles, so load them eagerly and decode off the main thread.
     // srcset serves the 800px rung to phones and the 1400px rung to large/retina
     // screens; sizes mirrors the CSS column widths.
-    const tileHTML = colTiles.map(tile =>
-      `<img src="photos/grid/${tile.name}-1400.webp"
+    // width/height give each tile its proportions before the image arrives,
+    // so the column length (the infinite scroll's wrap point) never changes
+    // while images load — see GRID_SIZES in index.html.
+    const tileHTML = colTiles.map(tile => {
+      const size = (window.GRID_SIZES || {})[tile.name];
+      const dims = size ? `width="${size[0]}" height="${size[1]}"` : 'style="aspect-ratio: 4 / 3"';
+      return `<img src="photos/grid/${tile.name}-1400.webp"
             srcset="photos/grid/${tile.name}-800.webp 800w, photos/grid/${tile.name}-1400.webp 1400w"
             sizes="(max-width: 768px) 100vw, 33vw"
             onerror="gridImgFallback(this)" data-name="${tile.name}"
-            data-id="${tile.projectId}" alt="${tile.label}" loading="eager" decoding="async">`
-    ).join('');
+            data-id="${tile.projectId}" alt="${tile.label}" ${dims} loading="eager" decoding="async">`;
+    }).join('');
 
     // Duplicate for infinite loop
     col.innerHTML = tileHTML + tileHTML;
