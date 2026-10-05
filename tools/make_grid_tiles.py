@@ -4,8 +4,8 @@ WHY THIS EXISTS
   The parallax grid must scroll at 60fps, which means the browser has to keep
   every tile decoded in memory. The original photos (competition boards,
   renders) are far too large for that — some are 40 megapixels — so the grid
-  loads pre-shrunk copies from photos/grid/ instead. Project modals still
-  open the full-size originals; nothing in photos/ is ever modified.
+  loads pre-shrunk copies from photos/grid/ instead. Project modals open
+  the photos in photos/ (capped at 2400px by tools/resize_photos.py).
 
 HOW TO USE
   1. Add your photos to photos/ as usual (p14-01.webp, p14-02.webp, ...)

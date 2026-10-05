@@ -4,7 +4,9 @@ metagroupe architecture and urbanism
 ## Adding a project / photos
 
 1. Drop photos into `photos/` named `pXX-01.webp`, `pXX-02.webp`, …
-   (the numbering must start at 01 with no gaps).
+   (the numbering must start at 01 with no gaps). Full-size exports are fine:
+   anything larger than 2400×3600px is shrunk to web size automatically, so
+   keep your print-resolution originals somewhere else.
 2. In `script.js`, add or edit the project's entry in `PROJECTS`:
    - `photos:` — how many photos the project has (shown in its modal)
    - `preview:` — how many of the first photos appear in the homepage grid
@@ -13,9 +15,11 @@ metagroupe architecture and urbanism
    and commits the results a minute later. You can also start it by hand from
    the Actions tab → *Rebuild site* → *Run workflow*. To do it locally instead:
 
-3. Regenerate the small grid tiles (only new/changed ones are processed):
+3. Shrink oversized photos, then regenerate the small grid tiles (only
+   new/changed ones are processed):
 
    ```
+   python tools/resize_photos.py
    python tools/make_grid_tiles.py
    ```
 
@@ -35,9 +39,8 @@ metagroupe architecture and urbanism
 5. Commit everything, including the new files in `photos/grid/`.
 
 The grid scrolls through the small `photos/grid/` copies for smooth
-performance; project modals always open the full-size originals from
-`photos/`. If step 3 is forgotten the site still works — the grid just
-falls back to the heavy originals for the new photos (laggy but not broken).
+performance; project modals open the web-sized photos in `photos/`. If step 3 is forgotten the site still works — the grid just
+falls back to the larger photos for the new tiles (laggy but not broken).
 
 ## Search engines and AI
 
