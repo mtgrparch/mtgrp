@@ -38,10 +38,27 @@ const COLLABORATORS = {
   architects: [
     "Jorge Sanchez Bajo, Bettina Kagelmacher, Roman Schober, Andres Solano, Elie El Khoury, Jaques Zekian, Mike Chaiban, Valerie Saab, Christina Karam, Ryuhei Ismael Kagawa, Jorge Andres Rodriguez Angel, Andrey Bader",
   ],
-  offices: [
-    "tebt+, esteoeste, superunion, b.noma, studio street 9",
-  ],
+  offices: ["tebt+", "esteoeste", "superunion", "b.noma", "studio street 9"],
 };
+
+// Website for each collaborating office — fill in a URL to turn its name into a link
+// (in the About modal and in every project's Collaborators row). Empty = plain text.
+const OFFICE_LINKS = {
+  "tebt+": "https://share.google/8CaVKI3CuQQVfZhw8",
+  "esteoeste": "https://share.google/K0FVaXd8golPBPz9O",
+  "b.noma": "https://bnoma.com",
+  "[casaleganitos]": "https://casaleganitos.com/estudio/",
+  "n'undo": "https://www.nundo.org/",
+  "superunion": "",
+  "studio street 9": "",
+};
+
+function linkCollaborator(name) {
+  const url = OFFICE_LINKS[name];
+  return url
+    ? `<a class="collab-link" href="${url}" target="_blank" rel="noopener">${name}</a>`
+    : name;
+}
 
 function buildAboutHTML() {
   const partnersHTML = PARTNERS.map(p => `
@@ -64,7 +81,7 @@ function buildAboutHTML() {
       </div>
       <div class="about-collabs-col">
         <div class="collabs-label">Offices of our Friends</div>
-        ${COLLABORATORS.offices.map(n => `<div class="collab-entry">${n}</div>`).join('')}
+        <div class="collab-entry">${COLLABORATORS.offices.map(linkCollaborator).join(', ')}</div>
       </div>
     </div>` : '';
 
@@ -269,7 +286,7 @@ const PROJECTS = [
       { label: "Elevation",   value: "81m" },
       { label: "Coordinates",   value: "39°N01°E" },
       { label: "Team",          value: ["Andrew Georges", "Jorge Sanchez Bajo", "Andres Solano"] },
-      { label: "Collaborators", value: ["tebt+", "esteoeste estudio"] },
+      { label: "Collaborators", value: ["tebt+", "esteoeste"] },
     ],
     photos: 10,
     preview: 5,
@@ -456,8 +473,9 @@ function buildProjectHTML(p) {
     let cell;
     if (label === 'Team' || label === 'Collaborators') {
       const items = Array.isArray(value) ? value : [value];
+      const fmt = label === 'Collaborators' ? linkCollaborator : n => n;
       cell = items.length
-        ? `<ul class="modal-team-list">${items.map(n => `<li>${n}</li>`).join('')}</ul>`
+        ? `<ul class="modal-team-list">${items.map(n => `<li>${fmt(n)}</li>`).join('')}</ul>`
         : '—';
     } else {
       cell = value || '—';
