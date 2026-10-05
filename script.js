@@ -44,10 +44,11 @@ const COLLABORATORS = {
 // Website for each collaborating office — fill in a URL to turn its name into a link
 // (in the About modal and in every project's Collaborators row). Empty = plain text.
 const OFFICE_LINKS = {
-  "tebt+": "",
-  "esteoeste": "",
-  "esteoeste estudio": "",
-  "b.noma": "",
+  "tebt+": "https://share.google/8CaVKI3CuQQVfZhw8",
+  "esteoeste": "https://share.google/K0FVaXd8golPBPz9O",
+  "b.noma": "https://bnoma.com",
+  "[casaleganitos]": "https://casaleganitos.com/estudio/",
+  "n'undo": "https://www.nundo.org/",
   "superunion": "",
   "studio street 9": "",
 };
@@ -285,7 +286,7 @@ const PROJECTS = [
       { label: "Elevation",   value: "81m" },
       { label: "Coordinates",   value: "39°N01°E" },
       { label: "Team",          value: ["Andrew Georges", "Jorge Sanchez Bajo", "Andres Solano"] },
-      { label: "Collaborators", value: ["tebt+", "esteoeste estudio"] },
+      { label: "Collaborators", value: ["tebt+", "esteoeste"] },
     ],
     photos: 10,
     preview: 5,
