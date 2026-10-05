@@ -14,12 +14,18 @@ metagroupe architecture and urbanism
    python tools/make_grid_tiles.py
    ```
 
-4. Refresh the search / AI-search data (structured data and fallback text in
-   `index.html`, plus `llms.txt`) so new projects show up in search results:
+4. Make the link-preview image and rebuild the project pages, sitemap and
+   search / AI-search data:
 
    ```
+   python tools/make_og_images.py
    node tools/build_seo.js
    ```
+
+   Every project gets its own page at `www.mtgrp.xyz/projects/<slug>/`, with
+   the slug made from its title (e.g. "Salt Nest" → `salt-nest`). To choose a
+   different address, add `slug: "my-address",` to the project in `script.js`.
+   Never edit files in `projects/` by hand — they're regenerated each time.
 
 5. Commit everything, including the new files in `photos/grid/`.
 
