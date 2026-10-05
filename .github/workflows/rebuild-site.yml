@@ -2,6 +2,7 @@
 # on main, then commits the result — so editing script.js or uploading photos
 # on github.com is all that's needed.
 #
+#   • photos/        oversized uploads shrunk to web size (tools/resize_photos.py)
 #   • photos/grid/   small grid tiles          (tools/make_grid_tiles.py)
 #   • photos/og/     link-preview images       (tools/make_og_images.py)
 #   • projects/, sitemap.xml, llms.txt, search data in index.html,
@@ -65,13 +66,14 @@ jobs:
             done
           fi
 
+      - run: python tools/resize_photos.py
       - run: python tools/make_grid_tiles.py
       - run: python tools/make_og_images.py
       - run: node tools/build_seo.js
 
       - name: Commit changes
         run: |
-          git add -A photos/grid photos/og projects index.html sitemap.xml llms.txt
+          git add -A photos projects index.html sitemap.xml llms.txt
           if git diff --cached --quiet; then
             echo "Nothing to update."
             exit 0
