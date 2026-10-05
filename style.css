@@ -116,7 +116,14 @@ body {
 
 .parallax-col img {
   width: 100%;
-  height: 60vh;
+  /* Each tile keeps its photo's proportions (width/height attributes set from
+     GRID_SIZES), capped at the column's max height. flex-shrink: 0 stops the
+     column squashing tiles that haven't loaded yet — otherwise they collapse
+     to ~0 and pop to full size on load, changing the column length (the
+     infinite scroll's wrap point) and making the grid jump on slow networks. */
+  height: auto;
+  max-height: 60vh;
+  flex-shrink: 0;
   object-fit: cover;
   cursor: pointer;
   display: block;
@@ -124,9 +131,9 @@ body {
   transition: opacity 0.2s ease;
 }
 
-.parallax-col:nth-child(1) img { height: 55vh; }
-.parallax-col:nth-child(2) img { height: 72vh; }
-.parallax-col:nth-child(3) img { height: 48vh; }
+.parallax-col:nth-child(1) img { max-height: 55vh; }
+.parallax-col:nth-child(2) img { max-height: 72vh; }
+.parallax-col:nth-child(3) img { max-height: 48vh; }
 
 @media (hover: hover) {
   .parallax-col img:hover { opacity: 0.75; }
