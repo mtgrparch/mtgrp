@@ -520,3 +520,12 @@ a.about-list-item:hover {
     margin-left: 0;
   }
 }
+/* ── Rights notice at the end of the about modal ── */
+.about-rights {
+  font-family: 'EB Garamond', Georgia, serif;
+  font-style: italic;
+  font-size: 0.78rem;
+  line-height: 1.5;
+  color: #bbb;
+  margin-top: 32px;
+}

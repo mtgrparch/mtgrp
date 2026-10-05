@@ -156,7 +156,9 @@ function buildAboutHTML() {
       <tr><td>Instagram</td><td><a href="https://www.instagram.com/metagroupe/" target="_blank" style="color:#0033FF;text-decoration:none">@metagroupe</a></td></tr>
       <tr><td>Offices</td><td>Beirut &nbsp;·&nbsp; Madrid &nbsp;·&nbsp; Milan</td></tr>
       <tr><td>Est.</td><td>2018</td></tr>
-    </table>`;
+    </table>
+
+    <p class="about-rights">© ${new Date().getFullYear()} MTGRP — Metagroupe. All drawings, images and texts are the property of MTGRP and their authors. Quoting and linking with attribution is welcome; reproduction, or use for training AI models, is not permitted without written consent.</p>`;
 }
 
 // ── 2. PROJECT REGISTRY ───────────────────────────────────────────────────────
