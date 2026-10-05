@@ -44,8 +44,8 @@ const COLLABORATORS = {
 // Website for each collaborating office — fill in a URL to turn its name into a link
 // (in the About modal and in every project's Collaborators row). Empty = plain text.
 const OFFICE_LINKS = {
-  "tebt+": "https://share.google/8CaVKI3CuQQVfZhw8",
-  "esteoeste": "https://share.google/K0FVaXd8golPBPz9O",
+  "tebt+": "https://tebtarquitectura.es/",
+  "esteoeste": "https://www.esteoeste.pe/",
   "b.noma": "https://bnoma.com",
   "[casaleganitos]": "https://casaleganitos.com/estudio/",
   "n'undo": "https://www.nundo.org/",
