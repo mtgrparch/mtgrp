@@ -8,6 +8,11 @@ metagroupe architecture and urbanism
 2. In `script.js`, add or edit the project's entry in `PROJECTS`:
    - `photos:` — how many photos the project has (shown in its modal)
    - `preview:` — how many of the first photos appear in the homepage grid
+3–4. **Automatic:** when these changes land on `main` (including edits made
+   on github.com), the *Rebuild site* GitHub Action runs steps 3 and 4 for you
+   and commits the results a minute later. You can also start it by hand from
+   the Actions tab → *Rebuild site* → *Run workflow*. To do it locally instead:
+
 3. Regenerate the small grid tiles (only new/changed ones are processed):
 
    ```

@@ -178,12 +178,33 @@ const jsonLd = obj => `<script type="application/ld+json">\n${JSON.stringify(obj
 
 const indexPath = path.join(ROOT, 'index.html');
 let html = fs.readFileSync(indexPath, 'utf8');
+const oldIndex = html;
+
+// Cache-busting: ?v= is a fingerprint of the CSS + JS, so browsers fetch fresh
+// files exactly when they change — no manual version bumps needed.
+const version = require('crypto').createHash('md5')
+  .update(fs.readFileSync(path.join(ROOT, 'script.js')))
+  .update(fs.readFileSync(path.join(ROOT, 'style.css')))
+  .digest('hex').slice(0, 8);
+html = html.replace(/(style\.css|script\.js)\?v=\w+/g, `$1?v=${version}`);
 html = replaceBetween(html, 'SEO:JSONLD', jsonLd(graph));
 html = replaceBetween(html, 'SEO:NOSCRIPT', noscript);
 fs.writeFileSync(indexPath, html);
 
 // ── Project pages ──
 const projectsDir = path.join(ROOT, 'projects');
+const today = new Date().toISOString().slice(0, 10);
+// Sitemap dates only move when a page's content actually changes
+const sitemapPath = path.join(ROOT, 'sitemap.xml');
+const oldDates = {};
+if (fs.existsSync(sitemapPath)) {
+  for (const [, loc, d] of fs.readFileSync(sitemapPath, 'utf8').matchAll(/<loc>([^<]+)<\/loc>\s*<lastmod>([^<]+)<\/lastmod>/g)) oldDates[loc] = d;
+}
+const pageFile = url => path.join(ROOT, url.replace(SITE, ''), 'index.html');
+const oldPages = {};
+for (const url of [`${SITE}/`, ...PROJECTS.map(pageUrl)]) {
+  if (fs.existsSync(pageFile(url))) oldPages[url] = fs.readFileSync(pageFile(url), 'utf8');
+}
 fs.rmSync(projectsDir, { recursive: true, force: true });   // drop pages of removed/renamed projects
 const navList = PROJECTS.map(p => `        <li><a href="/projects/${projectSlug(p)}/">${esc(p.title)}</a></li>`).join('\n');
 
@@ -241,12 +262,17 @@ ${navList}
 });
 
 // ── Sitemap ──
-const today = new Date().toISOString().slice(0, 10);
+const lastmod = url => {
+  const now = fs.readFileSync(pageFile(url), 'utf8');
+  const before = url === `${SITE}/` ? oldIndex : oldPages[url];
+  const strip = h => h && h.replace(/\?v=\w+/g, '');   // a new asset version alone isn't new content
+  return strip(before) === strip(now) && oldDates[url] ? oldDates[url] : today;
+};
 const sitemap = `<?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
 ${[`${SITE}/`, ...PROJECTS.map(pageUrl)].map(u => `  <url>
     <loc>${u}</loc>
-    <lastmod>${today}</lastmod>
+    <lastmod>${lastmod(u)}</lastmod>
   </url>`).join('\n')}
 </urlset>
 `;
