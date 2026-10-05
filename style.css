@@ -464,6 +464,15 @@ body {
   padding: 4px 0;
 }
 
+.collab-link {
+  color: inherit;
+  text-decoration: underline;
+  text-decoration-thickness: 1px;
+  text-underline-offset: 2px;
+}
+
+.collab-link:hover { opacity: 0.6; }
+
 @media (max-width: 600px) {
   .about-collabs { grid-template-columns: 1fr; gap: 24px; }
 }
