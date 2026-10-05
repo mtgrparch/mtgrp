@@ -215,8 +215,8 @@ PROJECTS.forEach((p, i) => {
   const desc = shortDesc(p);
   let page = html;
 
-  // Resolve every relative URL (photos/, fonts/, script.js…) from the site root
-  page = page.replace('<meta charset="UTF-8">', '<meta charset="UTF-8">\n  <base href="/">');
+  // (index.html's <base href="/"> makes photos/, fonts/… resolve from the site root here too)
+  if (!page.includes('<base href="/">')) throw new Error('index.html must keep <base href="/">');
   page = page.replace(/<title>[^<]*<\/title>/, `<title>${esc(title)}</title>`);
   page = setAttr(page, 'name="description"', desc);
   page = setAttr(page, 'rel="canonical"', url);
