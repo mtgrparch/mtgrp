@@ -250,6 +250,8 @@ body {
   line-height: 1.1;
 }
 
+h1.modal-title { margin-top: 0; }
+
 /* about modal title only — Karla */
 .modal-title.about-title {
   font-family: 'Karla', sans-serif;

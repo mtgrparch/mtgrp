@@ -8,7 +8,15 @@
 //  Writes:
 //    • index.html  — JSON-LD structured data (between SEO:JSONLD markers)
 //                  — <noscript> fallback content (between SEO:NOSCRIPT markers)
+//    • projects/<slug>/index.html — one real page per project, built from
+//                    index.html with its own title, description, link preview
+//                    and the project already open, so crawlers that don't
+//                    run JavaScript (most AI search bots) still see it all
+//    • sitemap.xml — homepage + every project page
 //    • llms.txt    — plain-text site summary for AI search engines
+//
+//  Link-preview images come from tools/make_og_images.py (run that first
+//  when a project gets new photos).
 // ─────────────────────────────────────────────────────────────────────────────
 
 const fs = require('fs');
@@ -21,20 +29,31 @@ const INSTAGRAM = 'https://www.instagram.com/metagroupe/';
 const DESCRIPTION = 'MTGRP (Metagroupe) is a collaborative architecture practice working at the intersection of metabolism, circularity, thermal conditions, and collective space. Founded in 2018, with offices in Beirut, Madrid, and Milan.';
 const COUNTRIES = { LB: 'Lebanon', CZ: 'Czech Republic', CH: 'Switzerland', ES: 'Spain', RU: 'Russia', IT: 'Italy', CL: 'Chile' };
 
-// ── Read data arrays straight out of script.js ──
+// ── Read data and render functions straight out of script.js ──
+// (so project pages use exactly the same markup as the on-site modal)
 const src = fs.readFileSync(path.join(ROOT, 'script.js'), 'utf8');
-function extractArray(name) {
-  const start = src.indexOf(`const ${name} = [`);
-  if (start < 0) throw new Error(`${name} not found in script.js`);
-  let i = src.indexOf('[', start), depth = 0, j = i;
+function extractBlock(startText, open) {
+  const start = src.indexOf(startText);
+  if (start < 0) throw new Error(`"${startText}" not found in script.js`);
+  const close = { '[': ']', '{': '}' }[open];
+  let i = src.indexOf(open, start + startText.length - 1), depth = 0, j = i;
   for (; j < src.length; j++) {
-    if (src[j] === '[') depth++;
-    if (src[j] === ']' && --depth === 0) break;
+    if (src[j] === open) depth++;
+    if (src[j] === close && --depth === 0) break;
   }
-  return Function(`return ${src.slice(i, j + 1)}`)();
+  return src.slice(start, j + 1);
 }
-const PARTNERS = extractArray('PARTNERS');
-const PROJECTS = extractArray('PROJECTS');
+const lib = Function([
+  extractBlock('const PARTNERS = [', '['),
+  extractBlock('const PROJECTS = [', '['),
+  extractBlock('const OFFICE_LINKS = {', '{'),
+  extractBlock('function linkCollaborator(', '{'),
+  extractBlock('function projectSlug(', '{'),
+  extractBlock('function buildProjectHTML(', '{'),
+  'return { PARTNERS, PROJECTS, projectSlug, buildProjectHTML };',
+].join(';\n'))();
+const { PARTNERS, PROJECTS, projectSlug, buildProjectHTML } = lib;
+const pageUrl = p => `${SITE}/projects/${projectSlug(p)}/`;
 
 const info = (p, label) => (p.info || []).find(r => r.label === label)?.value;
 const place = loc => loc ? loc.replace(/, ([A-Z]{2})$/, (_, c) => `, ${COUNTRIES[c] || c}`) : undefined;
@@ -60,10 +79,19 @@ const org = {
   founder: PARTNERS.map(p => ({ '@type': 'Person', name: p.name, jobTitle: p.role, description: clean(p.bio) })),
 };
 
+const ogImage = p => fs.existsSync(path.join(ROOT, `photos/og/${p.id}.jpg`))
+  ? `${SITE}/photos/og/${p.id}.jpg` : `${SITE}/photos/og-cover.jpg`;
+const shortDesc = p => {
+  const d = clean(p.desc || '');
+  if (d.length <= 160) return d;
+  return d.slice(0, 157).replace(/\s+\S*$/, '') + '…';
+};
+
 const works = PROJECTS.map(p => {
   const w = {
     '@type': 'CreativeWork',
-    '@id': `${SITE}/#${p.id}`,
+    '@id': `${pageUrl(p)}#work`,
+    url: pageUrl(p),
     name: p.title,
     alternativeHeadline: p.subtitle,
     description: p.desc,
@@ -74,8 +102,7 @@ const works = PROJECTS.map(p => {
   if (loc) w.locationCreated = { '@type': 'Place', name: loc };
   const status = info(p, 'Status');
   if (status && /prize|winner|mention/i.test(status + p.subtitle)) w.award = p.subtitle.replace(/^.*—\s*/, '');
-  const img = ['webp', 'jpg', 'gif'].map(ext => `photos/${p.id}-01.${ext}`).find(f => fs.existsSync(path.join(ROOT, f)));
-  if (img) w.image = `${SITE}/${img}`;
+  if (p.photos > 0) w.image = ogImage(p);
   return w;
 });
 
@@ -99,7 +126,7 @@ ${PARTNERS.map(p => `        <li>${esc(p.name)} — ${esc(p.role)}</li>`).join('
       </ul>
       <h2>Projects</h2>
 ${PROJECTS.map(p => `      <article>
-        <h3>${esc(p.title)}</h3>
+        <h3><a href="/projects/${projectSlug(p)}/">${esc(p.title)}</a></h3>
         <p>${esc([p.subtitle, info(p, 'Location')].filter(Boolean).join(' — '))}</p>
         <p>${esc(p.desc || '')}</p>
       </article>`).join('\n')}
@@ -131,7 +158,7 @@ ${PARTNERS.map(p => `- **${p.name}** (${p.role}): ${clean(p.bio)}`).join('\n')}
 
 ${PROJECTS.map(p => {
   const meta = [p.subtitle, place(info(p, 'Location')), info(p, 'Status')].filter(Boolean);
-  return `### ${p.title}\n${[...new Set(meta)].join(' · ')}\n\n${p.desc || ''}`;
+  return `### ${p.title}\n${[...new Set(meta)].join(' · ')}\nPage: ${pageUrl(p)}\n\n${p.desc || ''}`;
 }).join('\n\n')}
 `;
 
@@ -139,12 +166,94 @@ ${PROJECTS.map(p => {
 function replaceBetween(html, marker, content) {
   const re = new RegExp(`(<!-- ${marker}:START -->)[\\s\\S]*?(<!-- ${marker}:END -->)`);
   if (!re.test(html)) throw new Error(`Markers ${marker}:START/END missing in index.html`);
-  return html.replace(re, `$1\n  ${content}\n  $2`);
+  return html.replace(re, (_, a, b) => `${a}\n  ${content}\n  ${b}`);
 }
+function setAttr(html, selector, value) {
+  // selector like 'name="description"' or 'property="og:url"' or 'rel="canonical"'
+  const re = new RegExp(`(<(?:meta|link) ${selector} (?:content|href)=")[^"]*(")`);
+  if (!re.test(html)) throw new Error(`<${selector}> missing in index.html`);
+  return html.replace(re, (_, a, b) => a + value.replace(/"/g, '&quot;') + b);
+}
+const jsonLd = obj => `<script type="application/ld+json">\n${JSON.stringify(obj, null, 2)}\n  </script>`;
+
 const indexPath = path.join(ROOT, 'index.html');
 let html = fs.readFileSync(indexPath, 'utf8');
-html = replaceBetween(html, 'SEO:JSONLD', `<script type="application/ld+json">\n${JSON.stringify(graph, null, 2)}\n  </script>`);
+html = replaceBetween(html, 'SEO:JSONLD', jsonLd(graph));
 html = replaceBetween(html, 'SEO:NOSCRIPT', noscript);
 fs.writeFileSync(indexPath, html);
+
+// ── Project pages ──
+const projectsDir = path.join(ROOT, 'projects');
+fs.rmSync(projectsDir, { recursive: true, force: true });   // drop pages of removed/renamed projects
+const navList = PROJECTS.map(p => `        <li><a href="/projects/${projectSlug(p)}/">${esc(p.title)}</a></li>`).join('\n');
+
+PROJECTS.forEach((p, i) => {
+  const url = pageUrl(p);
+  const loc = place(info(p, 'Location'));
+  const title = `${p.title} — ${[p.subtitle, loc].filter(Boolean).join(', ')} | MTGRP`;
+  const desc = shortDesc(p);
+  let page = html;
+
+  // Resolve every relative URL (photos/, fonts/, script.js…) from the site root
+  page = page.replace('<meta charset="UTF-8">', '<meta charset="UTF-8">\n  <base href="/">');
+  page = page.replace(/<title>[^<]*<\/title>/, `<title>${esc(title)}</title>`);
+  page = setAttr(page, 'name="description"', desc);
+  page = setAttr(page, 'rel="canonical"', url);
+  page = setAttr(page, 'property="og:type"', 'article');
+  page = setAttr(page, 'property="og:url"', url);
+  page = setAttr(page, 'property="og:title"', `${p.title} — MTGRP`);
+  page = setAttr(page, 'property="og:description"', desc);
+  page = setAttr(page, 'property="og:image"', ogImage(p));
+  page = setAttr(page, 'name="twitter:title"', `${p.title} — MTGRP`);
+  page = setAttr(page, 'name="twitter:description"', desc);
+  page = setAttr(page, 'name="twitter:image"', ogImage(p));
+
+  page = replaceBetween(page, 'SEO:JSONLD', jsonLd({
+    '@context': 'https://schema.org',
+    '@graph': [
+      { ...works[i], isPartOf: { '@id': `${SITE}/#website` } },
+      { '@type': 'ArchitectureFirm', '@id': `${SITE}/#org`, name: 'MTGRP', alternateName: 'Metagroupe', url: `${SITE}/` },
+      { '@type': 'WebSite', '@id': `${SITE}/#website`, url: `${SITE}/`, name: 'MTGRP' },
+      { '@type': 'BreadcrumbList', itemListElement: [
+        { '@type': 'ListItem', position: 1, name: 'MTGRP', item: `${SITE}/` },
+        { '@type': 'ListItem', position: 2, name: p.title, item: url },
+      ] },
+    ],
+  }));
+
+  // Project already open in the modal — readable without JavaScript
+  page = page.replace('<div id="modal-container" class="hidden">', '<div id="modal-container">');
+  page = page.replace('<div id="modal-content"></div>', `<div id="modal-content">${buildProjectHTML(p)}</div>`);
+
+  page = replaceBetween(page, 'SEO:NOSCRIPT', `<noscript>
+    <nav>
+      <p><a href="/">MTGRP — Metagroupe</a>: architecture practice in Beirut, Madrid and Milan.</p>
+      <h2>More projects</h2>
+      <ul>
+${navList}
+      </ul>
+    </nav>
+  </noscript>`);
+
+  const dir = path.join(projectsDir, projectSlug(p));
+  fs.mkdirSync(dir, { recursive: true });
+  fs.writeFileSync(path.join(dir, 'index.html'), page);
+});
+
+// ── Sitemap ──
+const today = new Date().toISOString().slice(0, 10);
+const sitemap = `<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+${[`${SITE}/`, ...PROJECTS.map(pageUrl)].map(u => `  <url>
+    <loc>${u}</loc>
+    <lastmod>${today}</lastmod>
+  </url>`).join('\n')}
+</urlset>
+`;
+fs.writeFileSync(path.join(ROOT, 'sitemap.xml'), sitemap);
 fs.writeFileSync(path.join(ROOT, 'llms.txt'), llms);
-console.log(`Updated index.html and llms.txt (${PROJECTS.length} projects, ${PARTNERS.length} partners).`);
+
+const slugs = PROJECTS.map(projectSlug);
+const dupes = slugs.filter((s, i) => slugs.indexOf(s) !== i);
+if (dupes.length) throw new Error(`Two projects share the page address: ${dupes.join(', ')} — add a unique slug: "…" to one of them`);
+console.log(`Updated index.html, sitemap.xml, llms.txt and ${PROJECTS.length} project pages (${PARTNERS.length} partners).`);
