@@ -118,7 +118,7 @@ body {
   width: 100%;
   /* Each tile keeps its photo's proportions (width/height attributes set from
      GRID_SIZES), capped at the column's max height. flex-shrink: 0 stops the
-     column squashing tiles that haven't loaded yet — otherwise they collapse
+     column squashing tiles that haven't loaded yet - otherwise they collapse
      to ~0 and pop to full size on load, changing the column length (the
      infinite scroll's wrap point) and making the grid jump on slow networks. */
   height: auto;
@@ -140,7 +140,7 @@ body {
   .parallax-col img { cursor: crosshair; }
 }
 
-/* ── DATA HUD — cursor telemetry over the grid ── */
+/* ── DATA HUD - cursor telemetry over the grid ── */
 #data-hud {
   position: fixed;
   inset: 0;
@@ -172,7 +172,7 @@ body {
 #data-hud.hud-blend .hud-line { color: #fff; mix-blend-mode: difference; }
 
 /* ── Mobile variant: static stack anchored left of the screen centre.
-     Positions live entirely in CSS — the JS only swaps text and classes ── */
+     Positions live entirely in CSS - the JS only swaps text and classes ── */
 #data-hud.hud-mobile .hud-line { left: 16px; will-change: auto; }
 #data-hud.hud-mobile .hud-line:nth-child(1) { top: calc(50% - 34px); }
 #data-hud.hud-mobile .hud-line:nth-child(2) { top: calc(50% - 16px); }
@@ -180,7 +180,7 @@ body {
 #data-hud.hud-mobile .hud-line:nth-child(4) { top: calc(50% + 36px); }
 #data-hud.hud-mobile .hud-line:nth-child(5) { top: calc(50% + 52px); }
 
-/* blinking block cursor after the title — CSS-only, compositor-cheap */
+/* blinking block cursor after the title - CSS-only, compositor-cheap */
 #data-hud.hud-mobile.active .hud-title::after {
   content: ' ▌';
   animation: hudBlink 1.06s steps(1) infinite;
@@ -245,8 +245,8 @@ body {
 }
 #close-modal:hover { color: #000; }
 
-/* ── MODAL TYPOGRAPHY — Garamond throughout, Karla only for title ── */
-/* project titles — Garamond italic */
+/* ── MODAL TYPOGRAPHY - Garamond throughout, Karla only for title ── */
+/* project titles - Garamond italic */
 .modal-title {
   font-family: 'EB Garamond', Georgia, serif;
   font-weight: 400;
@@ -259,7 +259,7 @@ body {
 
 h1.modal-title { margin-top: 0; }
 
-/* about modal title only — Karla */
+/* about modal title only - Karla */
 .modal-title.about-title {
   font-family: 'Karla', sans-serif;
   font-weight: 800;
@@ -345,7 +345,7 @@ h1.modal-title { margin-top: 0; }
   color: #888;
 }
 
-/* ── PROJECT MODAL IMAGES — two-column masonry ── */
+/* ── PROJECT MODAL IMAGES - two-column masonry ── */
 .modal-images {
   columns: 2;
   column-gap: 8px;
