@@ -1,5 +1,5 @@
 // ─────────────────────────────────────────────────────────────────────────────
-//  MTGRP - script.js
+//  MTGRP — script.js
 //  Parallax image grid with smooth inertia scrolling, project modals,
 //  about modal, and work list modal. All data lives in PROJECTS below.
 // ─────────────────────────────────────────────────────────────────────────────
@@ -41,7 +41,7 @@ const COLLABORATORS = {
   offices: ["tebt+", "esteoeste", "superunion", "b.noma", "studio street 9"],
 };
 
-// Website for each collaborating office - fill in a URL to turn its name into a link
+// Website for each collaborating office — fill in a URL to turn its name into a link
 // (in the About modal and in every project's Collaborators row). Empty = plain text.
 const OFFICE_LINKS = {
   "tebt+": "https://tebtarquitectura.es/",
@@ -88,11 +88,11 @@ function buildAboutHTML() {
   return `
     <div class="modal-title about-title">MTGRP</div>
     <p class="about-statement">
-      MTGRP is metagroupe is a collaborative architecture practice working at the intersection of thermal conditions, open-ended use, and collective space. We pursue a holistic approach to material expression: buildings as proposals about how life is organised and shared.
+      MTGRP is metagroupe is a collaborative architecture practice working at the intersection of thermal conditions, open-ended use, and collective space. We pursue a holistic approach to material expression — buildings as proposals about how life is organised and shared.
       <br><br>
       Our work spans housing, adaptive reuse, urban design, and installation. Across these scales we return to the same questions: how a building manages energy and climate as a social act; how programme can remain underdetermined; how the shared spaces of a building carry as much weight as the private ones.
       <br><br>
-      We are interested in metabolism and circularity not as technical positions but as ideological ones, rooted in what it means to build with and within existing material and social structures rather than against them.
+      We are interested in metabolism and circularity not as technical positions but as ideological ones — in what it means to build with and within existing material and social structures rather than against them.
     </p>
 
     <div class="about-partners">${partnersHTML}</div>
@@ -105,27 +105,27 @@ function buildAboutHTML() {
       <div class="collabs-label">Publications</div>
       <a href="https://www.europan-europe.eu/en/exchanges/die-den-gletscher-bewohnen" target="_blank" rel="noopener" class="about-list-item">
         <span>Die Den Gletscher Bewohnen</span>
-        <span class="about-list-meta">Europan 18 Portrait, 2026</span>
+        <span class="about-list-meta">Europan 18 Portrait &mdash; 2026</span>
       </a>
       <a href="https://unbuiltarch.org/en/the-walled-garden-2/" target="_blank" rel="noopener" class="about-list-item">
         <span>Walled Garden</span>
-        <span class="about-list-meta">unbuiltarch Journal, 2023</span>
+        <span class="about-list-meta">unbuiltarch Journal &mdash; 2023</span>
       </a>
       <a href="https://issuu.com/mch_master/docs/untagged_final_online_" target="_blank" rel="noopener" class="about-list-item">
         <span>#Untagged - Issue 1: A Year in Collective Housing</span>
-        <span class="about-list-meta">#Untagged, 2023</span>
+        <span class="about-list-meta">#Untagged &mdash; 2023</span>
       </a>
       <a href="https://beirutartcenter.org/event/beirut-makers-x-beirut-art-center/" target="_blank" rel="noopener" class="about-list-item">
         <span>Pliee - Beirut Makers Exhibition</span>
-        <span class="about-list-meta">Beirut Art Center, 2022</span>
+        <span class="about-list-meta">Beirut Art Center &mdash; 2022</span>
       </a>
       <a href="https://www.google.com/amp/s/beirut-today.com/2019/03/07/student-transform-beirut-river-park/amp/" target="_blank" rel="noopener" class="about-list-item">
         <span>Beirut River Project - Interview</span>
-        <span class="about-list-meta">Beirut Today, 2019</span>
+        <span class="about-list-meta">Beirut Today &mdash; 2019</span>
       </a>
       <a href="https://www.lebanontraveler.com/en/magazine/keep-walking-lebanon/" target="_blank" rel="noopener" class="about-list-item">
         <span>KWL - Bringing Visions to Life</span>
-        <span class="about-list-meta">Lebanon Traveler, 2019</span>
+        <span class="about-list-meta">Lebanon Traveler &mdash; 2019</span>
       </a>
     </div>
 
@@ -158,7 +158,7 @@ function buildAboutHTML() {
       <tr><td>Est.</td><td>2018</td></tr>
     </table>
 
-    <p class="about-rights">© ${new Date().getFullYear()} MTGRP (Metagroupe). All drawings, images and texts are the property of MTGRP and their authors. Quoting and linking with attribution is welcome; reproduction, or use for training AI models, is not permitted without written consent. <a href="/privacy/" style="color:inherit">Privacy &amp; legal notice</a></p>`;
+    <p class="about-rights">© ${new Date().getFullYear()} MTGRP — Metagroupe. All drawings, images and texts are the property of MTGRP and their authors. Quoting and linking with attribution is welcome; reproduction, or use for training AI models, is not permitted without written consent. <a href="/privacy/" style="color:inherit">Privacy &amp; legal notice</a></p>`;
 }
 
 // ── 2. PROJECT REGISTRY ───────────────────────────────────────────────────────
@@ -204,8 +204,8 @@ const PROJECTS = [
   {
     id: "p12",
     title: "Die Den Gletscher Bewohnen",
-    subtitle: "Europan, Winner",
-    desc: "Winning entry for the Europan competition. The project addresses the geological threshold between molasse and moraine, proposing a model of dwelling that is responsive to the terrain, water, and social change. The glacier is not backdrop but partner: a slow, material presence that shapes the logic of the building.",
+    subtitle: "Europan — Winner",
+    desc: "Winning entry for the Europan competition. The project addresses the geological threshold between molasse and moraine, proposing a model of dwelling that is responsive to the terrain, water, and social change. The glacier is not backdrop but partner — a slow, material presence that shapes the logic of the building.",
     info: [
       { label: "Location",      value: "St. Gallen, CH" },
       { label: "Type",          value: "Competition" },
@@ -243,8 +243,8 @@ const PROJECTS = [
   {
     id: "p09",
     title: "Santa María de Valdeiglesias",
-    subtitle: "Adaptive Reuse, 2nd Prize",
-    desc: "Second prize in the competition for the adaptive reuse of the monastery of Santa María de Valdeiglesias. The project negotiates between the preserved fabric of a historic religious complex and a contemporary programme for collective inhabitation, working with rather than against the existing spatial hierarchies of monastic life.",
+    subtitle: "Adaptive Reuse — 2nd Prize",
+    desc: "Second prize in the competition for the adaptive reuse of the monastery of Santa María de Valdeiglesias. The project negotiates between the preserved fabric of a historic religious complex and a contemporary programme for collective inhabitation — working with rather than against the existing spatial hierarchies of monastic life.",
     info: [
       { label: "Location", value: "Pelayos de la Presa, ES" },
       { label: "Type",     value: "Heritage / Adaptive Reuse" },
@@ -297,7 +297,7 @@ const PROJECTS = [
     id: "p06b",
     title: "Three Brothers",
     subtitle: "Three Pavilions",
-    desc: "Three pavilions for three brothers on the coast of Amchit, Lebanon. Each pavilion is distinct, a singular response to a shared site, while the three together constitute a small domestic landscape on the water's edge.",
+    desc: "Three pavilions for three brothers on the coast of Amchit, Lebanon. Each pavilion is distinct — a singular response to a shared site — while the three together constitute a small domestic landscape on the water's edge.",
     info: [
       { label: "Location", value: "Amchit, Lebanon" },
       { label: "Type",     value: "Residential / Pavilion" },
@@ -323,7 +323,7 @@ const PROJECTS = [
     id: "p06",
     title: "Cárcel Abierta",
     subtitle: "Adaptive Reuse",
-    desc: "Adaptive reuse of a prison in Chile. The project addresses the conversion of a site of confinement into a structure for collective life, working through the existing spatial order of the penitentiary as an architectural argument about openness and enclosure.",
+    desc: "Adaptive reuse of a prison in Chile. The project addresses the conversion of a site of confinement into a structure for collective life — working through the existing spatial order of the penitentiary as an architectural argument about openness and enclosure.",
     info: [
       { label: "Location",      value: "Talca, CL" },
       { label: "Type",          value: "Heritage / Adaptive Reuse" },
@@ -352,7 +352,7 @@ const PROJECTS = [
     id: "p05",
     title: "Amchit Fire Proving Grounds",
     subtitle: "Ephemeral Station",
-    desc: "A temporary firefighter training station in Amchit, Lebanon, designed to transform into a public park for children once its operational phase is complete. A single structure serving two sequential programmes, using material logic to negotiate the transition between them.",
+    desc: "A temporary firefighter training station in Amchit, Lebanon — designed to transform into a public park for children once its operational phase is complete. A single structure serving two sequential programmes, using material logic to negotiate the transition between them.",
     info: [
       { label: "Location", value: "Amchit, LB" },
       { label: "Type",     value: "Public / Ephemeral" },
@@ -382,7 +382,7 @@ const PROJECTS = [
     info: [
       { label: "Location", value: "Aley, LB" },
       { label: "Type",     value: "Interior Design" },
-      { label: "Size",     value: "Duplex, 2 floors" },
+      { label: "Size",     value: "Duplex — 2 floors" },
       { label: "Team",     value: ["Andrew Georges", "Charbel Abou Chakra", "Nahi El Khoury", "Joe Chamata", "Mike Chaiban"] },
     ],
     photos: 0,
@@ -418,8 +418,8 @@ const PROJECTS = [
   {
     id: "p02",
     title: "Baglietto Pavilion",
-    subtitle: "Competition, Honourable Mention",
-    desc: "Competition entry for the Baglietto Pavilion, receiving an honourable mention. A proposal exploring temporary structure, public presence, and the architecture of gathering: a single gesture that is simultaneously enclosure and threshold.",
+    subtitle: "Competition — Honourable Mention",
+    desc: "Competition entry for the Baglietto Pavilion, receiving an honourable mention. A proposal exploring temporary structure, public presence, and the architecture of gathering — a single gesture that is simultaneously enclosure and threshold.",
     info: [
       { label: "Type",   value: "Pavilion / Competition" },
       { label: "Status", value: "Honourable Mention" },
@@ -430,9 +430,9 @@ const PROJECTS = [
   },
   {
     id: "p01",
-    title: "KWL: Beirut River",
-    subtitle: "Competition, 1st Prize",
-    desc: "First prize in the KWL competition. The project reframes the infrastructure of the Beirut River as a site of meeting, proposing that the engineered channel, rather than dividing, can become the basis for a new form of urban public space. Infrastructure as meeting place.",
+    title: "KWL — Beirut River",
+    subtitle: "Competition — 1st Prize",
+    desc: "First prize in the KWL competition. The project reframes the infrastructure of the Beirut River as a site of meeting — proposing that the engineered channel, rather than dividing, can become the basis for a new form of urban public space. Infrastructure as meeting place.",
     info: [
       { label: "Location", value: "Beirut, LB" },
       { label: "Type",     value: "Infrastructure / Public Space" },
@@ -462,15 +462,15 @@ function buildWorkListHTML() {
         <td style="color:#ccc;font-family:'Karla',sans-serif;font-size:0.7rem;
                    letter-spacing:0.08em;padding-top:3px;width:36px">${num}</td>
         <td style="font-size:1.1rem;padding-right:24px">${p.title}
-          ${p.subtitle ? `<span style="font-style:italic;color:#888;font-size:0.85em"> · ${p.subtitle}</span>` : ''}
+          ${p.subtitle ? `<span style="font-style:italic;color:#888;font-size:0.85em"> — ${p.subtitle}</span>` : ''}
         </td>
         <td style="font-style:italic;font-size:0.85rem;color:#888;
-                   text-align:right;white-space:nowrap">${(p.info.find ? p.info.find(r => r.label === "Location") : null)?.value || ""}</td>
+                   text-align:right;white-space:nowrap">${(p.info.find ? p.info.find(r => r.label === "Location") : null)?.value || "—"}</td>
       </tr>`;
   }).join('');
 
   return `
-    <h2>Work (${PROJECTS.length} projects)</h2>
+    <h2>Work — ${PROJECTS.length} projects</h2>
     <table class="modal-data-table" style="margin-bottom:0">
       <tbody>${rows}</tbody>
     </table>`;
@@ -478,7 +478,7 @@ function buildWorkListHTML() {
 
 // ── 4. PROJECT MODAL HTML ─────────────────────────────────────────────────────
 function buildProjectHTML(p) {
-  // Build info rows from p.info array - each entry is { label, value }
+  // Build info rows from p.info array — each entry is { label, value }
   // Special values: 'team' and 'collab' render as lists automatically
   const rowsHTML = (p.info || []).map(({ label, value }) => {
     let cell;
@@ -487,9 +487,9 @@ function buildProjectHTML(p) {
       const fmt = label === 'Collaborators' ? linkCollaborator : n => n;
       cell = items.length
         ? `<ul class="modal-team-list">${items.map(n => `<li>${fmt(n)}</li>`).join('')}</ul>`
-        : '';
+        : '—';
     } else {
-      cell = value || '';
+      cell = value || '—';
     }
     return `<tr><td>${label}</td><td>${cell}</td></tr>`;
   }).join('');
@@ -499,7 +499,7 @@ function buildProjectHTML(p) {
     const handleImgError = "this.onerror=null; this.src=this.src.replace('.webp', '.gif');";
     const imgs = Array.from({ length: p.photos }, (_, i) => {
       const num = String(i + 1).padStart(2, '0');
-      return `<img src="photos/${p.id}-${num}.webp" onerror="${handleImgError}" loading="lazy" decoding="async" alt="${p.title}${p.subtitle ? `, ${p.subtitle}` : ''}, image ${i + 1}">`;
+      return `<img src="photos/${p.id}-${num}.webp" onerror="${handleImgError}" loading="lazy" decoding="async" alt="${p.title}${p.subtitle ? ` — ${p.subtitle}` : ''}, image ${i + 1}">`;
     }).join('');
     imagesHTML = `<div class="modal-images">${imgs}</div>`;
   }
@@ -515,13 +515,13 @@ function buildProjectHTML(p) {
 }
 
 // ── 5. BUILD PARALLAX GRID ────────────────────────────────────────────────────
-// Use screen.width for mobile detection - more reliable than innerWidth at load time
+// Use screen.width for mobile detection — more reliable than innerWidth at load time
 const isMobile   = Math.min(window.screen.width, window.screen.height) <= 768;
 const COL_COUNT  = isMobile ? 1 : 3;
 const SPEEDS     = isMobile ? [1.0] : [0.7, 1.0, 0.55];
 const MARGINS    = isMobile ? [0]   : [0, -200, -110];
 
-// Build a flat list of PREVIEW tiles for the grid - only projects with photos
+// Build a flat list of PREVIEW tiles for the grid — only projects with photos
 function buildTileList() {
   const tiles = [];
   PROJECTS.forEach(p => {
@@ -536,7 +536,7 @@ function buildTileList() {
   return tiles.sort(() => Math.random() - 0.5);
 }
 
-// Grid tiles load pre-sized variants from photos/grid/ - the originals are
+// Grid tiles load pre-sized variants from photos/grid/ — the originals are
 // far too large to scroll smoothly (some are 40MP; decoded, the full set would
 // need ~1.6GB of memory, forcing constant eviction + re-decode = jank).
 // Fallback chain if a variant is missing: grid variant → original webp → gif.
@@ -584,7 +584,7 @@ function buildGrid() {
     // screens; sizes mirrors the CSS column widths.
     // width/height give each tile its proportions before the image arrives,
     // so the column length (the infinite scroll's wrap point) never changes
-    // while images load - see GRID_SIZES in index.html.
+    // while images load — see GRID_SIZES in index.html.
     const tileHTML = colTiles.map(tile => {
       const size = (window.GRID_SIZES || {})[tile.name];
       const dims = size ? `width="${size[0]}" height="${size[1]}"` : 'style="aspect-ratio: 4 / 3"';
@@ -642,7 +642,7 @@ function openModal(html, path = '/', title = HOME_TITLE) {
 }
 
 function openProject(p) {
-  openModal(buildProjectHTML(p), projectPath(p), `${p.title} | MTGRP`);
+  openModal(buildProjectHTML(p), projectPath(p), `${p.title} — MTGRP`);
 }
 
 function closeModal() {
@@ -653,7 +653,7 @@ function closeModal() {
 // Open whatever the current URL points at (initial load, back/forward buttons)
 function syncModalToUrl() {
   const p = PROJECTS.find(x => projectPath(x) === location.pathname);
-  if (p) openModal(buildProjectHTML(p), projectPath(p), `${p.title} | MTGRP`);
+  if (p) openModal(buildProjectHTML(p), projectPath(p), `${p.title} — MTGRP`);
   else modalContainer.classList.add('hidden');
 }
 window.addEventListener('popstate', syncModalToUrl);
@@ -681,11 +681,11 @@ function attachClickListeners() {
 // ── 7. SMOOTH INERTIA SCROLL ──────────────────────────────────────────────────
 let virtualScrollY = 0;
 let velocity       = 0;
-const FRICTION     = 0.88;   // momentum decay per frame - lower = stops faster
+const FRICTION     = 0.88;   // momentum decay per frame — lower = stops faster
 const WHEEL_SCALE  = 0.7;    // wheel sensitivity
 const TOUCH_SCALE  = 1.6;    // touch drag sensitivity
 
-// Mouse wheel - add to velocity rather than position directly
+// Mouse wheel — add to velocity rather than position directly
 window.addEventListener('wheel', e => {
   if (!modalContainer.classList.contains('hidden')) return;
   e.preventDefault();
@@ -721,7 +721,7 @@ function onTouchEnd() {
 }
 
 // Cache column elements AND their half-height. Column heights are driven by CSS
-// (fixed vh image heights), so they're stable regardless of image load state -
+// (fixed vh image heights), so they're stable regardless of image load state —
 // measure once here instead of forcing a reflow via scrollHeight every frame.
 let cachedCols = [];
 
@@ -738,7 +738,7 @@ function initScrollCache() {
   measureCols();
 }
 
-// Heights depend on viewport (vh units) and on images finishing layout - re-measure
+// Heights depend on viewport (vh units) and on images finishing layout — re-measure
 // on resize and once everything has loaded, but never inside the animation loop.
 window.addEventListener('resize', measureCols);
 window.addEventListener('load', () => { measureCols(); warmDecodeGrid(); });
@@ -753,7 +753,7 @@ function updateParallax() {
     if (halfHeight <= 0) continue;
     let y = (virtualScrollY * col.speed) % halfHeight;
     if (y < 0) y += halfHeight;
-    // Sub-pixel translate3d - rounding to whole pixels made the slower columns
+    // Sub-pixel translate3d — rounding to whole pixels made the slower columns
     // advance in visible integer steps (micro-stutter) at low speeds.
     col.el.style.transform = `translate3d(0, ${(-y).toFixed(2)}px, 0)`;
   }
@@ -764,7 +764,7 @@ function updateParallax() {
 }
 
 
-// ── 7b. DATA HUD - cursor telemetry ──────────────────────────────────────────
+// ── 7b. DATA HUD — cursor telemetry ──────────────────────────────────────────
 //  Hovering a grid tile summons a trailing instrument readout of the project's
 //  data (coordinates, altitude, temperatures). Each line follows the cursor
 //  with a different inertia so the stack stretches like a streamer; text
@@ -832,7 +832,7 @@ function hudDataFor(p) {
   return {
     num:   String(PROJECTS.indexOf(p) + 1).padStart(2, '0'),
     title: p.title,
-    meta:  [loc, status].filter(Boolean).join(' · ') || null,
+    meta:  [loc, status].filter(Boolean).join(' — ') || null,
     lat:   m ? { deg: +m[1], hemi: m[2] } : null,
     lon:   m ? { deg: +m[3], hemi: m[4] } : null,
     alt:   elev ? parseInt(elev, 10) : null,
@@ -840,11 +840,11 @@ function hudDataFor(p) {
   };
 }
 
-// Arc-minutes pan with the cursor - moving across the tile pans the reading
+// Arc-minutes pan with the cursor — moving across the tile pans the reading
 function hudLiveCoords(d) {
   const mm = String((hudMx / window.innerWidth  * 59) | 0).padStart(2, '0');
   const ss = String((hudMy / window.innerHeight * 59) | 0).padStart(2, '0');
-  return `${d.lat.deg}°${mm}′${d.lat.hemi}, ${d.lon.deg}°${ss}′${d.lon.hemi}`;
+  return `${d.lat.deg}°${mm}′${d.lat.hemi} — ${d.lon.deg}°${ss}′${d.lon.hemi}`;
 }
 
 // Average luminance (0–255) of the image pixels beneath the readout.
@@ -884,7 +884,7 @@ function hudSampleLuma(imgEl, regionOverride) {
   return sum / (d.length / 4);
 }
 
-// White text over dark imagery, MTGRP blue over light - with hysteresis so the
+// White text over dark imagery, MTGRP blue over light — with hysteresis so the
 // colour never flickers around the threshold. Sampled every 8th frame.
 function hudUpdateColor() {
   if (hudSamplingBroken || !hudProject) return;
@@ -896,7 +896,7 @@ function hudUpdateColor() {
     else if (hudOnLight && luma < 140) hudOnLight = false;
     hudEl.classList.toggle('on-light', hudOnLight);
   } catch (e) {
-    // canvas tainted (cross-origin) - fall back to difference blending
+    // canvas tainted (cross-origin) — fall back to difference blending
     hudSamplingBroken = true;
     hudEl.classList.remove('on-light');
     hudEl.classList.add('hud-blend');
@@ -971,7 +971,7 @@ function updateHud() {
 
     let text = null;
     switch (def.key) {
-      case 'title':  text = `${hudData.num} · ${hudData.title}` + (((now / 530) | 0) % 2 ? ' ▌' : ''); break;
+      case 'title':  text = `${hudData.num} — ${hudData.title}` + (((now / 530) | 0) % 2 ? ' ▌' : ''); break;
       case 'meta':   text = hudData.meta; break;
       case 'coords': text = hudData.lat ? hudLiveCoords(hudData) : null; break;
       case 'alt':    text = hudData.alt != null ? `ALT +${Math.round(altEase * hudData.alt)}M` : null; break;
@@ -990,7 +990,7 @@ function updateHud() {
 // ── 7c. MOBILE DATA HUD ───────────────────────────────────────────────────────
 //  Event-driven variant for touch devices: the tile crossing the screen centre
 //  is read out as a static left-anchored stack (positioned purely in CSS).
-//  All work happens at the moment the centre tile changes - one probe every
+//  All work happens at the moment the centre tile changes — one probe every
 //  150ms, a single colour sample, and a short self-terminating decode
 //  animation. Nothing is added to the per-frame scroll loop.
 let mhudEl = null, mhudLineEls = [], mhudProject = null, mhudAnimId = 0;
@@ -1029,18 +1029,18 @@ function mhudCheck() {
   if (!project) return;
 
   const d = hudDataFor(project);
-  // arc-minutes snapshot from the scroll position - varies reveal to reveal
+  // arc-minutes snapshot from the scroll position — varies reveal to reveal
   const mm = String((((virtualScrollY / 7)   % 60) + 60) % 60 | 0).padStart(2, '0');
   const ss = String((((virtualScrollY / 2.8) % 60) + 60) % 60 | 0).padStart(2, '0');
   const texts = [
-    `${d.num} · ${d.title}`,
+    `${d.num} — ${d.title}`,
     d.meta,
-    d.lat ? `${d.lat.deg}°${mm}′${d.lat.hemi}, ${d.lon.deg}°${ss}′${d.lon.hemi}` : null,
+    d.lat ? `${d.lat.deg}°${mm}′${d.lat.hemi} — ${d.lon.deg}°${ss}′${d.lon.hemi}` : null,
     d.alt != null ? `ALT +${d.alt}M` : null,
     d.temp,
   ];
 
-  // one colour sample per tile change (no hysteresis needed - single reading)
+  // one colour sample per tile change (no hysteresis needed — single reading)
   try {
     const luma = hudSampleLuma(imgEl, {
       x: 8, y: window.innerHeight / 2 - 44,
@@ -1048,7 +1048,7 @@ function mhudCheck() {
     });
     if (luma !== null) mhudEl.classList.toggle('on-light', luma > 150);
   } catch (e) {
-    // canvas unavailable - keep whatever colour mode we had
+    // canvas unavailable — keep whatever colour mode we had
   }
 
   mhudDecode(texts);
@@ -1107,7 +1107,7 @@ async function fetchWeather() {
       const el   = document.getElementById(city.id);
       if (el) el.textContent = `${city.name} ${icon} ${temp}°`;
     } catch {
-      // fail silently - just keeps showing city name
+      // fail silently — just keeps showing city name
     }
   });
 }
@@ -1120,27 +1120,27 @@ const DESC_SLIDES = [
   {
     lang: 'en',
     dir: 'ltr',
-    text: 'Architecture concerned with metabolism and circularity: a political approach to temperature, material expression, and collective use. We are interested in the spaces in between.',
+    text: 'Architecture concerned with metabolism and circularity — a political approach to temperature, material expression, and collective use. We are interested in the spaces in between.',
   },
   {
     lang: 'fr',
     dir: 'ltr',
-    text: 'Architecture attentive au métabolisme et à la circularité : une approche politique de la température, de l\'expression matérielle et de l\'usage collectif. Nous nous intéressons aux espaces intermédiaires.',
+    text: 'Architecture attentive au métabolisme et à la circularité — une approche politique de la température, de l\'expression matérielle et de l\'usage collectif. Nous nous intéressons aux espaces intermédiaires.',
   },
   {
     lang: 'es',
     dir: 'ltr',
-    text: 'Arquitectura concernida con el metabolismo y la circularidad: una aproximación política a la temperatura, la expresión material y el uso colectivo. Nos interesan los espacios intermedios.',
+    text: 'Arquitectura concernida con el metabolismo y la circularidad — una aproximación política a la temperatura, la expresión material y el uso colectivo. Nos interesan los espacios intermedios.',
   },
   {
     lang: 'it',
     dir: 'ltr',
-    text: 'Architettura che si confronta con il metabolismo e la circolarità: un approccio politico alla temperatura, all\'espressione materiale e all\'uso collettivo. Siamo interessati agli spazi intermedi.',
+    text: 'Architettura che si confronta con il metabolismo e la circolarità — un approccio politico alla temperatura, all\'espressione materiale e all\'uso collettivo. Siamo interessati agli spazi intermedi.',
   },
   {
     lang: 'ar',
     dir: 'rtl',
-    text: 'عمارة معنيّة بالتمثيل الحيوي والتدوير: مقاربة سياسية للحرارة، والتعبير المادي، والاستخدام الجماعي. نحن مهتمّون بالفضاءات البينيّة.',
+    text: 'عمارة معنيّة بالتمثيل الحيوي والتدوير — مقاربة سياسية للحرارة، والتعبير المادي، والاستخدام الجماعي. نحن مهتمّون بالفضاءات البينيّة.',
   },
 ];
 

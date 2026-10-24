@@ -101,7 +101,7 @@ const works = PROJECTS.map(p => {
   const loc = place(info(p, 'Location'));
   if (loc) w.locationCreated = { '@type': 'Place', name: loc };
   const status = info(p, 'Status');
-  if (status && /prize|winner|mention/i.test(status + p.subtitle)) w.award = p.subtitle.split(/,\s*/).pop();
+  if (status && /prize|winner|mention/i.test(status + p.subtitle)) w.award = p.subtitle.replace(/^.*—\s*/, '');
   if (p.photos > 0) w.image = ogImage(p);
   return w;
 });
@@ -118,16 +118,16 @@ const graph = {
 // ── <noscript> fallback ──
 const noscript = `<noscript>
     <main>
-      <h1>MTGRP (Metagroupe)</h1>
+      <h1>MTGRP — Metagroupe</h1>
       <p>${esc(DESCRIPTION)}</p>
       <h2>Partners</h2>
       <ul>
-${PARTNERS.map(p => `        <li>${esc(p.name)}, ${esc(p.role)}</li>`).join('\n')}
+${PARTNERS.map(p => `        <li>${esc(p.name)} — ${esc(p.role)}</li>`).join('\n')}
       </ul>
       <h2>Projects</h2>
 ${PROJECTS.map(p => `      <article>
         <h3><a href="/projects/${projectSlug(p)}/">${esc(p.title)}</a></h3>
-        <p>${esc([p.subtitle, info(p, 'Location')].filter(Boolean).join(' · '))}</p>
+        <p>${esc([p.subtitle, info(p, 'Location')].filter(Boolean).join(' — '))}</p>
         <p>${esc(p.desc || '')}</p>
       </article>`).join('\n')}
       <h2>Contact</h2>
@@ -216,7 +216,7 @@ const navList = PROJECTS.map(p => `        <li><a href="/projects/${projectSlug(
 PROJECTS.forEach((p, i) => {
   const url = pageUrl(p);
   const loc = place(info(p, 'Location'));
-  const title = `${p.title} | ${[p.subtitle, loc].filter(Boolean).join(', ')} | MTGRP`;
+  const title = `${p.title} — ${[p.subtitle, loc].filter(Boolean).join(', ')} | MTGRP`;
   const desc = shortDesc(p);
   let page = html;
 
@@ -227,10 +227,10 @@ PROJECTS.forEach((p, i) => {
   page = setAttr(page, 'rel="canonical"', url);
   page = setAttr(page, 'property="og:type"', 'article');
   page = setAttr(page, 'property="og:url"', url);
-  page = setAttr(page, 'property="og:title"', `${p.title} | MTGRP`);
+  page = setAttr(page, 'property="og:title"', `${p.title} — MTGRP`);
   page = setAttr(page, 'property="og:description"', desc);
   page = setAttr(page, 'property="og:image"', ogImage(p));
-  page = setAttr(page, 'name="twitter:title"', `${p.title} | MTGRP`);
+  page = setAttr(page, 'name="twitter:title"', `${p.title} — MTGRP`);
   page = setAttr(page, 'name="twitter:description"', desc);
   page = setAttr(page, 'name="twitter:image"', ogImage(p));
 
@@ -253,7 +253,7 @@ PROJECTS.forEach((p, i) => {
 
   page = replaceBetween(page, 'SEO:NOSCRIPT', `<noscript>
     <nav>
-      <p><a href="/">MTGRP (Metagroupe)</a>: architecture practice in Beirut, Madrid and Milan.</p>
+      <p><a href="/">MTGRP — Metagroupe</a>: architecture practice in Beirut, Madrid and Milan.</p>
       <h2>More projects</h2>
       <ul>
 ${navList}
@@ -286,5 +286,5 @@ fs.writeFileSync(path.join(ROOT, 'llms.txt'), llms);
 
 const slugs = PROJECTS.map(projectSlug);
 const dupes = slugs.filter((s, i) => slugs.indexOf(s) !== i);
-if (dupes.length) throw new Error(`Two projects share the page address: ${dupes.join(', ')}; add a unique slug: "…" to one of them`);
+if (dupes.length) throw new Error(`Two projects share the page address: ${dupes.join(', ')} — add a unique slug: "…" to one of them`);
 console.log(`Updated index.html, sitemap.xml, llms.txt and ${PROJECTS.length} project pages (${PARTNERS.length} partners).`);
