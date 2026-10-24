@@ -1,9 +1,9 @@
-# MTGRP (www.mtgrp.xyz)
+# MTGRP — www.mtgrp.xyz
 #
 # Search engines and AI *search* assistants are welcome to index, quote and
 # link to this site. Collecting content to TRAIN AI models is not permitted.
 # Legal notice: text-and-data-mining rights are reserved under Art. 4 of the
-# EU DSM Directive (2019/790); see /.well-known/tdmrep.json
+# EU DSM Directive (2019/790) — see /.well-known/tdmrep.json
 
 # ── AI training crawlers: blocked ──
 User-agent: GPTBot
