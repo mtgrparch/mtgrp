@@ -88,11 +88,11 @@ function buildAboutHTML() {
   return `
     <div class="modal-title about-title">MTGRP</div>
     <p class="about-statement">
-      MTGRP is metagroupe is a collaborative architecture practice working at the intersection of thermal conditions, open-ended use, and collective space. We pursue a holistic approach to material expression — buildings as proposals about how life is organised and shared.
+      MTGRP is metagroupe is a collaborative architecture practice working at the intersection of thermal conditions, open-ended use, and collective space. We pursue a holistic approach to material expression: buildings as proposals about how life is organised and shared.
       <br><br>
       Our work spans housing, adaptive reuse, urban design, and installation. Across these scales we return to the same questions: how a building manages energy and climate as a social act; how programme can remain underdetermined; how the shared spaces of a building carry as much weight as the private ones.
       <br><br>
-      We are interested in metabolism and circularity not as technical positions but as ideological ones — in what it means to build with and within existing material and social structures rather than against them.
+      We are interested in metabolism and circularity not as technical positions but as ideological ones, rooted in what it means to build with and within existing material and social structures rather than against them.
     </p>
 
     <div class="about-partners">${partnersHTML}</div>
@@ -205,7 +205,7 @@ const PROJECTS = [
     id: "p12",
     title: "Die Den Gletscher Bewohnen",
     subtitle: "Europan — Winner",
-    desc: "Winning entry for the Europan competition. The project addresses the geological threshold between molasse and moraine, proposing a model of dwelling that is responsive to the terrain, water, and social change. The glacier is not backdrop but partner — a slow, material presence that shapes the logic of the building.",
+    desc: "Winning entry for the Europan competition. The project addresses the geological threshold between molasse and moraine, proposing a model of dwelling that is responsive to the terrain, water, and social change. The glacier is not backdrop but partner: a slow, material presence that shapes the logic of the building.",
     info: [
       { label: "Location",      value: "St. Gallen, CH" },
       { label: "Type",          value: "Competition" },
@@ -244,7 +244,7 @@ const PROJECTS = [
     id: "p09",
     title: "Santa María de Valdeiglesias",
     subtitle: "Adaptive Reuse — 2nd Prize",
-    desc: "Second prize in the competition for the adaptive reuse of the monastery of Santa María de Valdeiglesias. The project negotiates between the preserved fabric of a historic religious complex and a contemporary programme for collective inhabitation — working with rather than against the existing spatial hierarchies of monastic life.",
+    desc: "Second prize in the competition for the adaptive reuse of the monastery of Santa María de Valdeiglesias. The project negotiates between the preserved fabric of a historic religious complex and a contemporary programme for collective inhabitation, working with rather than against the existing spatial hierarchies of monastic life.",
     info: [
       { label: "Location", value: "Pelayos de la Presa, ES" },
       { label: "Type",     value: "Heritage / Adaptive Reuse" },
@@ -297,7 +297,7 @@ const PROJECTS = [
     id: "p06b",
     title: "Three Brothers",
     subtitle: "Three Pavilions",
-    desc: "Three pavilions for three brothers on the coast of Amchit, Lebanon. Each pavilion is distinct — a singular response to a shared site — while the three together constitute a small domestic landscape on the water's edge.",
+    desc: "Three pavilions for three brothers on the coast of Amchit, Lebanon. Each pavilion is distinct, a singular response to a shared site, while the three together constitute a small domestic landscape on the water's edge.",
     info: [
       { label: "Location", value: "Amchit, Lebanon" },
       { label: "Type",     value: "Residential / Pavilion" },
@@ -323,7 +323,7 @@ const PROJECTS = [
     id: "p06",
     title: "Cárcel Abierta",
     subtitle: "Adaptive Reuse",
-    desc: "Adaptive reuse of a prison in Chile. The project addresses the conversion of a site of confinement into a structure for collective life — working through the existing spatial order of the penitentiary as an architectural argument about openness and enclosure.",
+    desc: "Adaptive reuse of a prison in Chile. The project addresses the conversion of a site of confinement into a structure for collective life, working through the existing spatial order of the penitentiary as an architectural argument about openness and enclosure.",
     info: [
       { label: "Location",      value: "Talca, CL" },
       { label: "Type",          value: "Heritage / Adaptive Reuse" },
@@ -352,7 +352,7 @@ const PROJECTS = [
     id: "p05",
     title: "Amchit Fire Proving Grounds",
     subtitle: "Ephemeral Station",
-    desc: "A temporary firefighter training station in Amchit, Lebanon — designed to transform into a public park for children once its operational phase is complete. A single structure serving two sequential programmes, using material logic to negotiate the transition between them.",
+    desc: "A temporary firefighter training station in Amchit, Lebanon, designed to transform into a public park for children once its operational phase is complete. A single structure serving two sequential programmes, using material logic to negotiate the transition between them.",
     info: [
       { label: "Location", value: "Amchit, LB" },
       { label: "Type",     value: "Public / Ephemeral" },
@@ -419,7 +419,7 @@ const PROJECTS = [
     id: "p02",
     title: "Baglietto Pavilion",
     subtitle: "Competition — Honourable Mention",
-    desc: "Competition entry for the Baglietto Pavilion, receiving an honourable mention. A proposal exploring temporary structure, public presence, and the architecture of gathering — a single gesture that is simultaneously enclosure and threshold.",
+    desc: "Competition entry for the Baglietto Pavilion, receiving an honourable mention. A proposal exploring temporary structure, public presence, and the architecture of gathering: a single gesture that is simultaneously enclosure and threshold.",
     info: [
       { label: "Type",   value: "Pavilion / Competition" },
       { label: "Status", value: "Honourable Mention" },
@@ -432,7 +432,7 @@ const PROJECTS = [
     id: "p01",
     title: "KWL — Beirut River",
     subtitle: "Competition — 1st Prize",
-    desc: "First prize in the KWL competition. The project reframes the infrastructure of the Beirut River as a site of meeting — proposing that the engineered channel, rather than dividing, can become the basis for a new form of urban public space. Infrastructure as meeting place.",
+    desc: "First prize in the KWL competition. The project reframes the infrastructure of the Beirut River as a site of meeting, proposing that the engineered channel, rather than dividing, can become the basis for a new form of urban public space. Infrastructure as meeting place.",
     info: [
       { label: "Location", value: "Beirut, LB" },
       { label: "Type",     value: "Infrastructure / Public Space" },
@@ -1120,27 +1120,27 @@ const DESC_SLIDES = [
   {
     lang: 'en',
     dir: 'ltr',
-    text: 'Architecture concerned with metabolism and circularity — a political approach to temperature, material expression, and collective use. We are interested in the spaces in between.',
+    text: 'Architecture concerned with metabolism and circularity: a political approach to temperature, material expression, and collective use. We are interested in the spaces in between.',
   },
   {
     lang: 'fr',
     dir: 'ltr',
-    text: 'Architecture attentive au métabolisme et à la circularité — une approche politique de la température, de l\'expression matérielle et de l\'usage collectif. Nous nous intéressons aux espaces intermédiaires.',
+    text: 'Architecture attentive au métabolisme et à la circularité : une approche politique de la température, de l\'expression matérielle et de l\'usage collectif. Nous nous intéressons aux espaces intermédiaires.',
   },
   {
     lang: 'es',
     dir: 'ltr',
-    text: 'Arquitectura concernida con el metabolismo y la circularidad — una aproximación política a la temperatura, la expresión material y el uso colectivo. Nos interesan los espacios intermedios.',
+    text: 'Arquitectura concernida con el metabolismo y la circularidad: una aproximación política a la temperatura, la expresión material y el uso colectivo. Nos interesan los espacios intermedios.',
   },
   {
     lang: 'it',
     dir: 'ltr',
-    text: 'Architettura che si confronta con il metabolismo e la circolarità — un approccio politico alla temperatura, all\'espressione materiale e all\'uso collettivo. Siamo interessati agli spazi intermedi.',
+    text: 'Architettura che si confronta con il metabolismo e la circolarità: un approccio politico alla temperatura, all\'espressione materiale e all\'uso collettivo. Siamo interessati agli spazi intermedi.',
   },
   {
     lang: 'ar',
     dir: 'rtl',
-    text: 'عمارة معنيّة بالتمثيل الحيوي والتدوير — مقاربة سياسية للحرارة، والتعبير المادي، والاستخدام الجماعي. نحن مهتمّون بالفضاءات البينيّة.',
+    text: 'عمارة معنيّة بالتمثيل الحيوي والتدوير: مقاربة سياسية للحرارة، والتعبير المادي، والاستخدام الجماعي. نحن مهتمّون بالفضاءات البينيّة.',
   },
 ];
 
